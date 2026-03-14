@@ -2,19 +2,25 @@ import React, { useEffect } from "react"
 import { Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useSettingsStore } from "../src/stores/useSettingsStore"
-import { wsManager } from "../src/services/websocket"
+import { useWebSocket } from "../src/integration/hooks/useWebSocket"
+import { syncHazards } from "../src/integration/sync/hazardSync"
+import { deviceService } from "../src/integration/services/deviceService"
 import { colors } from "../src/tokens"
 
 export default function RootLayout() {
   const hydrateSettings = useSettingsStore((s) => s.hydrate)
 
+  // Manage WebSocket lifecycle for the entire app session
+  useWebSocket({ enabled: true })
+
   useEffect(() => {
     hydrateSettings()
-    wsManager.connect()
 
-    return () => {
-      wsManager.disconnect()
-    }
+    // Initial hazard fetch — silent if backend is down
+    syncHazards()
+
+    // Register push token — non-blocking, degrades gracefully in Expo Go
+    deviceService.registerPushToken()
   }, [hydrateSettings])
 
   return (
@@ -22,17 +28,14 @@ export default function RootLayout() {
       <StatusBar style="light" />
       <Stack
         screenOptions={{
-          headerShown: false,
+          headerShown:  false,
           contentStyle: { backgroundColor: colors.background },
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="route-detail"
-          options={{
-            presentation: "modal",
-            animation: "slide_from_bottom",
-          }}
+          options={{ presentation: "modal", animation: "slide_from_bottom" }}
         />
       </Stack>
     </>
