@@ -165,6 +165,8 @@ export const useHazardStore = create<HazardState>((set, get) => ({
     try {
       const hazards = await apiClient.getHazards({ lat, lon, radius_m: radius, active_only: true })
       set({ hazards })
+    } catch {
+      // Backend unreachable — keep existing hazards, fail silently
     } finally {
       set({ isFetching: false })
     }
