@@ -10,6 +10,8 @@ from app.config import Settings
 from app.core.graph.weighting import (
     EdgeWeightResult,
     compute_edge_weight,
+    compute_air_quality_factor,
+    compute_density_factor,
     parse_maxspeed,
 )
 
@@ -256,3 +258,117 @@ class TestHazardPenalty:
         result = compute_edge_weight(base_edge(), {999: 100.0}, settings)
         assert result.weight < float("inf")
         assert result.excluded is False
+
+
+# ── Air quality (PM2.5) factor ───────────────────────────────────────────────
+
+class TestAirQualityFactor:
+
+    def test_clean_air_factor_is_one(self):
+        """PM2.5 = 0 → factor 1.0 (no penalty)."""
+        assert compute_air_quality_factor(0.0) == 1.0
+
+    def test_moderate_air(self):
+        """PM2.5 = 50 → factor ≈ 1.2."""
+        factor = compute_air_quality_factor(50.0)
+        assert abs(factor - 1.2) < 0.01
+
+    def test_unhealthy_air(self):
+        """PM2.5 = 250 → factor 2.0."""
+        factor = compute_air_quality_factor(250.0)
+        assert abs(factor - 2.0) < 0.01
+
+    def test_hazardous_air(self):
+        """PM2.5 = 500 → factor 3.0."""
+        factor = compute_air_quality_factor(500.0)
+        assert abs(factor - 3.0) < 0.01
+
+    def test_negative_clamped_to_zero(self):
+        """Negative PM2.5 is clamped to 0 → factor 1.0."""
+        assert compute_air_quality_factor(-10.0) == 1.0
+
+    def test_over_max_clamped(self):
+        """PM2.5 > 500 is clamped → factor 3.0."""
+        assert compute_air_quality_factor(999.0) == 3.0
+
+    def test_pm25_increases_edge_weight(self, settings):
+        """High PM2.5 should increase the total edge weight."""
+        clean = compute_edge_weight(base_edge(), {}, settings, pm25_value=0.0)
+        dirty = compute_edge_weight(base_edge(), {}, settings, pm25_value=250.0)
+        assert dirty.weight > clean.weight
+        # Factor is 2.0 so weight should double
+        ratio = dirty.weight / clean.weight
+        assert abs(ratio - 2.0) < 0.01
+
+    def test_pm25_metadata_returned(self, settings):
+        """EdgeWeightResult should contain PM2.5 metadata."""
+        result = compute_edge_weight(base_edge(), {}, settings, pm25_value=100.0)
+        assert result.pm25_value == 100.0
+        assert result.pm25_factor > 1.0
+
+
+# ── People density factor ────────────────────────────────────────────────────
+
+class TestPeopleDensityFactor:
+
+    def test_empty_street_factor_is_one(self):
+        """Density = 0 → factor 1.0."""
+        assert compute_density_factor(0.0) == 1.0
+
+    def test_moderate_crowd(self):
+        """Density = 50 → factor 1.5."""
+        factor = compute_density_factor(50.0)
+        assert abs(factor - 1.5) < 0.01
+
+    def test_crowded_street(self):
+        """Density = 100 → factor 2.0."""
+        factor = compute_density_factor(100.0)
+        assert abs(factor - 2.0) < 0.01
+
+    def test_negative_clamped(self):
+        """Negative density clamped to 0 → factor 1.0."""
+        assert compute_density_factor(-5.0) == 1.0
+
+    def test_over_max_clamped(self):
+        """Density > 100 clamped → factor 2.0."""
+        assert compute_density_factor(200.0) == 2.0
+
+    def test_density_increases_edge_weight(self, settings):
+        """High density should increase total edge weight."""
+        empty   = compute_edge_weight(base_edge(), {}, settings, people_density=0.0)
+        crowded = compute_edge_weight(base_edge(), {}, settings, people_density=100.0)
+        assert crowded.weight > empty.weight
+        ratio = crowded.weight / empty.weight
+        assert abs(ratio - 2.0) < 0.01
+
+    def test_density_metadata_returned(self, settings):
+        """EdgeWeightResult should contain density metadata."""
+        result = compute_edge_weight(base_edge(), {}, settings, people_density=75.0)
+        assert result.density_value == 75.0
+        assert result.density_factor > 1.0
+
+
+# ── Combined factors ─────────────────────────────────────────────────────────
+
+class TestCombinedFactors:
+
+    def test_all_factors_multiply(self, settings):
+        """PM2.5 + density should multiply together with other factors."""
+        baseline = compute_edge_weight(base_edge(), {}, settings)
+        combined = compute_edge_weight(
+            base_edge(), {}, settings,
+            pm25_value=250.0,      # factor 2.0
+            people_density=100.0,  # factor 2.0
+        )
+        # Combined should be ~4x the baseline (2.0 * 2.0)
+        ratio = combined.weight / baseline.weight
+        assert abs(ratio - 4.0) < 0.1
+
+    def test_excluded_edge_ignores_factors(self, settings):
+        """Excluded edges should still be inf regardless of pm25/density."""
+        result = compute_edge_weight(
+            base_edge({"highway": "motorway"}), {}, settings,
+            pm25_value=500.0, people_density=100.0,
+        )
+        assert result.weight == float("inf")
+        assert result.excluded is True
