@@ -6,7 +6,8 @@ street graph receives a safety-weighted cost w(e) that the A* router
 minimises. Lower weight = safer and more preferable for cyclists.
 
 Weight formula:
-    w = (length_m × traffic_factor × surface_factor × speed_factor × bike_factor)
+    w = (length_m × traffic_factor × surface_factor × speed_factor
+         × bike_factor × air_quality_factor × density_factor)
         + hazard_penalty
 
 w = inf means the edge is completely excluded from routing.
@@ -106,6 +107,54 @@ CYCLEWAY_FACTOR: float = 0.6
 # OSM cycleway:both / cycleway:left — painted lane, less separation
 BIKE_LANE_FACTOR: float = 0.75
 
+# ── Air quality (PM2.5) factor ────────────────────────────────────────────────
+# PM2.5 ranges from 0 to 500 µg/m³. We normalise to a multiplicative factor:
+#   0 µg/m³   → 1.0  (clean air, no penalty)
+#   250 µg/m³ → 2.0  (very unhealthy)
+#   500 µg/m³ → 3.0  (hazardous, strongly avoided)
+# Formula: factor = 1.0 + (pm25 / PM25_MAX) * PM25_FACTOR_RANGE
+PM25_MAX: float = 500.0
+PM25_FACTOR_RANGE: float = 2.0  # max additional penalty multiplier
+
+# ── People density factor ─────────────────────────────────────────────────────
+# People density (pedestrians per 100m of road segment).
+#   0   → 1.0  (empty street, no penalty)
+#   50  → 1.5  (moderate crowd)
+#   100 → 2.0  (very crowded, collision risk)
+# Formula: factor = 1.0 + (density / DENSITY_MAX) * DENSITY_FACTOR_RANGE
+DENSITY_MAX: float = 100.0
+DENSITY_FACTOR_RANGE: float = 1.0  # max additional penalty multiplier
+
+
+def compute_air_quality_factor(pm25: float) -> float:
+    """
+    Convert PM2.5 µg/m³ → multiplicative cost factor.
+
+    Uses linear scaling:
+        0   → 1.0 (clean)
+        250 → 2.0 (very unhealthy)
+        500 → 3.0 (hazardous)
+
+    Values are clamped to [0, PM25_MAX].
+    """
+    clamped = max(0.0, min(pm25, PM25_MAX))
+    return 1.0 + (clamped / PM25_MAX) * PM25_FACTOR_RANGE
+
+
+def compute_density_factor(density: float) -> float:
+    """
+    Convert people density (per 100m) → multiplicative cost factor.
+
+    Uses linear scaling:
+        0   → 1.0 (empty)
+        50  → 1.5 (moderate)
+        100 → 2.0 (crowded)
+
+    Values are clamped to [0, DENSITY_MAX].
+    """
+    clamped = max(0.0, min(density, DENSITY_MAX))
+    return 1.0 + (clamped / DENSITY_MAX) * DENSITY_FACTOR_RANGE
+
 
 @dataclass
 class EdgeWeightResult:
@@ -122,6 +171,10 @@ class EdgeWeightResult:
     surface_defaulted: bool
     bike_path: bool
     bike_path_type: str | None  # "alley" | "recreational" | "connecting" | None
+    pm25_value: float           # PM2.5 µg/m³ used for this edge
+    pm25_factor: float          # normalised air quality factor [1.0–3.0]
+    density_value: float        # people density per 100m used for this edge
+    density_factor: float       # normalised density factor [1.0–2.0]
     excluded: bool
     exclusion_reason: str | None  # "speed_limit" | "highway_type" | None
 
@@ -206,12 +259,15 @@ def compute_edge_weight(
     edge_data: dict,
     hazard_penalties: dict[int, float],
     settings: Settings,
+    pm25_value: float = 0.0,
+    people_density: float = 0.0,
 ) -> EdgeWeightResult:
     """
     Compute the safety-weighted cost of traversing a road edge.
 
     Weight formula:
-        w = length_m × traffic_factor × surface_factor × speed_factor × bike_factor
+        w = (length_m × traffic_factor × surface_factor × speed_factor
+             × bike_factor × air_quality_factor × density_factor)
             + hazard_penalty
 
     Lower weight = safer and more preferable.
@@ -228,6 +284,10 @@ def compute_edge_weight(
         finite weight into inf.
     settings : Settings
         All thresholds come from here — never from magic numbers.
+    pm25_value : float
+        PM2.5 air quality reading in µg/m³ (0–500). Defaults to 0 (clean).
+    people_density : float
+        Pedestrian density per 100m of road (0–100). Defaults to 0 (empty).
 
     Returns
     -------
@@ -249,6 +309,10 @@ def compute_edge_weight(
             surface_defaulted=False,
             bike_path=False,
             bike_path_type=None,
+            pm25_value=pm25_value,
+            pm25_factor=1.0,
+            density_value=people_density,
+            density_factor=1.0,
             excluded=True,
             exclusion_reason="highway_type",
         )
@@ -268,6 +332,10 @@ def compute_edge_weight(
             surface_defaulted=False,
             bike_path=False,
             bike_path_type=None,
+            pm25_value=pm25_value,
+            pm25_factor=1.0,
+            density_value=people_density,
+            density_factor=1.0,
             excluded=True,
             exclusion_reason="speed_limit",
         )
@@ -293,6 +361,10 @@ def compute_edge_weight(
             surface_defaulted=False,
             bike_path=False,
             bike_path_type=None,
+            pm25_value=pm25_value,
+            pm25_factor=1.0,
+            density_value=people_density,
+            density_factor=1.0,
             excluded=True,
             exclusion_reason="speed_limit",
         )
@@ -344,7 +416,13 @@ def compute_edge_weight(
         else:
             hazard_penalty = hazard_penalties.get(osmid, 0.0)
 
-    # ── Step 7: Final composition ─────────────────────────────────────────────
+    # ── Step 7: Air quality factor (PM2.5) ────────────────────────────────────
+    air_factor = compute_air_quality_factor(pm25_value)
+
+    # ── Step 8: People density factor ────────────────────────────────────────
+    dens_factor = compute_density_factor(people_density)
+
+    # ── Step 9: Final composition ─────────────────────────────────────────────
     base_length = edge_data.get("length", 10.0)
     weight = (
         base_length
@@ -352,6 +430,8 @@ def compute_edge_weight(
         * surface_factor
         * speed_factor
         * bike_factor
+        * air_factor
+        * dens_factor
     ) + hazard_penalty
 
     return EdgeWeightResult(
@@ -362,6 +442,10 @@ def compute_edge_weight(
         surface_defaulted=surface_defaulted,
         bike_path=bike_path,
         bike_path_type=bike_path_type,
+        pm25_value=pm25_value,
+        pm25_factor=round(air_factor, 4),
+        density_value=people_density,
+        density_factor=round(dens_factor, 4),
         excluded=False,
         exclusion_reason=None,
     )
