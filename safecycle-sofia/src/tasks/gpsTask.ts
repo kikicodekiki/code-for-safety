@@ -129,7 +129,7 @@ TaskManager.defineTask(BACKGROUND_LOCATION_TASK, async ({ data, error }) => {
     if (dist <= HAZARD_ALERT_RADIUS_M) {
       inHazardZone = true
       if (settings.hazardAlertsEnabled && canAlert(`hazard_${hazard.id}`)) {
-        await fireHazardNearbyAlert(hazard.type, dist)
+        await fireHazardNearbyAlert(hazard.hazard_type, dist)
       }
       break
     }
