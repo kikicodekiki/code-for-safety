@@ -1,5 +1,6 @@
 import React from "react"
-import { StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { colors, radius, spacing, typography } from "../tokens"
 import { useNavigationStore } from "../stores/useNavigationStore"
 import type { RouteResponse, ZoneStatus } from "../types"
@@ -34,10 +35,14 @@ export const NavigationHUD = React.memo(function NavigationHUD({
   timeRemainingMin,
 }: NavigationHUDProps) {
   const zoneStatus = useNavigationStore((s) => s.currentZoneStatus)
+  const clearRoute = useNavigationStore((s) => s.clearRoute)
   const config = STATUS_CONFIG[zoneStatus]
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.closeButton} onPress={clearRoute}>
+        <MaterialCommunityIcons name="close" size={20} color={colors.textSecondary} />
+      </TouchableOpacity>
       <View style={styles.row}>
         <View style={styles.metricBlock}>
           <Text style={styles.metricValue}>{formatDistance(distanceRemainingM)}</Text>
@@ -72,6 +77,20 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  closeButton: {
+    position: "absolute",
+    top: spacing.md,
+    right: spacing.md,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: colors.surfaceElevated,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: colors.border,
+    zIndex: 10,
   },
   metricBlock: {
     flex: 1,

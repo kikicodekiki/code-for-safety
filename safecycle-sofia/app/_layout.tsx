@@ -35,7 +35,11 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="route-detail"
-          options={{ presentation: "modal", animation: "slide_from_bottom" }}
+          options={{ 
+            presentation: "transparentModal", 
+            animation: "fade",
+            contentStyle: { backgroundColor: "transparent" }
+          }}
         />
       </Stack>
     </>

@@ -6,7 +6,7 @@ Does NOT require OSMnx, Redis, PostgreSQL, or Firebase.
 
 Run:
     cd safecycle-backend
-    python -m uvicorn app.main_lite:app --reload --port 8000
+    python -m uvicorn app.main_lite:app --reload --port 8000 --host 0.0.0.0
 """
 from __future__ import annotations
 
