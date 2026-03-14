@@ -66,6 +66,13 @@ class Settings(BaseSettings):
     # Radius for proximity alert from user-reported hazard
     HAZARD_ALERT_RADIUS_M: float = 20.0
 
+    # ── VeloBG KML Pipeline ───────────────────────────────────────────────────
+    VELOBG_REFRESH_INTERVAL_S: int = 86400   # 24 hours between scheduled refreshes
+    VELOBG_FETCH_TIMEOUT_S: int = 30
+    VELOBG_KML_CACHE_PATH: str = "data/velobg_cache.kml"
+    VELOBG_REDIS_KEY: str = "velobg:map_data"
+    VELOBG_REDIS_TTL_S: int = 90000          # 25 hours — slightly longer than refresh interval
+
     # ── GPS WebSocket ─────────────────────────────────────────────────────────
     GPS_POLL_INTERVAL_S: int = 10
     WS_PING_INTERVAL_S: int = 30
