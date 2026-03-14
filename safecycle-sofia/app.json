@@ -1,0 +1,64 @@
+{
+  "expo": {
+    "name": "SafeCycle Sofia",
+    "slug": "safecycle-sofia",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "safecycle",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#0D0D0D"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.safecycle.sofia",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "SafeCycle needs your location to calculate safe cycling routes and alert you to nearby hazards.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "SafeCycle uses background location to monitor your route and send safety alerts even when the app is minimised.",
+        "NSLocationAlwaysUsageDescription": "SafeCycle uses background location to monitor your route and send safety alerts even when the app is minimised.",
+        "UIBackgroundModes": ["location", "fetch", "remote-notification"]
+      },
+      "config": {
+        "googleMapsApiKey": "REPLACE_WITH_IOS_GOOGLE_MAPS_KEY"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0D0D0D"
+      },
+      "package": "com.safecycle.sofia",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE",
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE"
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "REPLACE_WITH_ANDROID_GOOGLE_MAPS_KEY"
+        }
+      },
+      "googleServicesFile": "./google-services.json"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "SafeCycle uses your location in the background to alert you to intersections and hazards during navigation."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#00C97B"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
