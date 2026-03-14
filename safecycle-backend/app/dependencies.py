@@ -1,0 +1,109 @@
+"""
+SafeCycle Sofia — FastAPI dependency injectors.
+All route handlers and WebSocket endpoints consume these.
+"""
+from __future__ import annotations
+
+from collections.abc import AsyncGenerator
+from typing import Annotated
+
+import networkx as nx
+import structlog
+from fastapi import Depends, Request
+from redis.asyncio import Redis
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.config import Settings, settings
+from app.core.exceptions import GraphNotLoadedError
+from app.db.session import get_async_session
+from app.models.schemas.common import AwarenessZoneSchema
+from app.services.gps_service import GPSConnectionManager
+from app.services.hazard_service import HazardService
+from app.services.notification_service import NotificationService
+from app.services.routing_service import RoutingService
+
+logger = structlog.get_logger(__name__)
+
+# ── Singletons (set during app lifespan) ─────────────────────────────────────
+_connection_manager: GPSConnectionManager | None = None
+_notification_service: NotificationService | None = None
+
+
+def get_settings() -> Settings:
+    return settings
+
+
+async def get_db(
+    session: AsyncSession = Depends(get_async_session),
+) -> AsyncGenerator[AsyncSession, None]:
+    yield session
+
+
+async def get_redis(request: Request) -> Redis:
+    return request.app.state.redis
+
+
+def get_graph(request: Request) -> nx.MultiDiGraph:
+    graph = getattr(request.app.state, "graph", None)
+    if graph is None:
+        raise GraphNotLoadedError(
+            "The Sofia street graph is not loaded. "
+            "Check server startup logs for errors."
+        )
+    return graph
+
+
+def get_danger_nodes(request: Request) -> frozenset[int]:
+    return getattr(request.app.state, "danger_nodes", frozenset())
+
+
+def get_awareness_zones(request: Request) -> list[AwarenessZoneSchema]:
+    return getattr(request.app.state, "awareness_zones", [])
+
+
+def get_hazard_service() -> HazardService:
+    return HazardService()
+
+
+def get_notification_service() -> NotificationService:
+    global _notification_service
+    if _notification_service is None:
+        _notification_service = NotificationService()
+    return _notification_service
+
+
+def get_connection_manager(request: Request) -> GPSConnectionManager:
+    manager = getattr(request.app.state, "connection_manager", None)
+    if manager is None:
+        raise RuntimeError("GPSConnectionManager not initialised on app state")
+    return manager
+
+
+async def get_routing_service(
+    request: Request,
+    graph: nx.MultiDiGraph = Depends(get_graph),
+    danger_nodes: frozenset[int] = Depends(get_danger_nodes),
+    awareness_zones: list[AwarenessZoneSchema] = Depends(get_awareness_zones),
+) -> RoutingService:
+    return RoutingService(
+        graph=graph,
+        hazard_service=HazardService(),
+        danger_nodes=danger_nodes,
+        awareness_zones=awareness_zones,
+        settings=settings,
+    )
+
+
+async def check_redis(redis: Redis) -> bool:
+    try:
+        return await redis.ping()
+    except Exception:
+        return False
+
+
+async def check_database(db: AsyncSession) -> bool:
+    try:
+        await db.execute(__import__("sqlalchemy").text("SELECT 1"))
+        return True
+    except Exception:
+        return False
