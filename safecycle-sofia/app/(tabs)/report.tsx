@@ -10,7 +10,7 @@ import type { HazardType, SeverityLevel } from "../../src/types"
 export default function ReportScreen() {
   const [location, setLocation] = useState<{ lat: number; lon: number } | null>(null)
   const currentPosition = useNavigationStore((s) => s.currentPosition)
-  const { submitReport, isSubmitting, submitError } = useHazardStore()
+  const { submitReport } = useHazardStore()
 
   useEffect(() => {
     if (currentPosition) {
