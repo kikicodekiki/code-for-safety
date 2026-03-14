@@ -1,131 +1,118 @@
 """
-SafeCycle Sofia — Hazard report endpoints.
-POST /hazard   — submit a new crowd-sourced hazard report
-GET  /hazards  — list active hazards (optionally filtered by proximity)
+Hazard API endpoints.
 """
-from __future__ import annotations
-
-import structlog
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from redis.asyncio import Redis
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.config import Settings
-from app.dependencies import (
-    get_db,
-    get_hazard_service,
-    get_notification_service,
-    get_redis,
-    get_settings,
-    get_connection_manager,
-)
-from app.models.schemas.hazard import (
-    HazardReportCreate,
+from app.core.hazard.validators import HazardValidationError
+from app.models.enums import HazardType
+from app.models.schemas.hazard_create import HazardReportCreate
+from app.models.schemas.hazard_response import (
+    AggregatedHazardResponse,
     HazardReportResponse,
-    HazardResponse,
+    HazardStatsResponse,
 )
-from app.services.gps_service import GPSConnectionManager
+from app.models.schemas.hazard_update import HazardConfirmationCreate
 from app.services.hazard_service import HazardService
-from app.services.notification_service import NotificationService
-from app.utils.geo import is_within_bbox
-
-logger = structlog.get_logger(__name__)
 
 router = APIRouter(tags=["hazards"])
 
 
-@router.post(
-    "/hazard",
-    response_model=HazardReportResponse,
-    status_code=201,
-    summary="Report a cycling hazard",
-    description="""
-Submit a crowd-sourced hazard report at your current location.
+async def get_redis() -> Redis:
+    """Dependency — override in app startup with the real Redis instance."""
+    raise NotImplementedError("Redis dependency not configured")
 
-The report is:
-- **Persisted to PostgreSQL** for permanent record-keeping
-- **Cached in Redis** with a 10-hour TTL — the routing engine reads from Redis
-- **Broadcast via WebSocket** to nearby connected cyclists
-- **Pushed via FCM** to devices within 200 m
 
-Active reports (< 10 h old) add a dynamic penalty to nearby road edges,
-causing the router to avoid those streets.
-""",
-)
+def get_hazard_service() -> HazardService:
+    return HazardService()
+
+
+# ---------------------------------------------------------------------------
+# POST /hazard — Submit a new report
+# ---------------------------------------------------------------------------
+@router.post("/hazard", response_model=HazardReportResponse, status_code=status.HTTP_201_CREATED)
 async def report_hazard(
-    report: HazardReportCreate,
-    db: AsyncSession = Depends(get_db),
+    payload: HazardReportCreate,
     redis: Redis = Depends(get_redis),
-    hazard_service: HazardService = Depends(get_hazard_service),
-    notification_service: NotificationService = Depends(get_notification_service),
-    manager: GPSConnectionManager = Depends(get_connection_manager),
-    settings: Settings = Depends(get_settings),
+    service: HazardService = Depends(get_hazard_service),
 ) -> HazardReportResponse:
-    # Coordinates are already validated by Pydantic Field constraints (Sofia bbox)
-
-    response = await hazard_service.submit_report(
-        report=report,
-        db=db,
-        redis=redis,
-    )
-
-    # Build a HazardResponse for broadcasting
-    from app.models.schemas.hazard import HazardResponse
-    from app.utils.time import utc_now
-    hazard_broadcast = HazardResponse(
-        id=response.id,
-        lat=report.lat,
-        lon=report.lon,
-        type=report.type,
-        description=report.description,
-        timestamp=response.timestamp,
-        age_hours=0.0,
-        is_recent=True,
-        is_active=True,
-    )
-
-    # Broadcast via WebSocket to nearby cyclists
-    await manager.broadcast_hazard_nearby(
-        hazard=hazard_broadcast,
-        radius_m=200.0,
-    )
-
-    return response
+    try:
+        return await service.submit_report(payload, redis)
+    except HazardValidationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=[{"loc": ["body", exc.field_name], "msg": exc.message}],
+        )
 
 
-@router.get(
-    "/hazards",
-    response_model=list[HazardResponse],
-    summary="List active hazard reports",
-    description="""
-Returns active crowd-sourced hazard reports from Redis.
-
-- Reports expire automatically after 10 hours.
-- If `lat`/`lon` are provided, only reports within `radius_m` are returned.
-- Set `active_only=false` to include recently expired reports (for analytics).
-- Results are sorted freshest-first.
-""",
-)
+# ---------------------------------------------------------------------------
+# GET /hazards — List active aggregated hazards
+# ---------------------------------------------------------------------------
+@router.get("/hazards", response_model=list[AggregatedHazardResponse])
 async def list_hazards(
-    lat: float | None = Query(
-        None, ge=-90, le=90, description="Filter by proximity — your latitude"
-    ),
-    lon: float | None = Query(
-        None, ge=-180, le=180, description="Filter by proximity — your longitude"
-    ),
-    radius_m: float = Query(
-        500.0, gt=0, le=5000.0, description="Proximity filter radius in metres"
-    ),
-    active_only: bool = Query(
-        True, description="If true, only return reports younger than 10 hours"
-    ),
+    lat: float | None = Query(None),
+    lon: float | None = Query(None),
+    radius_m: float = Query(500.0, gt=0, le=10_000),
+    type: HazardType | None = Query(None),
+    min_severity: int = Query(1, ge=1, le=10),
+    aggregated: bool = Query(True),
+    active_only: bool = Query(True),
     redis: Redis = Depends(get_redis),
-    hazard_service: HazardService = Depends(get_hazard_service),
-) -> list[HazardResponse]:
-    return await hazard_service.get_all_active(
+    service: HazardService = Depends(get_hazard_service),
+) -> list[AggregatedHazardResponse]:
+    return await service.get_aggregated_hazards(
         redis=redis,
         lat=lat,
         lon=lon,
         radius_m=radius_m,
+        hazard_type=type,
+        min_severity=min_severity,
         active_only=active_only,
     )
+
+
+# ---------------------------------------------------------------------------
+# POST /hazard/{id}/confirm — Community validation
+# ---------------------------------------------------------------------------
+@router.post("/hazard/{report_id}/confirm", status_code=status.HTTP_204_NO_CONTENT)
+async def confirm_or_dismiss_hazard(
+    report_id: str,
+    payload: HazardConfirmationCreate,
+    redis: Redis = Depends(get_redis),
+    service: HazardService = Depends(get_hazard_service),
+) -> None:
+    try:
+        await service.confirm_hazard(report_id, payload, redis)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+
+
+# ---------------------------------------------------------------------------
+# DELETE /hazard/{id} — Admin/system removal
+# ---------------------------------------------------------------------------
+@router.delete("/hazard/{report_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def remove_hazard(
+    report_id: str,
+    reason: str = Query(..., max_length=200),
+    redis: Redis = Depends(get_redis),
+) -> None:
+    key = f"hazard:{report_id}"
+    deleted = await redis.delete(key)
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Hazard {report_id} not found.",
+        )
+    import logging
+    logging.getLogger(__name__).info("Hazard %s removed. Reason: %s", report_id, reason)
+
+
+# ---------------------------------------------------------------------------
+# GET /hazards/stats — Demo dashboard stats
+# ---------------------------------------------------------------------------
+@router.get("/hazards/stats", response_model=HazardStatsResponse)
+async def hazard_statistics(
+    redis: Redis = Depends(get_redis),
+    service: HazardService = Depends(get_hazard_service),
+) -> HazardStatsResponse:
+    return await service.get_statistics(redis)
