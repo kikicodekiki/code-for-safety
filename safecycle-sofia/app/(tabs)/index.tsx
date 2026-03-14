@@ -22,7 +22,6 @@ import { CrossroadMarker } from "../../src/components/CrossroadMarker"
 import { AwarenessZoneCircle } from "../../src/components/AwarenessZoneCircle"
 import { AlertBanner } from "../../src/components/AlertBanner"
 import { NavigationHUD } from "../../src/components/NavigationHUD"
-import { wsManager } from "../../src/services/websocket"
 import { colors, radius, spacing, typography } from "../../src/tokens"
 import type { Coordinate } from "../../src/types"
 
@@ -96,8 +95,6 @@ export default function MapScreen() {
   const [gpsGranted, setGpsGranted] = useState<boolean | null>(null)
   const [destinationText, setDestinationText] = useState("")
   const [isSearchFocused, setIsSearchFocused] = useState(false)
-  const [isLoadingRoute, setIsLoadingRoute] = useState(false)
-  const [routeError, setRouteError] = useState<string | null>(null)
   const [banners, setBanners] = useState<Banner[]>([])
   const [distanceRemainingM, setDistanceRemainingM] = useState(0)
   const [timeRemainingMin, setTimeRemainingMin] = useState(0)
@@ -107,10 +104,15 @@ export default function MapScreen() {
   const currentPosition = useNavigationStore((s) => s.currentPosition)
   const setOrigin = useNavigationStore((s) => s.setOrigin)
   const setDestination = useNavigationStore((s) => s.setDestination)
+  const pendingAlert = useNavigationStore((s) => s.pendingAlert)
+  const clearPendingAlert = useNavigationStore((s) => s.clearPendingAlert)
   const connectionStatus = useConnectionStore((s) => s.status)
   const fetchHazards = useHazardStore((s) => s.fetchHazards)
   const confirmHazard = useHazardStore((s) => s.confirmHazard)
   const getActiveHazards = useHazardStore((s) => s.getActiveHazards)
+
+  const { findRoute, isLoading: isLoadingRoute, error: routeError } = useRoute()
+  const clearRouteError = useNavigationStore((s) => s.setRouteError)
 
   // Request foreground location permission and capture initial position
   useEffect(() => {
@@ -132,35 +134,6 @@ export default function MapScreen() {
     const interval = setInterval(fetchHazards, 60_000)
     return () => clearInterval(interval)
   }, [fetchHazards])
-
-  // Listen for WebSocket server-push events and surface them as banners
-  useEffect(() => {
-    const onCrossroad = (..._args: unknown[]) => {
-      pushBanner("crossroad", "Approaching intersection — consider dismounting")
-    }
-    const onAwarenessZone = (..._args: unknown[]) => {
-      pushBanner(
-        "awareness",
-        "Heightened awareness zone ahead — children may be present"
-      )
-    }
-    const onHazardNearby = (...args: unknown[]) => {
-      const payload = args[0] as { hazard: { type: string }; distance_m: number }
-      pushBanner(
-        "hazard",
-        `User-reported hazard ${Math.round(payload.distance_m)} metres ahead`
-      )
-    }
-
-    wsManager.on("crossroad", onCrossroad)
-    wsManager.on("awareness_zone", onAwarenessZone)
-    wsManager.on("hazard_nearby", onHazardNearby)
-    return () => {
-      wsManager.off("crossroad", onCrossroad)
-      wsManager.off("awareness_zone", onAwarenessZone)
-      wsManager.off("hazard_nearby", onHazardNearby)
-    }
-  }, [])
 
   // Seed HUD values when navigation starts
   useEffect(() => {
@@ -192,43 +165,41 @@ export default function MapScreen() {
     setBanners((prev) => prev.filter((b) => b.id !== id))
   }, [])
 
+  // Surface pending alerts from the navigation store as banners
+  useEffect(() => {
+    if (!pendingAlert) return
+    pushBanner(pendingAlert.type, pendingAlert.message)
+    clearPendingAlert()
+  }, [pendingAlert, clearPendingAlert, pushBanner])
+
   const handleFindRoute = useCallback(async () => {
     if (!destinationText.trim()) return
-    setIsLoadingRoute(true)
-    setRouteError(null)
     Keyboard.dismiss()
 
-    try {
-      const pos =
-        useNavigationStore.getState().currentPosition ??
-        useNavigationStore.getState().origin ?? {
-          lat: 42.6977,
-          lon: 23.3219,
-        }
+    const pos =
+      useNavigationStore.getState().currentPosition ??
+      useNavigationStore.getState().origin ?? {
+        lat: 42.6977,
+        lon: 23.3219,
+      }
 
-      // Destination geocoding is handled by the backend for this hackathon build.
-      // We pass a placeholder destination at Sofia centre; replace with a proper
-      // geocoding call (Google Places API) for production.
-      const destCoord: Coordinate = { lat: 42.698, lon: 23.322 }
-      setDestination(destCoord)
+    // Destination geocoding is handled by the backend for this hackathon build.
+    // We pass a placeholder destination at Sofia centre; replace with a proper
+    // geocoding call (Google Places API) for production.
+    const destCoord: Coordinate = { lat: 42.698, lon: 23.322 }
+    setDestination(destCoord)
 
-      const result = await apiClient.getRoute({
-        origin_lat: pos.lat,
-        origin_lon: pos.lon,
-        dest_lat: destCoord.lat,
-        dest_lon: destCoord.lon,
-      })
+    await findRoute({
+      origin_lat: pos.lat,
+      origin_lon: pos.lon,
+      dest_lat: destCoord.lat,
+      dest_lon: destCoord.lon,
+    })
 
-      useNavigationStore.getState().setRoute(result)
+    if (!useNavigationStore.getState().routeError) {
       router.push("/route-detail")
-    } catch {
-      setRouteError(
-        "No safe route found. Try adjusting your settings or destination."
-      )
-    } finally {
-      setIsLoadingRoute(false)
     }
-  }, [destinationText, setDestination])
+  }, [destinationText, setDestination, findRoute])
 
   const activeHazards = getActiveHazards()
 
