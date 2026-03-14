@@ -27,6 +27,7 @@ shapely==2.0.4
 geopandas==0.14.4
 pyproj==3.6.1
 Fiona==1.9.5
+scikit-learn==1.5.1
 
 # Scientific
 numpy==1.26.4

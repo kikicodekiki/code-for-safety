@@ -8,6 +8,8 @@ import logging
 import uuid
 from datetime import datetime, timedelta, timezone
 
+import networkx as nx
+import osmnx as ox
 from redis.asyncio import Redis
 
 from app.core.hazard.aggregation import (
@@ -133,6 +135,65 @@ class HazardService:
             routing_impact=routing_impact,
             message=f"{TYPE_ICON[report.type]} {TYPE_DISPLAY[report.type]} reported — thank you!",
         )
+
+    async def get_active_hazard_penalties(
+        self,
+        G: nx.MultiDiGraph,
+        redis: Redis,
+    ) -> dict[int, float]:
+        """
+        Calculates additive segment penalties based on active crowd-sourced hazards.
+        Returns a map of osmid -> penalty.
+        """
+        raw_reports = await self._fetch_reports_from_redis(redis)
+        if not raw_reports:
+            return {}
+
+        aggregated = aggregate_nearby_reports(raw_reports)
+        now = _utc_now()
+        penalties: dict[int, float] = {}
+
+        for cluster in aggregated:
+            age_hours = (now - cluster.most_recent_report).total_seconds() / 3600.0
+            factor = decay_factor(age_hours, cluster.hazard_type)
+
+            if factor <= 0.0:
+                continue
+
+            # Find nearest edge in the graph
+            # Note: ox.nearest_edges expects (X, Y) order
+            try:
+                u, v, k = ox.nearest_edges(G, X=cluster.lon, Y=cluster.lat)
+                edge_data = G[u][v][k]
+                osmid = edge_data.get("osmid")
+
+                if osmid is None:
+                    continue
+
+                penalty_spec = SEVERITY_PENALTY_MAP.get(
+                    (cluster.hazard_type, cluster.effective_severity)
+                )
+                if not penalty_spec:
+                    continue
+
+                if penalty_spec.exclude:
+                    # Map excluded edges to a very high penalty if we can't remove them dynamically
+                    penalty = 1_000_000.0
+                else:
+                    # Penalty = (base_penalty + multiplier_effect) * decay * confidence
+                    # We assume a base length of 1.0 for the multiplier comparison
+                    raw_p = penalty_spec.additive + 1.0 * (penalty_spec.multiplier - 1.0)
+                    penalty = raw_p * factor * cluster.confidence
+
+                # If osmid is a list (OSMnx simplification), apply to all
+                osmids = osmid if isinstance(osmid, list) else [osmid]
+                for oid in osmids:
+                    penalties[oid] = penalties.get(oid, 0.0) + penalty
+
+            except Exception as exc:
+                logger.warning("Could not map hazard %s to edge: %s", cluster.canonical_id, exc)
+
+        return penalties
 
     async def get_aggregated_hazards(
         self,

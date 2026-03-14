@@ -13,14 +13,10 @@ from app.models.schemas.hazard_response import (
     HazardStatsResponse,
 )
 from app.models.schemas.hazard_update import HazardConfirmationCreate
+from app.dependencies import get_redis
 from app.services.hazard_service import HazardService
 
 router = APIRouter(tags=["hazards"])
-
-
-async def get_redis() -> Redis:
-    """Dependency — override in app startup with the real Redis instance."""
-    raise NotImplementedError("Redis dependency not configured")
 
 
 def get_hazard_service() -> HazardService:
