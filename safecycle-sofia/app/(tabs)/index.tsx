@@ -17,7 +17,7 @@ import { useNavigationStore } from "../../src/stores/useNavigationStore"
 import { useHazardStore } from "../../src/stores/useHazardStore"
 import { useConnectionStore } from "../../src/stores/useConnectionStore"
 import { apiClient } from "../../src/api/client"
-import { HazardPin } from "../../src/components/HazardPin"
+import { HazardPin } from "../../src/components/hazard"
 import { CrossroadMarker } from "../../src/components/CrossroadMarker"
 import { AwarenessZoneCircle } from "../../src/components/AwarenessZoneCircle"
 import { AlertBanner } from "../../src/components/AlertBanner"
@@ -108,8 +108,9 @@ export default function MapScreen() {
   const setOrigin = useNavigationStore((s) => s.setOrigin)
   const setDestination = useNavigationStore((s) => s.setDestination)
   const connectionStatus = useConnectionStore((s) => s.status)
-  const hazards = useHazardStore((s) => s.hazards)
   const fetchHazards = useHazardStore((s) => s.fetchHazards)
+  const confirmHazard = useHazardStore((s) => s.confirmHazard)
+  const getActiveHazards = useHazardStore((s) => s.getActiveHazards)
 
   // Request foreground location permission and capture initial position
   useEffect(() => {
@@ -229,12 +230,12 @@ export default function MapScreen() {
     }
   }, [destinationText, setDestination])
 
+  const activeHazards = getActiveHazards()
+
   const routeCoords = route?.path.coordinates.map(([lon, lat]) => ({
     latitude: lat,
     longitude: lon,
   }))
-
-  const activeHazards = hazards.filter((h) => h.age_hours < 10)
 
   // ── Permission denied ──────────────────────────────────────────────────────
   if (gpsGranted === false) {
@@ -308,7 +309,7 @@ export default function MapScreen() {
 
         {/* Hazard pins — active reports only (< 10 h) */}
         {activeHazards.map((hazard) => (
-          <HazardPin key={hazard.id} hazard={hazard} />
+          <HazardPin key={hazard.id} hazard={hazard} onConfirm={confirmHazard} />
         ))}
 
         {/* Current position — teal dot with white ring */}
