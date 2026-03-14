@@ -1,0 +1,3539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>velobg_paths</name>
+    <description>Всички изградени до момента велоалеи в София</description>
+    <Style id="line-000099-3000-normal">
+      <LineStyle>
+        <color>ff990000</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-000099-3000-highlight">
+      <LineStyle>
+        <color>ff990000</color>
+        <width>4.5</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-000099-3000">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-000099-3000-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-000099-3000-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-000099-4000-normal">
+      <LineStyle>
+        <color>ff990000</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-000099-4000-highlight">
+      <LineStyle>
+        <color>ff990000</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-000099-4000">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-000099-4000-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-000099-4000-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-000099-4000-nodesc-normal">
+      <LineStyle>
+        <color>ff990000</color>
+        <width>4</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-000099-4000-nodesc-highlight">
+      <LineStyle>
+        <color>ff990000</color>
+        <width>6</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-000099-4000-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-000099-4000-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-000099-4000-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-009D57-3713-nodesc-normal">
+      <LineStyle>
+        <color>ff579d00</color>
+        <width>3.713</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-009D57-3713-nodesc-highlight">
+      <LineStyle>
+        <color>ff579d00</color>
+        <width>5.5695</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-009D57-3713-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-009D57-3713-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-009D57-3713-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-009D57-4488-nodesc-normal">
+      <LineStyle>
+        <color>ff579d00</color>
+        <width>4.488</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-009D57-4488-nodesc-highlight">
+      <LineStyle>
+        <color>ff579d00</color>
+        <width>6.732</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-009D57-4488-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-009D57-4488-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-009D57-4488-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-009D57-5069-nodesc-normal">
+      <LineStyle>
+        <color>ff579d00</color>
+        <width>5.069</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-009D57-5069-nodesc-highlight">
+      <LineStyle>
+        <color>ff579d00</color>
+        <width>7.6035</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-009D57-5069-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-009D57-5069-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-009D57-5069-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-009D57-5263-nodesc-normal">
+      <LineStyle>
+        <color>ff579d00</color>
+        <width>5.263</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-009D57-5263-nodesc-highlight">
+      <LineStyle>
+        <color>ff579d00</color>
+        <width>7.8945</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-009D57-5263-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-009D57-5263-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-009D57-5263-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-3F5BA9-4000-normal">
+      <LineStyle>
+        <color>ffa95b3f</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-3F5BA9-4000-highlight">
+      <LineStyle>
+        <color>ffa95b3f</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-3F5BA9-4000">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-3F5BA9-4000-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-3F5BA9-4000-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-3F5BA9-4100-normal">
+      <LineStyle>
+        <color>ffa95b3f</color>
+        <width>4.1</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-3F5BA9-4100-highlight">
+      <LineStyle>
+        <color>ffa95b3f</color>
+        <width>6.15</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-3F5BA9-4100">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-3F5BA9-4100-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-3F5BA9-4100-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-4186F0-4000-normal">
+      <LineStyle>
+        <color>fff08641</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-4186F0-4000-highlight">
+      <LineStyle>
+        <color>fff08641</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-4186F0-4000">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-4186F0-4000-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-4186F0-4000-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-660000-4000-normal">
+      <LineStyle>
+        <color>ff000066</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-660000-4000-highlight">
+      <LineStyle>
+        <color>ff000066</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-660000-4000">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-660000-4000-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-660000-4000-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-2000-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>2</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-2000-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>3</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-2000">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-2000-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-2000-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-2744-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>2.744</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-2744-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.116</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-2744">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-2744-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-2744-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-2744-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>2.744</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-2744-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.116</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-2744-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-2744-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-2744-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-3325-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>3.325</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-3325-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.9875</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-3325-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-3325-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-3325-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-3519-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>3.519</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-3519-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.2785</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-3519">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-3519-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-3519-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-3519-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>3.519</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-3519-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.2785</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-3519-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-3519-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-3519-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-3713-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>3.713</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-3713-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.5695</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-3713">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-3713-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-3713-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-3713-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>3.713</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-3713-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.5695</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-3713-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-3713-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-3713-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-3906-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>3.906</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-3906-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.859</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-3906-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-3906-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-3906-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-4000-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-4000-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-4000">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-4000-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-4000-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-4100-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.1</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-4100-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>6.15</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-4100">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-4100-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-4100-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-4100-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.1</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-4100-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>6.15</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-4100-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-4100-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-4100-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-4294-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.294</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-4294-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>6.441</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-4294">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-4294-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-4294-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-4294-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.294</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-4294-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>6.441</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-4294-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-4294-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-4294-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-4332-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.332</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-4332-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>6.498</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-4332-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-4332-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-4332-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-4488-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.488</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-4488-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>6.732</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-4488">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-4488-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-4488-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-4488-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.488</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-4488-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>6.732</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-4488-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-4488-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-4488-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-4681-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.681</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-4681-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>7.0215</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-4681">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-4681-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-4681-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-4681-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.681</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-4681-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>7.0215</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-4681-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-4681-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-4681-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-4875-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.875</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-4875-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>7.3125</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-4875">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-4875-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-4875-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-4875-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>4.875</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-4875-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>7.3125</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-4875-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-4875-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-4875-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-5069-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.069</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-5069-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>7.6035</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-5069">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-5069-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-5069-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-5069-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.069</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-5069-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>7.6035</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-5069-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-5069-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-5069-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-5263-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.263</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-5263-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>7.8945</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-5263">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-5263-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-5263-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-5263-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.263</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-5263-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>7.8945</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-5263-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-5263-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-5263-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-5456-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.456</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-5456-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>8.184</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-5456">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-5456-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-5456-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-5456-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.456</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-5456-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>8.184</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-5456-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-5456-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-5456-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-5650-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.65</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-5650-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>8.475</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-5650-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-5650-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-5650-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-5844-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.844</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-5844-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>8.766</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-5844">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-5844-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-5844-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-5844-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>5.844</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-5844-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>8.766</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-5844-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-5844-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-5844-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-6231-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>6.231</width>
+      </LineStyle>
+    </Style>
+    <Style id="line-DB4436-6231-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>9.3465</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="line-DB4436-6231">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-6231-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-6231-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-DB4436-6813-nodesc-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>6.813</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-DB4436-6813-nodesc-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>10.2195</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-DB4436-6813-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-DB4436-6813-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-DB4436-6813-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-F4B400-3325-nodesc-normal">
+      <LineStyle>
+        <color>ff00b4f4</color>
+        <width>3.325</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-F4B400-3325-nodesc-highlight">
+      <LineStyle>
+        <color>ff00b4f4</color>
+        <width>4.9875</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-F4B400-3325-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-F4B400-3325-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-F4B400-3325-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-F4B400-3713-nodesc-normal">
+      <LineStyle>
+        <color>ff00b4f4</color>
+        <width>3.713</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-F4B400-3713-nodesc-highlight">
+      <LineStyle>
+        <color>ff00b4f4</color>
+        <width>5.5695</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-F4B400-3713-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-F4B400-3713-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-F4B400-3713-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-F4B400-3906-nodesc-normal">
+      <LineStyle>
+        <color>ff00b4f4</color>
+        <width>3.906</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-F4B400-3906-nodesc-highlight">
+      <LineStyle>
+        <color>ff00b4f4</color>
+        <width>5.859</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-F4B400-3906-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-F4B400-3906-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-F4B400-3906-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-F4B400-4100-nodesc-normal">
+      <LineStyle>
+        <color>ff00b4f4</color>
+        <width>4.1</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-F4B400-4100-nodesc-highlight">
+      <LineStyle>
+        <color>ff00b4f4</color>
+        <width>6.15</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-F4B400-4100-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-F4B400-4100-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-F4B400-4100-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-F4B400-4294-nodesc-normal">
+      <LineStyle>
+        <color>ff00b4f4</color>
+        <width>4.294</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-F4B400-4294-nodesc-highlight">
+      <LineStyle>
+        <color>ff00b4f4</color>
+        <width>6.441</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-F4B400-4294-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-F4B400-4294-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-F4B400-4294-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="line-F4B400-4875-nodesc-normal">
+      <LineStyle>
+        <color>ff00b4f4</color>
+        <width>4.875</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="line-F4B400-4875-nodesc-highlight">
+      <LineStyle>
+        <color>ff00b4f4</color>
+        <width>7.3125</width>
+      </LineStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="line-F4B400-4875-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#line-F4B400-4875-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#line-F4B400-4875-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Велоалеи в София</name>
+      <Placemark>
+        <name>Велоалея Южен Парк 2</name>
+        <description><![CDATA[Велоалея с естествена настилка в парка на красотата (Южен парк 2).<br>Настилка: екологична - естествена<br>Обща дължина ~1,7 км.]]></description>
+        <styleUrl>#line-660000-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.31811,42.68171,0
+            23.317,42.68138,0
+            23.31621,42.68081,0
+            23.31621,42.68047,0
+            23.31665,42.68029,0
+            23.316808,42.679864,0
+            23.31664,42.67859,0
+            23.3179,42.67916,0
+            23.31946,42.68074,0
+            23.32062,42.68108,0
+            23.32043,42.68188,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея Южен Парк 2</name>
+        <description><![CDATA[Велоалея с естествена настилка в парка на красотата (Южен парк 2).<br>Настилка: екологична - естествена<br>Обща дължина ~1,7 км.]]></description>
+        <styleUrl>#line-660000-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.31666,42.67859,0
+            23.31618,42.67762,0
+            23.31575,42.67725,0
+            23.31363,42.6765,0
+            23.31338,42.6762,0
+            23.31291,42.67592,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея бул. Евлоги Георгиев</name>
+        <description><![CDATA[Еднопосочна велоалея по бул. Евлоги Георгиев. <br>Настилка:тротоарни плочки. <br>Обща дължина 2,7 км<br>Дължина на еднопосочната отсечка: 2х900 м.]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.321582,42.683193,0
+            23.331152,42.686339,0
+            23.330798,42.686647,0
+            23.330621,42.686505,0
+            23.321427,42.683445,0
+            23.321587,42.683196,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея бул. Евлоги Георгиев</name>
+        <description><![CDATA[Двупосочна велоалея по бул. Евлоги Георгиев. <br>Настилка: тротоарни плочки.<br>Обща дължина: 2,7 км]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.330863,42.686576,0
+            23.333679,42.688465,0
+            23.334226,42.688847,0
+            23.334355,42.688772,0
+            23.336876,42.690397,0
+            23.336779,42.69046,0
+            23.33701,42.69057,0
+            23.337321,42.690342,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея бул. Евлоги Георгиев</name>
+        <description><![CDATA[Двупосочна велоалея по бул. Евлоги Георгиев. <br>Настилка: тротоарни плочки.<br>Обща дължина: 2,7 км]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3376,42.690783,0
+            23.337842,42.690645,0
+            23.338094,42.690744,0
+            23.339832,42.691142,0
+            23.339746,42.691323,0
+            23.343742,42.692218,0
+            23.3462205,42.6937446,0
+            23.3467733,42.6960747,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея бул. Цар Борис III</name>
+        <description><![CDATA[Двупосочна споделена велоалея/пешеходна алея. <br>Настилка: Асфалт. <br>Дължина: 5 км.]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.30955,42.692,0
+            23.28472,42.67887,0
+            23.272787,42.672174,0
+            23.263174,42.666573,0
+            23.260792,42.66561,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - Ловен парк</name>
+        <description><![CDATA[Велоалея през парка. <br>Настилка: Асфалт. <br>Дължина: 1,1 км.]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.337321,42.666091,0
+            23.331914,42.664608,0
+            23.329425,42.664482,0
+            23.324296,42.662951,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея бул. Гоце Делчев</name>
+        <description><![CDATA[Велоалея успоредна на бул. Гоце Делчев изградена по тротоара. <br>Настилка: асфалт. <br>Дължина: 2 км<br>Свързва велоалеята по бул. Цар Борис III и Южен Парк]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2858499,42.6781529,0
+            23.294288,42.672221,0
+            23.300929,42.66673,0
+            23.302592,42.665523,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - жк. Младост</name>
+        <description><![CDATA[Настилка: червен Асфалт<br>Обща дължина: ~4,8 км.<br>Дължина с еднопосочните алеи: ~7 км.]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.376235,42.650252,0
+            23.376009,42.650256,0
+            23.375409,42.650548,0
+            23.374357,42.650256,0
+            23.374261,42.649502,0
+            23.375237,42.648725,0
+            23.374969,42.648449,0
+            23.375001,42.647904,0
+            23.375387,42.647068,0
+            23.375521,42.647013,0
+            23.375494,42.646942,0
+            23.376406,42.646673,0
+            23.377367,42.646172,0
+            23.380027,42.642889,0
+            23.381208,42.641445,0
+            23.381497,42.640896,0
+            23.377088,42.640356,0
+            23.37712,42.640178,0
+            23.375071,42.639945,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - жк. Младост</name>
+        <description><![CDATA[Настилка: червен Асфалт<br>Обща дължина: ~4,8 км.<br>Дължина с еднопосочните алеи: ~7 км.]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.375108,42.630154,0
+            23.378531,42.630651,0
+            23.380172,42.630738,0
+            23.380494,42.630865,0
+            23.380247,42.636477,0
+            23.381428,42.638718,0
+            23.381717,42.639815,0
+            23.381492,42.640896,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - жк. Младост</name>
+        <description><![CDATA[Настилка: червен Асфалт<br>Обща дължина: ~4,8 км.<br>Дължина с еднопосочните алеи: ~7 км.]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.374937,42.639941,0
+            23.375044,42.630138,0
+            23.375022,42.630138,0
+            23.375022,42.630123,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Ломско шосе</name>
+        <description><![CDATA[Настилка: Асфалт<br>Дължина: 1,7 км.]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.293105,42.7350699,0
+            23.30539,42.72368,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Акад. Иван Гешов</name>
+        <description><![CDATA[Настилка: 300 м. асфалт и 560 м. бетонени павета<br>Дължина: 840 м.]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3018648,42.6820579,0
+            23.301669,42.68264,0
+            23.30113,42.68576,0
+            23.30086,42.68637,0
+            23.300595,42.6866524,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея по бул. Мария </name>
+        <description><![CDATA[Изградена 2012<br>Настилка: Армиран бетон<br>Дтлжина: 1,75 км]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.310167,42.715438,0
+            23.32251,42.71039,0
+            23.32399,42.70521,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея надлез Надежда</name>
+        <description><![CDATA[Изградена 2012<br>Настилка: Асфалт<br>Дължина: 1,1 км]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.30539,42.72367,0
+            23.30698,42.72233,0
+            23.30884,42.72133,0
+            23.30954,42.72104,0
+            23.30987,42.72072,0
+            23.31009,42.72036,0
+            23.30959,42.7158,0
+            23.310167,42.71544,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея бул. Бъкстон</name>
+        <description><![CDATA[Изградена в края на 2012<br>Настилка: Армиран бетон<br>Дтлжина: 1,37 км]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.276832,42.669515,0
+            23.2728405,42.6600081,0
+            23.27239,42.657728,0
+            23.27239,42.657697,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. България - бул. Пенчо Славейков - север</name>
+        <description><![CDATA[Ще бъде изградена през 2012<br>Изградена: 2018 г.<br>Настилка: асфалт<br>Дължина: 450м <br>Ширина: 2м.<br>Двупосочна велоалея по тротоара северна част]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3150401,42.6835218,0
+            23.316126,42.682709,0
+            23.316357,42.682595,0
+            23.316733,42.6825,0
+            23.317218,42.682422,0
+            23.317688,42.682416,0
+            23.318106,42.682514,0
+            23.320161,42.683238,0
+            23.320195,42.683317,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея -  бул. Царица Йоанна</name>
+        <description><![CDATA[Двупосочна велоалея по бул. Царица Йоанна. <br>Настилка: асфалт<br>Обща дължина 150 м]]></description>
+        <styleUrl>#line-000099-3000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.242198,42.726295,0
+            23.243979,42.725413,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - бул. Никола Мушанов - изток</name>
+        <description><![CDATA[Дължина: 1,45 км.<br>Ширина: 1м.<br>Еднопосочна велолента източна част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-3F5BA9-4100</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2850075,42.6953884,0
+            23.2780337,42.6905151,0
+            23.2761229,42.6879672,0
+            23.2741908,42.6853286,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - бул. Тодор Александров - южна</name>
+        <description><![CDATA[Дължина: 3.1 км.<br>Ширина: 1 м.<br>Еднопосочна велолента на южната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2850504,42.7057293,0
+            23.293248,42.7038852,0
+            23.2962096,42.7021511,0
+            23.3161221,42.6986976,0
+            23.3193751,42.6981214,0
+            23.3208525,42.6978014,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - ул. Сребърна, ул. Люба Величкова, ул. Атанас Дуков - юг</name>
+        <description><![CDATA[Еднопосочна велолента от южната част<br>Настилка: асфалт<br>Дължина: 1,2 км<br>Ширина: 1 м]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3184171,42.6601427,0
+            23.3198868,42.6606565,0
+            23.3212788,42.6619115,0
+            23.3228639,42.6628035,0
+            23.3250579,42.6635194,0
+            23.3258196,42.6643448,0
+            23.3266136,42.6652452,0
+            23.3270857,42.6658063,0
+            23.3271823,42.6664148,0
+            23.3270107,42.6670262,0
+            23.3266568,42.6675745,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - ул. Ф. Нансен</name>
+        <description><![CDATA[Двупосочна велоалея от западната страна към пл. България<br>Настилка: плочки<br>Дължина: 610 м.<br>Ширина: 2 м]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.321561,42.688697,0
+            23.3211319,42.6860886,0
+            23.3209857,42.6859639,0
+            23.3209093,42.6854607,0
+            23.3206129,42.6840879,0
+            23.320195,42.683317,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Копенхаген</name>
+        <description><![CDATA[Двупосочна велоалея<br>Настилка: асфалт<br>Дължина: 450м.]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.4016138,42.6441953,0
+            23.402059,42.6446599,0
+            23.4024345,42.6451639,0
+            23.4037944,42.647498,0
+            23.4034646,42.6476598,0
+            23.4019919,42.6452389,0
+            23.401233,42.6443541,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалаея - ул. Обиколна</name>
+        <styleUrl>#line-000099-4000-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3954179,42.6539489,0
+            23.3954126,42.6546196,0
+            23.3941225,42.6564541,0
+            23.3942184,42.6574024,0
+            23.394105,42.6574512,0
+            23.394211,42.6577659,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. България - север</name>
+        <description><![CDATA[Дължина: 940 м.<br>Ширина: 2 м.<br>Двупосочна велоалея на северната част<br>Настилка: Уни-павета]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3030954,42.6798713,0
+            23.3032565,42.6797318,0
+            23.3059925,42.6806492,0
+            23.308608,42.6814753,0
+            23.3108142,42.6817208,0
+            23.3126764,42.6818612,0
+            23.3135672,42.682168,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Дондуков</name>
+        <description><![CDATA[Дължина: 1 км<br>Ширина: 2 м.<br>Двупосочна велоалея на южната част<br>Настилка: Павета]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3260024,42.6977225,0
+            23.3299345,42.69817,0
+            23.3346471,42.698656,0
+            23.3379221,42.6989446,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея по бул. Прага</name>
+        <description><![CDATA[Двупосочна велоалея от едната страна на пътното платно. <br>Настилка: асфалт<br>Дължина: 400м]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3105958,42.6870688,0
+            23.3139646,42.6894268,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - Студентски град</name>
+        <description><![CDATA[Двупосочна маркирана велоалея от 2те страни на булеварда.<br>Настилка: асфалт<br>Дължина: 1600 м]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3453679,42.6469653,0
+            23.3463925,42.649305,0
+            23.347232,42.6511654,0
+            23.347641,42.6544745,0
+            23.3493368,42.654409,0
+            23.3495786,42.656767,0
+            23.3478247,42.6594563,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - ул. Г.С. Раковски</name>
+        <description><![CDATA[Двупосочна велоалея по ул. Г.С. Раковски<br>Настилка: асфалт<br>Дължина: 820м]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3231807,42.6886895,0
+            23.3235025,42.6906689,0
+            23.3250186,42.6914119,0
+            23.3267493,42.6926202,0
+            23.3275499,42.6931598,0
+            23.3287651,42.6943101,0
+            23.328816,42.6943357,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея по ул. Монтевидео</name>
+        <description><![CDATA[Двупосочна от 2те сстрани на улицата<br>настилка: Асфалт<br>дължина: ~650м]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2559001,42.6849355,0
+            23.2544088,42.6904087,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - ул. Обиколна
+</name>
+        <description>Двупосочна, на южното пътно платно, отделена с гумени разделители</description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3954179,42.6539489,0
+            23.3954556,42.6530779,0
+            23.3956192,42.6525754,0
+            23.3959975,42.6520018,0
+            23.3963784,42.6516793,0
+            23.3982184,42.6506269,0
+            23.3984866,42.6503961,0
+            23.3998867,42.64873,0
+            23.4002568,42.6482398,0
+            23.4009917,42.6480327,0
+            23.4026358,42.6479686,0
+            23.4034646,42.6476598,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Пейо К. Яворов
+</name>
+        <description>Двупосочна, на тротоара, отделена с жълта боя.</description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3324102,42.6702981,0
+            23.3329278,42.6701304,0
+            23.3322197,42.6696907,0
+            23.3322036,42.6697104,0
+            23.3322385,42.6697242,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея бул. Монтевидео</name>
+        <description><![CDATA[Двупосочна велоалеея от 2те страни на пътното платно<br>Настилка: асфалт<br>Дължина: ~1200м]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2522223,42.6734481,0
+            23.2560847,42.6838595,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул Ботеевградско Шосе - юг</name>
+        <description><![CDATA[Дължина: 4 км.<br>Ширина: 2 м.<br>Двупосочна велоалея в южната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-3F5BA9-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.4304282,42.7088764,0
+            23.4262455,42.7091611,0
+            23.4215263,42.7092249,0
+            23.4043369,42.7060747,0
+            23.3942462,42.7042856,0
+            23.3934389,42.70399,0
+            23.3918162,42.7037102,0
+            23.3901935,42.7034383,0
+            23.3893862,42.7033792,0
+            23.3874798,42.7030161,0
+            23.3873278,42.7029026,0
+            23.3866071,42.7027852,0
+            23.3863298,42.7028185,0
+            23.3848709,42.7025582,0
+            23.3846404,42.7025462,0
+            23.3841204,42.7024395,0
+            23.3840683,42.7023014,0
+            23.3826429,42.7020293,0
+            23.3825011,42.7021236,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Противопосочна велолента - ул. Княз Борис I</name>
+        <description><![CDATA[Дължина: 600 м.<br>Ширина: 1 м.<br>Еднопосочна велолента на източната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3166485,42.6895252,0
+            23.3183141,42.6949506,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - Руски паметник</name>
+        <description><![CDATA[Велоалея  около руски паметник<br>Настилка: Асфалт<br>Дължина: 210 м<br>Ширина: 2 м.]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.309598,42.6920331,0
+            23.3099359,42.6918222,0
+            23.3102846,42.6917571,0
+            23.3107835,42.6918123,0
+            23.3110651,42.6919789,0
+            23.3111859,42.6922716,0
+            23.311084,42.6926206,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Т. Каблешков - юг</name>
+        <description><![CDATA[Дължина: 900 м.<br>Ширина: 1,7-1,8 м.<br>Еднопосочна велоалея на южната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2899702,42.6640364,0
+            23.2996584,42.6593618,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Асен Йорданов - бул. Искарско Шосе</name>
+        <description><![CDATA[Настилка: Асфалт<br>Дължина: 2750 м]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3762134,42.6749101,0
+            23.3872319,42.6729775,0
+            23.395418,42.6714945,0
+            23.4067691,42.6657752,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - пл. Македония</name>
+        <description><![CDATA[Дължина: 400 м.<br>Ширина: 2 м.<br>Двупосочна велоалея на северната част<br>Настилка: Уни-павета<br>Изградена: 2022 г.<br>Приоритетна за изграждане 2012 г.<br>ПЛАН за развитие на ВЕЛОсипедния транспорт на територията на СТОЛИЧНА ОБЩИНА 2012-2017]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3110504,42.6926545,0
+            23.3150308,42.6946377,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - бул. д-р Петър Дертлиев - изток</name>
+        <description><![CDATA[Длжина: 0.9 км<br>Ширина: 1,5-1,8 м<br>Еднопосочна велолента от източната част<br>Настилка: асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2712699,42.7111684,0
+            23.2735015,42.7121301,0
+            23.2742418,42.7125558,0
+            23.2748533,42.7130288,0
+            23.2772888,42.7157169,0
+            23.278823,42.7175063,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - Западен парк</name>
+        <styleUrl>#line-000099-4000-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2745936,42.7127051,0
+            23.274812,42.7125083,0
+            23.2749109,42.7125222,0
+            23.2749883,42.7125951,0
+            23.275127,42.7126544,0
+            23.275544,42.7127647,0
+            23.2757143,42.7127765,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Т. Каблешков - север
+</name>
+        <description><![CDATA[Дължина: 1.1 км<br>Ширина: 2 м.<br>Еднопосочна велоалеяа на северната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2997915,42.6595492,0
+            23.2952586,42.6616203,0
+            23.289851,42.6644023,0
+            23.289663,42.6645566,0
+            23.2888073,42.6650145,0
+            23.2884451,42.6654644,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул България - запад</name>
+        <description><![CDATA[Дължина: 3,2 км<br>Ширина: 2 м.<br>Еднопосочна велолента на западната част<br>Настилка: Уни-павета / Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3021277,42.6795386,0
+            23.300099,42.6791362,0
+            23.2992486,42.6788679,0
+            23.2992311,42.6787102,0
+            23.297969,42.6777952,0
+            23.2945439,42.6725497,0
+            23.2870215,42.6646771,0
+            23.286477,42.6636692,0
+            23.2857984,42.6614581,0
+            23.2844251,42.6566295,0
+            23.2837116,42.6553473,0
+            23.2833603,42.6551125,0
+            23.2834153,42.6549872,0
+            23.2828581,42.6543131,0
+            23.2823759,42.6539151,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - ул. даскал Стоян Попандреев</name>
+        <styleUrl>#line-000099-4000-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2823926,42.6537366,0
+            23.2820701,42.6534496,0
+            23.2814686,42.6533362,0
+            23.2808879,42.6528252,0
+            23.2804131,42.6522295,0
+            23.2788199,42.6511011,0
+            23.2763952,42.6496807,0
+            23.2747644,42.6492072,0
+            23.271138,42.6489705,0
+            23.2682842,42.64886,0
+            23.2669109,42.649223,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. България</name>
+        <styleUrl>#line-000099-4000-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2847398,42.6580369,0
+            23.2843965,42.6581,0
+            23.2840639,42.6572163,0
+            23.2852011,42.6567429,0
+            23.285523,42.6574609,0
+            23.2856088,42.6579737,0
+            23.2852655,42.6582499,0
+            23.2867997,42.6635202,0
+            23.2872678,42.6642736,0
+            23.2876339,42.6646681,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - Самоковско Шосе</name>
+        <description><![CDATA[Дължина: 2,5к м.<br>Ширина: 2 м.<br>Двупосочна велоалея на западната част<br>Настилка: Асфалт<br>Изградена: 2023 г.]]></description>
+        <styleUrl>#line-4186F0-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.400843,42.6432658,0
+            23.4015314,42.6429796,0
+            23.4019193,42.6427644,0
+            23.4020086,42.6423971,0
+            23.4053627,42.639579,0
+            23.4072215,42.6368233,0
+            23.4090936,42.6330483,0
+            23.4081171,42.6290975,0
+            23.4049628,42.6227117,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея Западен парк - Запад</name>
+        <description><![CDATA[Дължина: 420 м.<br>Двупосочна от западната страна на алеята<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2770178,42.7119107,0
+            23.2787075,42.7139327,0
+            23.2795203,42.7144077,0
+            23.2800125,42.7145663,0
+            23.2803759,42.7146461,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - Западен Парк - изток</name>
+        <description><![CDATA[Длжина: 1 км<br>Двупосочна от източната страна на алеята<br>Настилка: асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2762345,42.7097724,0
+            23.2777954,42.7097094,0
+            23.2791767,42.7101745,0
+            23.2804682,42.710746,0
+            23.2818113,42.7108662,0
+            23.2823005,42.7110446,0
+            23.2825537,42.7113175,0
+            23.2827415,42.7119245,0
+            23.2838117,42.7128508,0
+            23.2836495,42.7139446,0
+            23.2838366,42.7144993,0
+            23.2834121,42.714857,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - бул. Сливница - Орион - мост Оряхово - южна алея</name>
+        <description><![CDATA[Дължина: 1,2 км<br>Ширина: 1 м<br>Еднопосочна  велолента от южната страна<br>Настилка: асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2913957,42.7110662,0
+            23.2830216,42.715281,0
+            23.2827529,42.7153217,0
+            23.2812182,42.7161112,0
+            23.2811589,42.71623,0
+            23.279104,42.7173736,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - Бул. Сливница </name>
+        <description><![CDATA[Дължина: 500 м.<br>Ширина: 1м.<br>Еднопосочна велолента на южната част]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2929463,42.7103013,0
+            23.2979085,42.7078446,0
+            23.2979782,42.7077214,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - бул. Сливница - южна</name>
+        <description><![CDATA[Дължина: 1,5 км.<br>Ширина: 1,7-1,8 м.<br>Еднопосочна велолента на южната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2993794,42.7070315,0
+            23.300624,42.7064086,0
+            23.3019758,42.7061642,0
+            23.3045936,42.7058489,0
+            23.3053339,42.7057858,0
+            23.3071256,42.7058646,0
+            23.3175004,42.7051078,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - бул. Сливница - север</name>
+        <description><![CDATA[Дължина: 1,5 км.<br>Ширина: 1,7-1,8 м.<br>Еднопосочна велолента на северната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3175541,42.7056966,0
+            23.3073402,42.706422,0
+            23.3065248,42.7063116,0
+            23.3057524,42.7061145,0
+            23.3051515,42.7060278,0
+            23.3011711,42.7064929,0
+            23.300506,42.7066979,0
+            23.2994545,42.7072182,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - бул. Сливница - север</name>
+        <description><![CDATA[Дължина: 1,45 км.<br>Ширина: 1 м.<br>Еднопосочна велолента на северната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.298978,42.7075043,0
+            23.284258,42.7148673,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - бул. Сливница - север</name>
+        <description><![CDATA[Дължина: 400 м.<br>Ширина: 1 м.<br>Еднопосочна велолента на северната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2835625,42.7152256,0
+            23.2796518,42.7172554,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Дондуков</name>
+        <description><![CDATA[Дължина: 80м<br>Ширина: 2 м.<br>Двупосочна велоалеяа на северната част<br>Настилка: Плочки]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3259132,42.6978898,0
+            23.3258327,42.6979213,0
+            23.3250737,42.6978701,0
+            23.3249047,42.697803,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Скобелев - изток</name>
+        <description><![CDATA[Дължина: 330 м.<br>Ширина: 2 м.<br>Двупосочна велоалея на източната част<br>Настилка: Асфалт<br>Изградена: Май 2024 г.<br>Приоритетна за изграждане 2012-13 г.<br>Програма за развитие на велосипедния транспорт 2012-2015]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3110446,42.6918718,0
+            23.313841,42.689659,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Витоша - изток</name>
+        <description><![CDATA[Дължина: 700 м.<br>Ширина: 2 м.<br>Двупосочна велоалея на източната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3153236,42.6833866,0
+            23.3156025,42.6836351,0
+            23.3162946,42.6846091,0
+            23.3166969,42.6851178,0
+            23.3179468,42.6858433,0
+            23.3180809,42.6860878,0
+            23.319055,42.688918,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - срещпосочна - бул. П. Евтимий - юг</name>
+        <description><![CDATA[Дължина: 1.2 км.<br>Ширина: 1,5-2 м.<br>Еднопосочна велоалея на южната част<br>Настилка: Асфалт<br>Изградена: Май 2024 г.<br>Приоритетна за изграждане 2012-13 г.<br>Програма за развитие на велосипедния транспорт 2012-2015]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3142301,42.6893835,0
+            23.3284458,42.688098,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бл. П. Евтимий - север</name>
+        <description><![CDATA[Дължина: 1,2 км<br>Ширина: 1,7-2 м.<br>Еднопосочна велоалея на северната част<br>Настилка: Асфалт<br>Изградена: Май 2024 г.<br>Приоритетна за изграждане 2012-13 г.<br>Програма за развитие на велосипедния транспорт 2012-2015]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.328691,42.68822,0
+            23.314109,42.689541,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Витоша - запад</name>
+        <description><![CDATA[Дължина: 900 м.<br>Ширина: 1,5-2 м.<br>Еднопосочна велолента на западна част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3135702,42.6820545,0
+            23.3104803,42.6791047,0
+            23.3088496,42.6748769,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Витоша - запад</name>
+        <description><![CDATA[Дължина:<br>Ширина: 2 м.<br>Двупосочна велоалея на западната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3136342,42.6821754,0
+            23.3150021,42.6835319,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Витоша - изток</name>
+        <description><![CDATA[Дължина: 1,1 км.<br>Ширина: 1,5-2 м.<br>Еднопосочна  велоалея на източна част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3091672,42.6748049,0
+            23.3108409,42.6790327,0
+            23.3153236,42.6833866,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул Ботеевградско Шосе - север</name>
+        <description><![CDATA[Дължина: 700 м.<br>Ширина: 2 м.<br>Двупосочна велоалея в северната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3817281,42.7024595,0
+            23.3806495,42.7022587,0
+            23.3803326,42.7021742,0
+            23.3783068,42.7018021,0
+            23.3780826,42.7017755,0
+            23.377806,42.7016947,0
+            23.3773441,42.7016592,0
+            23.3744862,42.7011378,0
+            23.3743574,42.7011743,0
+            23.3735045,42.7010304,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Бул. България - изток</name>
+        <description><![CDATA[Дължина: 600 м.<br>Ширина: 1,5 м.<br>Еднопосочна велоалея от източна страна<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2884769,42.6655238,0
+            23.2927541,42.6699619,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Бул. България - изток</name>
+        <description><![CDATA[Дължина: 1 км.<br>Ширина: 2 м.<br>Еднопосочна велоалея в източната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2947991,42.6720873,0
+            23.2955716,42.6730418,0
+            23.2983503,42.67753,0
+            23.2991014,42.6781295,0
+            23.3000669,42.6786264,0
+            23.3022073,42.679009,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея Надежда</name>
+        <description><![CDATA[Дължина: 1 км.<br>Ширина: 2 м.<br>Двупосочна велоалея в северната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2961484,42.7321988,0
+            23.2924148,42.7292671,0
+            23.2885524,42.7329711,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велосипедна алея - Филип Кутев - юг</name>
+        <description><![CDATA[Дължина: 770 м.<br>Ширина: 2 м.<br>Еднопосочна велоалея в южната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3280662,42.6565317,0
+            23.3296862,42.6564449,0
+            23.3309522,42.6558689,0
+            23.3317569,42.6555849,0
+            23.3327332,42.6555849,0
+            23.3336881,42.6558452,0
+            23.3346751,42.6565475,0
+            23.3354583,42.6571235,0
+            23.3363703,42.657447,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велосипедна Алея - Филип Кутев - север</name>
+        <description><![CDATA[Дължина: 770 м.<br>Ширина: 2 м.<br>Двупосочна велоалея в северната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3363493,42.6576591,0
+            23.3354051,42.6573356,0
+            23.3346863,42.6569332,0
+            23.3337958,42.6561679,0
+            23.3330019,42.6558523,0
+            23.3321114,42.6557497,0
+            23.3310278,42.6560653,0
+            23.3298476,42.6566018,0
+            23.3280988,42.656736,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - ул. Сребърна, ул. Люба Величкова, ул. Атанас Дуков - север</name>
+        <description><![CDATA[Дължина: 1.2 км.<br>Ширина: 1 м.<br>Еднопосочна велолента в северната част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3264859,42.6675311,0
+            23.3268426,42.6669335,0
+            23.3269552,42.6666535,0
+            23.3269955,42.6663399,0
+            23.3269633,42.6661052,0
+            23.326848,42.6657403,0
+            23.3265663,42.6653301,0
+            23.3263169,42.6650638,0
+            23.3254827,42.6641645,0
+            23.3250294,42.663701,0
+            23.3246325,42.6635353,0
+            23.3240692,42.6634209,0
+            23.3235006,42.6632,0
+            23.3228488,42.6629317,0
+            23.3220817,42.6625905,0
+            23.3214996,42.6622118,0
+            23.3195524,42.6609357,0
+            23.3181817,42.6602808,0
+            23.317082,42.6597502,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - бул. д-р Петър Дертлиев - запад</name>
+        <description><![CDATA[Длжина: 0,9 км<br>Ширина: 1,5-1,8 м<br>Еднопосочна велолента от западната част<br>Настилка: асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2786699,42.7175598,0
+            23.2747753,42.7131888,0
+            23.2737668,42.7124675,0
+            23.2728173,42.7120103,0
+            23.2716103,42.71149,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - бул. Никола Мушанов - запад</name>
+        <description><![CDATA[Дължина: 1,45 км.<br>Ширина: 1м.<br>Еднопосочна велолента западна част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2846908,42.6955419,0
+            23.2777814,42.6906843,0
+            23.2740478,42.6855424,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велолента - бул. Овча Купел - запад</name>
+        <description><![CDATA[Дължина: 360 м.<br>Ширина: 1м.<br>Еднопосочна велолента западна част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2739298,42.6854241,0
+            23.2713656,42.6827978,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул Овча Купел - запад</name>
+        <description><![CDATA[Дължина: 640 м.<br>Ширина: 1м.<br>Еднопосочна велоалея западна част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2685313,42.6790946,0
+            23.2678875,42.6770991,0
+            23.2687029,42.6744961,0
+            23.2691643,42.6738493,0
+            23.2695076,42.6736442,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велосипедна лента - бул. Овча Купел - запад</name>
+        <description><![CDATA[Дължина: 300 м.<br>Ширина: 1,5 м.<br>Еднопосочна велосипедна лента западна част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2696339,42.6737239,0
+            23.2721659,42.6719057,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велосипедна лента - бул. Овча Купел - изток</name>
+        <description><![CDATA[Дължина: 340 м.<br>Ширина: 1,5 м.<br>Еднопосочна велосипедна лента източна част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2723829,42.6720207,0
+            23.269352,42.674115,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Овча Купел - изток</name>
+        <description><![CDATA[Дължина: 800 м.<br>Ширина: 1 м.<br>Еднопосочна велоалея източна част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2692702,42.6742077,0
+            23.2691039,42.6745784,0
+            23.2683475,42.6770158,0
+            23.269694,42.6811133,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велосипедна лента - бул. Овча Купел - изток</name>
+        <description><![CDATA[Дължина: 510 м.<br>Ширина: 1,5 м.<br>Еднопосочна велосипедна лента източна част<br>Настилка: Асфалт]]></description>
+        <styleUrl>#line-000099-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2701493,42.6816569,0
+            23.2713723,42.6825008,0
+            23.2741189,42.6852375,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Премахнати велоалеи в София</name>
+      <Placemark>
+        <name>Велоалея НДК</name>
+        <description><![CDATA[Пилотна велоалея стартирана 1998 г.<br>Обикаля НДК. Маркирана с боя. Настилка - тротоарни плочки. Обща дължина ~2 км.]]></description>
+        <styleUrl>#line-DB4436-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.320997,42.686016,0
+            23.320053,42.685594,0
+            23.319823,42.683689,0
+            23.320418,42.681915,0
+            23.320595,42.681927,0
+            23.320541,42.682226,0
+            23.320327,42.682408,0
+            23.318192,42.681686,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея НДК - 5те кьошета - Руски паметник</name>
+        <description><![CDATA[Велоалеята не е призната от общината.<br>Беше маркирана с криви жълти линии по тротоара.]]></description>
+        <styleUrl>#line-DB4436-2000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.310478,42.691907,0
+            23.3108,42.691781,0
+            23.314099,42.689238,0
+            23.314356,42.689324,0
+            23.319055,42.688918,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея НДК - 5те кьошета - Руски паметник</name>
+        <description><![CDATA[Велоалеята не е призната от общината.<br>Беше маркирана с криви жълти линии по тротоара.]]></description>
+        <styleUrl>#line-DB4436-2000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.319023,42.689044,0
+            23.314109,42.689541,0
+            23.313841,42.689659,0
+            23.310939,42.691887,0
+            23.310853,42.692096,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея бул. Витоша</name>
+        <description><![CDATA[ВЕЛОАЛЕЯТА Е ПРЕМАХНАТА<br>Еднопосочна велоалея в двете посоки до трамвайната линия. <br>Настилка: Асфалт. <br>Дължина: 2х700 м.]]></description>
+        <styleUrl>#line-DB4436-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.319093,42.688914,0
+            23.318996,42.689104,0
+            23.320788,42.694833,0
+            23.320638,42.694844,0
+            23.318889,42.689064,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея Патриарх Евтими</name>
+        <description><![CDATA[Премахната ~2012<br>еднопосочна маркирана велоалея по тротоара]]></description>
+        <styleUrl>#line-DB4436-2744</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3231967,42.6885594,0
+            23.3287597,42.6880822,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Копенхаген
+</name>
+        <description>Двупосочна, върху западния тротоар, маркирана с боя</description>
+        <styleUrl>#line-DB4436-4100</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.401233,42.6443541,0
+            23.4011579,42.6443586,0
+            23.4011109,42.6443036,0
+            23.4011069,42.6442249,0
+            23.4000689,42.6433824,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Кръстю Пастухов
+</name>
+        <description><![CDATA[Двупосочна, на източния тротоар, обособена с червени плочки. Май никога не е била обявявана за велоалея, но си личи, че за това са червените плочки.<br>Дължина: 1300 м]]></description>
+        <styleUrl>#line-DB4436-4681</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3943611,42.6577047,0
+            23.3944533,42.657679,0
+            23.3947279,42.6590499,0
+            23.394687,42.6592195,0
+            23.3949699,42.6597797,0
+            23.3950515,42.6599097,0
+            23.3952672,42.6601461,0
+            23.3972544,42.6622009,0
+            23.3982407,42.663691,0
+            23.3999379,42.6655243,0
+            23.4020913,42.6677678,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Асен Йорданов
+</name>
+        <description>Двупосочна, на източния тротоар, отделена с боя. Има съвсем малко жълта боя, останалото е бели маркери, където е трябвало да сложат жълтата боя, но сигурно кофата с боята е свършила.</description>
+        <styleUrl>#line-DB4436-3519</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3763474,42.6748397,0
+            23.3761629,42.6748333,0
+            23.373924,42.6732059,0
+            23.3716348,42.6715326,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея НДК</name>
+        <description><![CDATA[Пилотна велоалея стартирана 1998 г.<br>Обикаля НДК. Маркирана с боя. Настилка - тротоарни плочки. Обща дължина ~2 км.]]></description>
+        <styleUrl>#line-DB4436-4000</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.319871,42.68434,0
+            23.319485,42.684186,0
+            23.319399,42.683208,0
+            23.318852,42.683153,0
+            23.318197,42.683283,0
+            23.317881,42.683595,0
+            23.317827,42.683875,0
+            23.317655,42.683918,0
+            23.317891,42.685476,0
+            23.318219,42.685622,0
+            23.318015,42.685969,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул Пушкин</name>
+        <styleUrl>#line-DB4436-2744-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2656503,42.6497658,0
+            23.2662082,42.6513282,0
+            23.2656288,42.6550053,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Споделени зони</name>
+      <Placemark>
+        <name>Споделена зона - Западен парк - запад</name>
+        <styleUrl>#line-F4B400-4294-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2786695,42.7139594,0
+            23.2778863,42.7152364,0
+            23.2793347,42.7143417,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Споделена зона - Западен парк</name>
+        <styleUrl>#line-F4B400-4100-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2803759,42.7146461,0
+            23.2834225,42.712635,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Споделена зона - Западен парк</name>
+        <styleUrl>#line-F4B400-4875-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2804185,42.7147082,0
+            23.2821887,42.7146452,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Споделена зона - Западен парк</name>
+        <styleUrl>#line-F4B400-4100-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2770178,42.7119107,0
+            23.2765568,42.7114615,0
+            23.2746149,42.7108702,0
+            23.274175,42.7103657,0
+            23.2736493,42.7100582,0
+            23.2732952,42.7101134,0
+            23.2730485,42.7105549,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Споделена зона - Западен Парк</name>
+        <styleUrl>#line-F4B400-3713-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2732952,42.7101134,0
+            23.2734897,42.7098848,0
+            23.2743265,42.7094827,0
+            23.2753565,42.7089703,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Споделена зона - Алабин - Графа</name>
+        <styleUrl>#line-F4B400-3906-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3218462,42.6947917,0
+            23.3220983,42.6947721,0
+            23.3306599,42.6867047,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Споделена зона - Западен Парк</name>
+        <styleUrl>#line-F4B400-3325-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2757409,42.7127744,0
+            23.2795391,42.7103577,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Липсващи връзки и проблемни зони</name>
+      <Placemark>
+        <name>Пресичане на Орлов мост</name>
+        <description><![CDATA[Пресичане на Орлов мост<br>Подлеза вече няма рампа за велосипедисти откъм Княжевска градина<br><br>Заложена в План за развитие на велосипедния транспорт на територията на Столична община 2012-2017 г.]]></description>
+        <styleUrl>#line-DB4436-5456</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3369,42.690608,0
+            23.33667,42.690608,0
+            23.336458,42.690507,0
+            23.336256,42.690612,0
+            23.337273,42.691189,0
+            23.337345,42.691128,0
+            23.337249,42.691045,0
+            23.337437,42.69087,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Преминаване по бул. Сливница на кръстовището с К. Величков - юг</name>
+        <styleUrl>#line-DB4436-6813-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2980736,42.7076945,0
+            23.2993342,42.7070322,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>НДК към бул. Ев. и Хр. Георгиев</name>
+        <description>Липсва рампа в подлеза откъм НДК</description>
+        <styleUrl>#line-DB4436-6231</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3202952,42.6831854,0
+            23.3213574,42.6833589,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Моста на Влюбените</name>
+        <description>Липсва връзка между НДК и Южен Парк 3</description>
+        <styleUrl>#line-DB4436-5263</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.320161,42.683238,0
+            23.3204468,42.6820295,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Пресичане Цар Борис 3 към Гоце Делчев</name>
+        <description>Премахнато с направата на подлеза под Борис </description>
+        <styleUrl>#line-DB4436-4875</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.284768,42.6788908,0
+            23.2856746,42.6782598,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Връзка Гешов с България</name>
+        <description><![CDATA[Така и не беше довършена до край алеята по Гешов<br><br>Проектиране - планирано за 2012 г.<br>Програма за развитие на велосипедния транспорт 2012-2015]]></description>
+        <styleUrl>#line-DB4436-4100</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3018648,42.6820579,0
+            23.3025613,42.6796006,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Площад Македония с Граф Игнатиев</name>
+        <description><![CDATA[Трябва да стане споделена зона, но не е обозначена още<br>Приоритетна за изграждане 2012 г.<br><br>Заложена в Програма за развитието на велосипедния транспорт на територията на Столична община 2012-2015 г.;<br><br>Заложена в План за развитие на велосипедния транспорт на територията на Столична община 2012-2017 г.]]></description>
+        <styleUrl>#line-DB4436-4875</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3151871,42.6947114,0
+            23.3190924,42.6951135,0
+            23.3218462,42.6947917,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсваща връзка - Т. Александров - Княз Борис</name>
+        <styleUrl>#line-DB4436-4681-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.319234,42.698148,0
+            23.3183328,42.695128,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Т. Александров - пл. Независимост - Дондуков</name>
+        <styleUrl>#line-DB4436-4294-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3209607,42.6977812,0
+            23.3235356,42.6973712,0
+            23.324233,42.6975999,0
+            23.325896,42.6977339,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Ръковски до Дондуков</name>
+        <styleUrl>#line-DB4436-5069-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3287651,42.6943101,0
+            23.3301952,42.6963564,0
+            23.3299345,42.69817,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Бул. Сливница - мост Оряхово към центъра</name>
+        <styleUrl>#line-DB4436-4488-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2913957,42.7110662,0
+            23.2928803,42.7103303,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Бул. Сливница - пред Западен Парк - център къ Люлин</name>
+        <styleUrl>#line-DB4436-4488-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2842118,42.714885,0
+            23.2835625,42.7152256,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Кръстовище Орион - бул. Сливница</name>
+        <styleUrl>#line-DB4436-4681-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2796203,42.7172686,0
+            23.2788237,42.7176942,0
+            23.278711,42.717574,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Т. Александров - Западен Парк</name>
+        <styleUrl>#line-DB4436-3325-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2847028,42.7061927,0
+            23.2753565,42.7089703,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Западен Парк - Т. Александров</name>
+        <styleUrl>#line-DB4436-3519-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2728152,42.7095985,0
+            23.275712,42.7082898,0
+            23.2847457,42.705767,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Бул. Сливница - Ботев до М. Луиза</name>
+        <styleUrl>#line-DB4436-4294-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3175652,42.7051126,0
+            23.3237021,42.7047184,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Бул. Сливница - М. Луиза до Ботев</name>
+        <styleUrl>#line-DB4436-4488-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.323863,42.7052782,0
+            23.3175541,42.7056966,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Борис 3 към Гешов</name>
+        <styleUrl>#line-DB4436-4332-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3001865,42.6870382,0
+            23.3005835,42.6866794,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Самоковско шосе към Копенхаген</name>
+        <styleUrl>#line-DB4436-3325-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.4007293,42.643352,0
+            23.4015125,42.644078,0
+            23.4011109,42.6443036,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Руски паметник - северна дъга</name>
+        <styleUrl>#line-DB4436-5650-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3109377,42.6926551,0
+            23.3106212,42.6927616,0
+            23.3102511,42.6927931,0
+            23.3099507,42.6926709,0
+            23.3097361,42.6923594,0
+            23.3097576,42.6921268,0
+            23.3096342,42.6920558,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Бул. България - пресичане на Каблешков</name>
+        <styleUrl>#line-DB4436-4100-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2876455,42.6646851,0
+            23.2883911,42.6654464,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Бул. България към Каблешков</name>
+        <styleUrl>#line-DB4436-4294-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2879583,42.6649578,0
+            23.289911,42.6640426,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Бул. България към Гоце Делчев</name>
+        <styleUrl>#line-DB4436-3906-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2927541,42.6699619,0
+            23.2943151,42.6715239,0
+            23.2944868,42.6715396,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Вход Западен Парк - Запад</name>
+        <styleUrl>#line-DB4436-3519-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2743657,42.7126302,0
+            23.27443,42.7126125,0
+            23.2745936,42.7127051,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Централевн вход - Западен парк</name>
+        <styleUrl>#line-DB4436-4681-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2829277,42.7152589,0
+            23.2833783,42.7148904,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсва връзка от подлеза на Гоце Делчев към алеята по България </name>
+        <styleUrl>#line-DB4436-4681-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2941003,42.6722156,0
+            23.2938482,42.6724286,0
+            23.2937302,42.6722827,0
+            23.2940359,42.6720421,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсва рампа за подлеза югоизточен вход </name>
+        <styleUrl>#line-DB4436-3713-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2944973,42.6715766,0
+            23.2944973,42.6718606,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсваща велоалея бул. Овча Купел</name>
+        <description>Дължина: 475 м.</description>
+        <styleUrl>#line-DB4436-4294</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2712055,42.6828194,0
+            23.2694031,42.6813287,0
+            23.2685448,42.679144,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Нерегламентирано пресичане жп линии - Западен Парк - Гевгелийски</name>
+        <styleUrl>#line-DB4436-4875-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2822053,42.7109684,0
+            23.2824253,42.7103495,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Нерегламентирано пресичане жп линии - Западен Парк - Гевгелийски
+</name>
+        <styleUrl>#line-DB4436-5456-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2746393,42.7086763,0
+            23.2751328,42.7076041,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Неудобно пресичане жп линии - Западен Парк - Гевгелийски
+</name>
+        <styleUrl>#line-DB4436-5263-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2800567,42.7105328,0
+            23.2803034,42.709772,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Нерегламентирано пресичане жп линии - Западен Парк - Гевгелийски
+</name>
+        <styleUrl>#line-DB4436-3519-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2835696,42.7112048,0
+            23.2835481,42.710791,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Нерегламентирано пресичане жп линии - Западен Парк - Гевгелийски
+</name>
+        <styleUrl>#line-DB4436-5263-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2857314,42.7117961,0
+            23.2859138,42.7114532,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Нерегламентирано пресичане жп линии - Западен Парк - Гевгелийски
+</name>
+        <styleUrl>#line-DB4436-4100-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.287727,42.7123263,0
+            23.2880006,42.7119439,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсваща връзка с кръстовище - бул. Ломско Шосе</name>
+        <styleUrl>#line-DB4436-5069-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2930146,42.7351369,0
+            23.292682,42.7355743,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсваща връзка с кръстовище бул. Прага</name>
+        <styleUrl>#line-DB4436-4488-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3105958,42.6870688,0
+            23.3101011,42.6868771,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсва пресичане - ул. Гурко</name>
+        <styleUrl>#line-DB4436-5844-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3342581,42.6888002,0
+            23.3336734,42.6884217,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липса на част от алеята и пресичане на Графа</name>
+        <styleUrl>#line-DB4436-5650-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.331012,42.6862233,0
+            23.3312239,42.6863436,0
+            23.3308726,42.6866256,0
+            23.3306902,42.6865093,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Опасен Мост</name>
+        <styleUrl>#line-DB4436-4875-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3399465,42.6911656,0
+            23.3398606,42.6913548,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсва пресичане - ул. Шипка</name>
+        <description>Заложена в Програма за развитието на велосипедния транспорт на територията на Столична община 2012-2015 г.;</description>
+        <styleUrl>#line-DB4436-5263</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3443882,42.6926363,0
+            23.3441763,42.6925081,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсва пресичане - ул. Оборище</name>
+        <description>Заложена в Програма за развитието на велосипедния транспорт на територията на Столична община 2012-2015 г.;</description>
+        <styleUrl>#line-DB4436-5069</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3463623,42.6942365,0
+            23.3463274,42.6940827,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсва връзка в кръстовище - бул. Сакъзов и бул. Мадрид</name>
+        <styleUrl>#line-DB4436-4681-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3465501,42.6963022,0
+            23.3467733,42.6960747,0
+            23.347454,42.6960952,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсващо пресичане на ул. Маестро Кънев</name>
+        <styleUrl>#line-DB4436-4294-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2697094,42.6811915,0
+            23.2700742,42.6816017,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсва включване в алеята от кръстовището</name>
+        <styleUrl>#line-DB4436-5650-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2608678,42.6656871,0
+            23.2598808,42.6652768,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсващо пресичане на бул. Дондуков</name>
+        <styleUrl>#line-DB4436-5456-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3259132,42.6978898,0
+            23.3260024,42.6977225,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсва алтернатива на бул. Витоша и преминаване север юг</name>
+        <styleUrl>#line-DB4436-5844-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3191363,42.6892187,0
+            23.3208377,42.6949179,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Липсва наземно двупосочно пресичане</name>
+        <description>Заложена в План за развитие на велосипедния транспорт на територията на Столична община 2012-2017 г.</description>
+        <styleUrl>#line-DB4436-5844</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3204262,42.6835474,0
+            23.3213275,42.6835158,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Подлези с рампи</name>
+      <Placemark>
+        <name>Пресичане на Цариградско шосе</name>
+        <styleUrl>#line-009D57-4488-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3402686,42.6888631,0
+            23.3399468,42.6886344,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Пресичане на Цариградско шосе</name>
+        <styleUrl>#line-009D57-4488-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3562546,42.6776834,0
+            23.3556431,42.6773364,0
+            23.3554714,42.6774547,0
+            23.3545595,42.67736,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Подлез Софийски Университет</name>
+        <styleUrl>#line-009D57-3713-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3342065,42.6935202,0
+            23.3341422,42.6932639,0
+            23.3345874,42.6928736,0
+            23.3349468,42.6928972,0
+            23.3345713,42.6928736,0
+            23.3344908,42.6926449,0
+            23.3345177,42.6929012,0
+            23.3341743,42.6932245,0
+            23.3338847,42.6931693,0
+            23.334008,42.6928736,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Подлез бул. България и Гешов</name>
+        <styleUrl>#line-009D57-5263-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3018455,42.6789879,0
+            23.3023873,42.679122,0
+            23.3022532,42.6795518,0
+            23.3016041,42.6795755,0
+            23.3022479,42.6795597,0
+            23.3023122,42.6793389,0
+            23.302897,42.679402,0
+            23.3029613,42.6796977,0
+            23.3027307,42.6797884,0
+            23.3030954,42.6798713,0
+            23.3027414,42.6797924,0
+            23.3029506,42.6797135,0
+            23.3028916,42.6793744,0
+            23.3029935,42.6792284,0
+            23.3033368,42.6792955,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Пресичане бул. България</name>
+        <styleUrl>#line-009D57-5069-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.297703,42.6775662,0
+            23.2975689,42.6773099,0
+            23.2980731,42.6771423,0
+            23.2982474,42.677444,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Подлез бул. Гоце Делчев и бул. Петко Тодоров</name>
+        <styleUrl>#line-009D57-5263-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3031773,42.6654417,0
+            23.3031157,42.6652228,0
+            23.3027401,42.6653451,0
+            23.302826,42.6656528,0
+            23.3026838,42.6650473,0
+            23.3025578,42.6652386,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Подлез под жп Линии - захарна Фабрика</name>
+        <styleUrl>#line-009D57-4488-nodesc</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.2889593,42.7122034,0
+            23.2880795,42.7126094,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Неизградени велосипедни алеи от плана 2012-2017 г.</name>
+      <Placemark>
+        <name>Велоалея - бул. Янко Сакъзов</name>
+        <description><![CDATA[Приоритет за изграждане 2012 г.<br>Дължина: 1000 м<br><br>Заложена в Програма за развитието на велосипедния транспорт на територията на Столична община 2012-2015 г.;<br><br>Заложена в План за развитие на велосипедния транспорт на територията на Столична община 2012-2017 г.]]></description>
+        <styleUrl>#line-DB4436-4681</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.335661,42.6967037,0
+            23.3465501,42.6963022,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Стамболийски</name>
+        <description><![CDATA[Приоритет за изграждане 2012 г.<br>Дължина: 1100 м<br><br>Заложена в Програма за развитието на велосипедния транспорт на територията на Столична община 2012-2015 г.;<br><br>Заложена в План за развитие на велосипедния транспорт на територията на Столична община 2012-2017 г.]]></description>
+        <styleUrl>#line-DB4436-5844</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.320662,42.6969008,0
+            23.3098474,42.6985567,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - бул. Стамболийски</name>
+        <description><![CDATA[Приоритет за изграждане 2013 г.<br>Дължина: 1800 м<br><br>Заложена в Програма за развитието на велосипедния транспорт на територията на Столична община 2012-2015 г.;<br><br>Заложена в План за развитие на велосипедния транспорт на територията на Столична община 2012-2017 г.]]></description>
+        <styleUrl>#line-DB4436-4875</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3094766,42.6985882,0
+            23.2858302,42.7022467,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея бул. Мария Луиза до бл. Витоша</name>
+        <description><![CDATA[Програма за развитие на велосипедния транспорт 2012-2015<br><br>Програма за периода 2013 - 2015 г.]]></description>
+        <styleUrl>#line-DB4436-5069</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3239326,42.7050587,0
+            23.321701,42.6975999,0
+            23.3208427,42.696906,0
+            23.3211002,42.6959913,0
+            23.3208377,42.6949179,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - ул. Цар Иван Асен</name>
+        <description><![CDATA[Приоритет за изграждане 2013 г.<br>Дължина: 2400 м<br><br>Заложена в Програма за развитието на велосипедния транспорт на територията на Столична община 2012-2015 г.;<br><br>Заложена в План за развитие на велосипедния транспорт на територията на Столична община 2012-2017 г.]]></description>
+        <styleUrl>#line-DB4436-3713</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.337842,42.690645,0
+            23.3417275,42.6898511,0
+            23.3456328,42.6884946,0
+            23.3502251,42.6855924,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Борисова градина I част</name>
+        <description><![CDATA[Борисова градина I част (от бул. Евлоги и Христо Георгиеви до бул. П.<br>Яворов)<br><br>Дължина: 2,2 км<br><br>Проектиране - планирано за 2012 г.<br>Програма за развитие на велосипедния транспорт 2012-2015]]></description>
+        <styleUrl>#line-DB4436-4294</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3314358,42.6862127,0
+            23.3323263,42.6857474,0
+            23.3334421,42.6857001,0
+            23.3347832,42.6863074,0
+            23.3361565,42.6855503,0
+            23.3367788,42.6846906,0
+            23.3442353,42.679635,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>връзка по ул. Ангел Кънчев до ул.
+П.Парчевич и ул. Христо Белчев (127
+СОУ) и продължение на трасето по ул.
+Ангел Кънчев от 127 СОУ до пл.
+Гарибалди и пл. Св.Неделя</name>
+        <description><![CDATA[Програма за развитие на велосипедния транспорт 2012-2015<br><br>Програма за периода 2013 - 2015 г.]]></description>
+        <styleUrl>#line-DB4436-4681</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3207284,42.690732,0
+            23.321576,42.6937759,0
+            23.3225255,42.6936813,0
+            23.3219514,42.6906374,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Южен парк III част</name>
+        <description><![CDATA[Южен парк III част (от кръстовище бул.<br>П.Тодоров - бул. Гоце Делчев до<br>кръстовище бул. Черни връх - бул.<br>Никола Вапцаров)<br><br>Програма за периода 2013 - 2015 г.<br><br>Програма за развитие на велосипедния транспорт 2012-2015]]></description>
+        <styleUrl>#line-DB4436-4100</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3029562,42.6651473,0
+            23.3029347,42.6636957,0
+            23.3061748,42.659309,0
+            23.3080631,42.6577626,0
+            23.3098441,42.6573207,0
+            23.3127409,42.6576048,0
+            23.3164745,42.6594984,0
+            23.317483,42.6649737,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+      <Placemark>
+        <name>Велоалея - ул. Цар Самуил</name>
+        <description><![CDATA[Проектиране - планирано за 2012 г.<br>Програма за развитие на велосипедния транспорт 2012-2015]]></description>
+        <styleUrl>#line-DB4436-4488</styleUrl>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+            23.3153868,42.6895557,0
+            23.3171249,42.6949181,0
+          </coordinates>
+        </LineString>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
