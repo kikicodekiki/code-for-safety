@@ -1,4 +1,3 @@
-import { EventEmitter } from "events"
 import { apiClient } from "../api/client"
 import { useConnectionStore } from "../stores/useConnectionStore"
 import type { WSServerEvent } from "../types"
@@ -10,9 +9,38 @@ interface GPSPayload {
   speed_kmh: number
 }
 
+type EventName = WSServerEvent["event"] | "event"
+type Listener = (...args: unknown[]) => void
+
 const BACKOFF_SEQUENCE_MS = [1000, 2000, 4000, 8000, 16000, 30000]
 
-class WebSocketManager extends EventEmitter {
+/** Minimal event emitter — avoids relying on Node's `events` polyfill in RN. */
+class TinyEmitter {
+  private _listeners: Map<EventName, Listener[]> = new Map()
+
+  on(event: EventName, fn: Listener): this {
+    const list = this._listeners.get(event) ?? []
+    list.push(fn)
+    this._listeners.set(event, list)
+    return this
+  }
+
+  off(event: EventName, fn: Listener): this {
+    const list = this._listeners.get(event) ?? []
+    this._listeners.set(
+      event,
+      list.filter((l) => l !== fn)
+    )
+    return this
+  }
+
+  emit(event: EventName, ...args: unknown[]): void {
+    const list = this._listeners.get(event) ?? []
+    list.forEach((fn) => fn(...args))
+  }
+}
+
+class WebSocketManager extends TinyEmitter {
   private socket: WebSocket | null = null
   private retryCount = 0
   private retryTimer: ReturnType<typeof setTimeout> | null = null
@@ -25,7 +53,6 @@ class WebSocketManager extends EventEmitter {
     ) {
       return
     }
-
     this.shouldReconnect = true
     this._open()
   }
