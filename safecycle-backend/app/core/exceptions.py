@@ -35,3 +35,11 @@ class NodeNotReachableError(SafeCycleBaseError):
     The nearest graph node to a requested coordinate is too far away,
     suggesting the coordinate is in an area not covered by the street graph.
     """
+
+
+class VeloBGFetchError(SafeCycleBaseError):
+    """Failed to fetch the VeloBG KML from Google My Maps and no fallback available."""
+
+
+class VeloBGParseError(SafeCycleBaseError):
+    """Failed to parse the VeloBG KML content into structured data."""

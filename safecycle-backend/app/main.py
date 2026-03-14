@@ -38,6 +38,11 @@ from app.core.exceptions import (
 from app.core.graph.enrichment import GeoJSONEnricher
 from app.core.graph.loader import GraphLoader
 from app.core.graph.zones import build_awareness_zone_list, build_danger_node_set
+from app.data.velobg.cache import VeloBGCache
+from app.data.velobg.enricher import VeloBGEnricher
+from app.data.velobg.fetcher import VeloBGFetcher
+from app.data.velobg.parser import VeloBGParser
+from app.data.velobg.scheduler import VeloBGScheduler
 from app.services.gps_service import GPSConnectionManager
 from app.services.notification_service import NotificationService
 
@@ -194,6 +199,47 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     app.state.danger_nodes = danger_nodes
     logger.info("danger_nodes_computed", count=len(danger_nodes))
 
+    # ── VeloBG KML Pipeline ───────────────────────────────────────────────────
+    # Initial fetch + graph enrichment. Falls back to disk cache gracefully.
+    velobg_fetcher   = VeloBGFetcher(settings)
+    velobg_parser    = VeloBGParser()
+    velobg_cache     = VeloBGCache(redis, settings)
+    velobg_scheduler = VeloBGScheduler(settings, redis)
+
+    app.state.velobg_cache     = velobg_cache
+    app.state.velobg_scheduler = velobg_scheduler
+
+    try:
+        from datetime import datetime, timezone as tz
+        t2 = time.perf_counter()
+        kml_content, fallback_used = await velobg_fetcher.fetch(force=True)
+        velobg_map_data = velobg_parser.parse(
+            kml_content,
+            fetched_at=datetime.now(tz.utc),
+            fetch_duration=time.perf_counter() - t2,
+        )
+        graph = VeloBGEnricher().enrich(graph, velobg_map_data, settings)
+        await velobg_cache.set(velobg_map_data)
+        app.state.velobg_map_data = velobg_map_data
+        velobg_ms = (time.perf_counter() - t2) * 1000
+        logger.info(
+            "velobg_enrichment_applied",
+            total_paths=velobg_map_data.total_paths,
+            usable_paths=len(velobg_map_data.usable_paths),
+            fallback_used=fallback_used,
+            elapsed_ms=round(velobg_ms),
+        )
+    except Exception as exc:
+        logger.warning(
+            "velobg_startup_fetch_failed",
+            error=str(exc),
+            note="Routing continues without VeloBG data. Scheduler will retry.",
+        )
+        app.state.velobg_map_data = None
+
+    # Start the background refresh scheduler
+    velobg_scheduler.start(app.state.graph)
+
     # ── GPS Connection Manager ────────────────────────────────────────────────
     app.state.connection_manager = GPSConnectionManager()
 
@@ -206,6 +252,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     # ── Shutdown ──────────────────────────────────────────────────────────────
     logger.info("app_shutdown_started")
+    await velobg_scheduler.stop()
     await app.state.connection_manager.disconnect_all()
     await redis.aclose()
     logger.info("app_shutdown_complete")
