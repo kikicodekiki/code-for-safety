@@ -1,13 +1,6 @@
-import React, { useEffect } from "react"
-import { StyleSheet, Text, View } from "react-native"
+import React, { useEffect, useRef } from "react"
+import { Animated, StyleSheet, Text, View } from "react-native"
 import { Callout, Marker } from "react-native-maps"
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withSequence,
-  withTiming,
-} from "react-native-reanimated"
 import { colors, radius, spacing, typography } from "../tokens"
 import type { Hazard, HazardType } from "../types"
 
@@ -56,41 +49,26 @@ function HazardPinInner({ hazard }: HazardPinProps) {
   const isRecent = hazard.age_hours < 1
   const isExpired = hazard.age_hours >= 10
 
-  const ringOpacity = useSharedValue(isRecent ? 1 : 0)
-  const ringScale = useSharedValue(1)
-  const tracksViewChanges = useSharedValue(isRecent)
+  const ringAnim = useRef(new Animated.Value(1)).current
+  const ringOpacity = useRef(new Animated.Value(isRecent ? 1 : 0)).current
 
   useEffect(() => {
-    if (isRecent) {
-      ringOpacity.value = withRepeat(
-        withSequence(
-          withTiming(0.8, { duration: 800 }),
-          withTiming(0, { duration: 800 })
-        ),
-        -1,
-        false
-      )
-      ringScale.value = withRepeat(
-        withSequence(
-          withTiming(1.8, { duration: 800 }),
-          withTiming(1, { duration: 800 })
-        ),
-        -1,
-        false
-      )
-
-      const timer = setTimeout(() => {
-        tracksViewChanges.value = false
-      }, 100)
-      return () => clearTimeout(timer)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isRecent])
-
-  const ringStyle = useAnimatedStyle(() => ({
-    opacity: ringOpacity.value,
-    transform: [{ scale: ringScale.value }],
-  }))
+    if (!isRecent) return
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.parallel([
+          Animated.timing(ringAnim, { toValue: 1.8, duration: 800, useNativeDriver: true }),
+          Animated.timing(ringOpacity, { toValue: 0, duration: 800, useNativeDriver: true }),
+        ]),
+        Animated.parallel([
+          Animated.timing(ringAnim, { toValue: 1, duration: 800, useNativeDriver: true }),
+          Animated.timing(ringOpacity, { toValue: 0.8, duration: 800, useNativeDriver: true }),
+        ]),
+      ])
+    )
+    pulse.start()
+    return () => pulse.stop()
+  }, [isRecent, ringAnim, ringOpacity])
 
   return (
     <Marker
@@ -104,7 +82,7 @@ function HazardPinInner({ hazard }: HazardPinProps) {
             style={[
               styles.pulseRing,
               { borderColor: pinColor },
-              ringStyle,
+              { opacity: ringOpacity, transform: [{ scale: ringAnim }] },
             ]}
           />
         )}

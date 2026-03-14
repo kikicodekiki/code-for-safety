@@ -29,14 +29,14 @@ class TinyEmitter {
     const list = this._listeners.get(event) ?? []
     this._listeners.set(
       event,
-      list.filter((l) => l !== fn)
+      list.filter((l: Listener) => l !== fn)
     )
     return this
   }
 
   emit(event: EventName, ...args: unknown[]): void {
     const list = this._listeners.get(event) ?? []
-    list.forEach((fn) => fn(...args))
+    list.forEach((fn: Listener) => fn(...args))
   }
 }
 

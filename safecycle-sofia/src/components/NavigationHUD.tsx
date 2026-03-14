@@ -1,12 +1,5 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { StyleSheet, Text, View } from "react-native"
-import Animated, {
-  interpolateColor,
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated"
 import { colors, radius, spacing, typography } from "../tokens"
 import { useNavigationStore } from "../stores/useNavigationStore"
 import type { RouteResponse, ZoneStatus } from "../types"
@@ -23,12 +16,8 @@ const STATUS_CONFIG: Record<ZoneStatus, { label: string; color: string; icon: st
   danger: { label: "Danger ahead", color: colors.danger, icon: "🔴" },
 }
 
-const STATUS_ORDER: Record<ZoneStatus, number> = { safe: 0, caution: 1, danger: 2 }
-
 function formatDistance(metres: number): string {
-  if (metres >= 1000) {
-    return `${(metres / 1000).toFixed(1)} km`
-  }
+  if (metres >= 1000) return `${(metres / 1000).toFixed(1)} km`
   return `${Math.round(metres)} m`
 }
 
@@ -45,21 +34,6 @@ export const NavigationHUD = React.memo(function NavigationHUD({
   timeRemainingMin,
 }: NavigationHUDProps) {
   const zoneStatus = useNavigationStore((s) => s.currentZoneStatus)
-  const statusProgress = useSharedValue(0)
-
-  useEffect(() => {
-    statusProgress.value = withTiming(STATUS_ORDER[zoneStatus], { duration: 500 })
-  }, [zoneStatus, statusProgress])
-
-  const animatedStatusStyle = useAnimatedStyle(() => {
-    const color = interpolateColor(
-      statusProgress.value,
-      [0, 1, 2],
-      [colors.safe, colors.caution, colors.danger]
-    )
-    return { color }
-  })
-
   const config = STATUS_CONFIG[zoneStatus]
 
   return (
@@ -77,9 +51,7 @@ export const NavigationHUD = React.memo(function NavigationHUD({
         <View style={styles.divider} />
         <View style={styles.statusBlock}>
           <Text style={styles.statusIcon}>{config.icon}</Text>
-          <Animated.Text style={[styles.statusLabel, animatedStatusStyle]}>
-            {config.label}
-          </Animated.Text>
+          <Text style={[styles.statusLabel, { color: config.color }]}>{config.label}</Text>
         </View>
       </View>
     </View>

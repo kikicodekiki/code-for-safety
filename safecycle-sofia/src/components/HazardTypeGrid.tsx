@@ -1,10 +1,5 @@
-import React, { useCallback } from "react"
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated"
+import React, { useCallback, useRef } from "react"
+import { Animated, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { colors, radius, spacing, typography } from "../tokens"
 import type { HazardType } from "../types"
 
@@ -35,22 +30,18 @@ interface CardProps {
 }
 
 function HazardCard({ option, isSelected, onPress }: CardProps) {
-  const scale = useSharedValue(1)
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }))
+  const scaleAnim = useRef(new Animated.Value(1)).current
 
   return (
-    <Animated.View style={[styles.cardWrapper, animatedStyle]}>
+    <Animated.View style={[styles.cardWrapper, { transform: [{ scale: scaleAnim }] }]}>
       <TouchableOpacity
         style={[styles.card, isSelected && styles.cardSelected]}
         onPress={() => onPress(option.type)}
         onPressIn={() => {
-          scale.value = withSpring(0.96, { damping: 10 })
+          Animated.spring(scaleAnim, { toValue: 0.96, damping: 10, useNativeDriver: true }).start()
         }}
         onPressOut={() => {
-          scale.value = withSpring(1, { damping: 10 })
+          Animated.spring(scaleAnim, { toValue: 1, damping: 10, useNativeDriver: true }).start()
         }}
         activeOpacity={1}
       >
@@ -65,9 +56,7 @@ function HazardCard({ option, isSelected, onPress }: CardProps) {
 
 export function HazardTypeGrid({ selected, onSelect }: HazardTypeGridProps) {
   const handleSelect = useCallback(
-    (type: HazardType) => {
-      onSelect(type)
-    },
+    (type: HazardType) => onSelect(type),
     [onSelect]
   )
 

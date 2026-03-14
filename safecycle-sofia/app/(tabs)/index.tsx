@@ -26,26 +26,54 @@ import { wsManager } from "../../src/services/websocket"
 import { colors, radius, spacing, typography } from "../../src/tokens"
 import type { Coordinate } from "../../src/types"
 
-// Custom grey-toned map style — makes the green route pop
+// Custom grey-toned map style — desaturates base tiles so the green route pops
 const MAP_STYLE = [
   { elementType: "geometry", stylers: [{ saturation: -60 }, { lightness: -10 }] },
   { elementType: "labels.text.fill", stylers: [{ color: "#9ca5b3" }] },
   { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
-  { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
+  {
+    featureType: "administrative.locality",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#d59563" }],
+  },
   { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
   { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#263c3f" }] },
-  { featureType: "poi.park", elementType: "labels.text.fill", stylers: [{ color: "#6b9a76" }] },
+  {
+    featureType: "poi.park",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#6b9a76" }],
+  },
   { featureType: "road", elementType: "geometry", stylers: [{ color: "#38414e" }] },
   { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#212a37" }] },
   { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#9ca5b3" }] },
   { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#746855" }] },
-  { featureType: "road.highway", elementType: "geometry.stroke", stylers: [{ color: "#1f2835" }] },
-  { featureType: "road.highway", elementType: "labels.text.fill", stylers: [{ color: "#f3d19c" }] },
+  {
+    featureType: "road.highway",
+    elementType: "geometry.stroke",
+    stylers: [{ color: "#1f2835" }],
+  },
+  {
+    featureType: "road.highway",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#f3d19c" }],
+  },
   { featureType: "transit", elementType: "geometry", stylers: [{ color: "#2f3948" }] },
-  { featureType: "transit.station", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
+  {
+    featureType: "transit.station",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#d59563" }],
+  },
   { featureType: "water", elementType: "geometry", stylers: [{ color: "#17263c" }] },
-  { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#515c6d" }] },
-  { featureType: "water", elementType: "labels.text.stroke", stylers: [{ color: "#17263c" }] },
+  {
+    featureType: "water",
+    elementType: "labels.text.fill",
+    stylers: [{ color: "#515c6d" }],
+  },
+  {
+    featureType: "water",
+    elementType: "labels.text.stroke",
+    stylers: [{ color: "#17263c" }],
+  },
 ]
 
 const SOFIA_REGION = {
@@ -71,7 +99,6 @@ export default function MapScreen() {
   const [isLoadingRoute, setIsLoadingRoute] = useState(false)
   const [routeError, setRouteError] = useState<string | null>(null)
   const [banners, setBanners] = useState<Banner[]>([])
-  const [showReportSheet, setShowReportSheet] = useState(false)
   const [distanceRemainingM, setDistanceRemainingM] = useState(0)
   const [timeRemainingMin, setTimeRemainingMin] = useState(0)
 
@@ -84,7 +111,7 @@ export default function MapScreen() {
   const hazards = useHazardStore((s) => s.hazards)
   const fetchHazards = useHazardStore((s) => s.fetchHazards)
 
-  // Request location permissions
+  // Request foreground location permission and capture initial position
   useEffect(() => {
     ;(async () => {
       const { status } = await Location.requestForegroundPermissionsAsync()
@@ -98,22 +125,26 @@ export default function MapScreen() {
     })()
   }, [setOrigin])
 
-  // Fetch hazards on mount and every 60s
+  // Fetch hazards on mount and refresh every 60 s
   useEffect(() => {
     fetchHazards()
     const interval = setInterval(fetchHazards, 60_000)
     return () => clearInterval(interval)
   }, [fetchHazards])
 
-  // Listen for WebSocket events → push banners
+  // Listen for WebSocket server-push events and surface them as banners
   useEffect(() => {
-    const onCrossroad = (payload: { distance_m: number }) => {
+    const onCrossroad = (..._args: unknown[]) => {
       pushBanner("crossroad", "Approaching intersection — consider dismounting")
     }
-    const onAwarenessZone = () => {
-      pushBanner("awareness", "Heightened awareness zone ahead — children may be present")
+    const onAwarenessZone = (..._args: unknown[]) => {
+      pushBanner(
+        "awareness",
+        "Heightened awareness zone ahead — children may be present"
+      )
     }
-    const onHazardNearby = (payload: { hazard: { type: string }; distance_m: number }) => {
+    const onHazardNearby = (...args: unknown[]) => {
+      const payload = args[0] as { hazard: { type: string }; distance_m: number }
       pushBanner(
         "hazard",
         `User-reported hazard ${Math.round(payload.distance_m)} metres ahead`
@@ -123,7 +154,6 @@ export default function MapScreen() {
     wsManager.on("crossroad", onCrossroad)
     wsManager.on("awareness_zone", onAwarenessZone)
     wsManager.on("hazard_nearby", onHazardNearby)
-
     return () => {
       wsManager.off("crossroad", onCrossroad)
       wsManager.off("awareness_zone", onAwarenessZone)
@@ -131,7 +161,7 @@ export default function MapScreen() {
     }
   }, [])
 
-  // Update distance remaining during navigation
+  // Seed HUD values when navigation starts
   useEffect(() => {
     if (route && isNavigating) {
       setDistanceRemainingM(route.distance_m)
@@ -139,7 +169,7 @@ export default function MapScreen() {
     }
   }, [route, isNavigating])
 
-  // Animate search card slide
+  // Slide card up when destination field is focused
   useEffect(() => {
     RNAnimated.timing(cardSlide, {
       toValue: isSearchFocused ? -120 : 0,
@@ -151,6 +181,7 @@ export default function MapScreen() {
   const pushBanner = useCallback((type: Banner["type"], message: string) => {
     const id = `${type}_${Date.now()}`
     setBanners((prev) => {
+      // De-duplicate consecutive same-type banners
       if (prev.length > 0 && prev[prev.length - 1].type === type) return prev
       return [...prev, { id, type, message }]
     })
@@ -167,11 +198,17 @@ export default function MapScreen() {
     Keyboard.dismiss()
 
     try {
-      // For hackathon: geocode via hard-coded Sofia center if no geocoder
-      const destCoord: Coordinate = { lat: 42.6977, lon: 23.3219 }
-      const pos = useNavigationStore.getState().currentPosition ??
-        useNavigationStore.getState().origin ?? { lat: 42.6977, lon: 23.3219 }
+      const pos =
+        useNavigationStore.getState().currentPosition ??
+        useNavigationStore.getState().origin ?? {
+          lat: 42.6977,
+          lon: 23.3219,
+        }
 
+      // Destination geocoding is handled by the backend for this hackathon build.
+      // We pass a placeholder destination at Sofia centre; replace with a proper
+      // geocoding call (Google Places API) for production.
+      const destCoord: Coordinate = { lat: 42.698, lon: 23.322 }
       setDestination(destCoord)
 
       const result = await apiClient.getRoute({
@@ -184,7 +221,9 @@ export default function MapScreen() {
       useNavigationStore.getState().setRoute(result)
       router.push("/route-detail")
     } catch {
-      setRouteError("No safe route found. Try adjusting your settings or destination.")
+      setRouteError(
+        "No safe route found. Try adjusting your settings or destination."
+      )
     } finally {
       setIsLoadingRoute(false)
     }
@@ -197,15 +236,19 @@ export default function MapScreen() {
 
   const activeHazards = hazards.filter((h) => h.age_hours < 10)
 
-  // Permission denied state
+  // ── Permission denied ──────────────────────────────────────────────────────
   if (gpsGranted === false) {
     return (
-      <View style={styles.permissionScreen}>
-        <MaterialCommunityIcons name="map-marker-off" size={64} color={colors.danger} />
-        <Text style={styles.permissionTitle}>Location Access Required</Text>
-        <Text style={styles.permissionBody}>
-          SafeCycle needs your location to calculate safe routes and alert you to nearby
-          hazards. Without location access the app cannot function.
+      <View style={styles.centreScreen}>
+        <MaterialCommunityIcons
+          name="map-marker-off"
+          size={64}
+          color={colors.danger}
+        />
+        <Text style={styles.centreTitle}>Location Access Required</Text>
+        <Text style={styles.centreBody}>
+          SafeCycle needs your location to calculate safe routes and alert you to
+          nearby hazards. Without location access the app cannot function.
         </Text>
         <TouchableOpacity
           style={styles.primaryButton}
@@ -217,16 +260,17 @@ export default function MapScreen() {
     )
   }
 
-  // Waiting for GPS
+  // ── Waiting for GPS ────────────────────────────────────────────────────────
   if (gpsGranted === null) {
     return (
-      <View style={styles.permissionScreen}>
+      <View style={styles.centreScreen}>
         <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={styles.waitingText}>Waiting for GPS signal...</Text>
+        <Text style={styles.centreBody}>Waiting for GPS signal...</Text>
       </View>
     )
   }
 
+  // ── Main map ───────────────────────────────────────────────────────────────
   return (
     <View style={styles.root}>
       <MapView
@@ -239,7 +283,7 @@ export default function MapScreen() {
         showsUserLocation={false}
         showsMyLocationButton={false}
       >
-        {/* Route polyline */}
+        {/* Safe route polyline */}
         {routeCoords && routeCoords.length > 0 && (
           <Polyline
             coordinates={routeCoords}
@@ -248,7 +292,7 @@ export default function MapScreen() {
           />
         )}
 
-        {/* Awareness zone circles */}
+        {/* Awareness zones — always visible during navigation */}
         {route?.awareness_zones.map((zone, i) => (
           <AwarenessZoneCircle
             key={`zone_${i}`}
@@ -262,15 +306,18 @@ export default function MapScreen() {
           <CrossroadMarker key={`cross_${i}`} coordinate={node} />
         ))}
 
-        {/* Active hazard pins */}
+        {/* Hazard pins — active reports only (< 10 h) */}
         {activeHazards.map((hazard) => (
           <HazardPin key={hazard.id} hazard={hazard} />
         ))}
 
-        {/* Current position */}
+        {/* Current position — teal dot with white ring */}
         {currentPosition && (
           <Circle
-            center={{ latitude: currentPosition.lat, longitude: currentPosition.lon }}
+            center={{
+              latitude: currentPosition.lat,
+              longitude: currentPosition.lon,
+            }}
             radius={8}
             fillColor={colors.primary}
             strokeColor="#FFFFFF"
@@ -279,30 +326,39 @@ export default function MapScreen() {
         )}
       </MapView>
 
-      {/* Connection status indicator */}
+      {/* WebSocket connection indicator */}
       {connectionStatus !== "connected" && (
         <View style={styles.connectionBadge}>
           <View style={styles.connectionDot} />
           <Text style={styles.connectionText}>
-            {connectionStatus === "connecting" ? "Connecting..." : "Live updates paused"}
+            {connectionStatus === "connecting"
+              ? "Connecting..."
+              : "Live updates paused"}
           </Text>
         </View>
       )}
 
-      {/* Offline / backend error banner */}
+      {/* Backend error banner */}
       {routeError && (
         <View style={styles.errorBanner}>
           <Text style={styles.errorBannerText}>{routeError}</Text>
           <TouchableOpacity onPress={() => setRouteError(null)}>
-            <MaterialCommunityIcons name="close" size={18} color={colors.textPrimary} />
+            <MaterialCommunityIcons
+              name="close"
+              size={18}
+              color={colors.textPrimary}
+            />
           </TouchableOpacity>
         </View>
       )}
 
-      {/* Search card */}
+      {/* Destination search card */}
       {!isNavigating && (
         <RNAnimated.View
-          style={[styles.searchCard, { transform: [{ translateY: cardSlide }] }]}
+          style={[
+            styles.searchCard,
+            { transform: [{ translateY: cardSlide }] },
+          ]}
         >
           <View style={styles.inputRow}>
             <MaterialCommunityIcons
@@ -336,7 +392,8 @@ export default function MapScreen() {
           <TouchableOpacity
             style={[
               styles.findRouteButton,
-              (!destinationText.trim() || isLoadingRoute) && styles.findRouteButtonDisabled,
+              (!destinationText.trim() || isLoadingRoute) &&
+                styles.findRouteButtonDisabled,
             ]}
             onPress={handleFindRoute}
             disabled={!destinationText.trim() || isLoadingRoute}
@@ -358,9 +415,9 @@ export default function MapScreen() {
         </RNAnimated.View>
       )}
 
-      {/* In-app alert banners */}
+      {/* Alert banners — one at a time, above HUD */}
       <View style={styles.bannerQueue}>
-        {banners.slice(-1).map((banner) => (
+        {banners.slice(-1).map((banner: Banner) => (
           <AlertBanner
             key={banner.id}
             type={banner.type}
@@ -381,13 +438,17 @@ export default function MapScreen() {
         </View>
       )}
 
-      {/* Report FAB */}
+      {/* Report FAB — visible only during active navigation */}
       {isNavigating && (
         <TouchableOpacity
           style={styles.reportFab}
-          onPress={() => setShowReportSheet(true)}
+          onPress={() => router.push("/(tabs)/report")}
         >
-          <MaterialCommunityIcons name="alert-plus" size={26} color={colors.background} />
+          <MaterialCommunityIcons
+            name="alert-plus"
+            size={26}
+            color={colors.background}
+          />
         </TouchableOpacity>
       )}
     </View>
@@ -399,7 +460,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  permissionScreen: {
+  centreScreen: {
     flex: 1,
     backgroundColor: colors.background,
     justifyContent: "center",
@@ -407,23 +468,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xl,
     gap: spacing.md,
   },
-  permissionTitle: {
+  centreTitle: {
     color: colors.textPrimary,
     fontSize: typography.size.xl,
     fontWeight: typography.weight.bold,
     textAlign: "center",
     marginTop: spacing.md,
   },
-  permissionBody: {
+  centreBody: {
     color: colors.textSecondary,
     fontSize: typography.size.md,
     textAlign: "center",
     lineHeight: 22,
-  },
-  waitingText: {
-    color: colors.textSecondary,
-    fontSize: typography.size.lg,
-    marginTop: spacing.md,
   },
   primaryButton: {
     backgroundColor: colors.primary,
@@ -500,7 +556,6 @@ const styles = StyleSheet.create({
     bottom: 160,
     left: 0,
     right: 0,
-    paddingHorizontal: spacing.md,
   },
   hudContainer: {
     position: "absolute",

@@ -1,10 +1,5 @@
-import React, { useEffect } from "react"
-import { StyleSheet, Text, View } from "react-native"
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated"
+import React, { useEffect, useRef } from "react"
+import { Animated, StyleSheet, Text, View } from "react-native"
 import { colors, radius, spacing, typography } from "../tokens"
 
 interface SafetyScoreBarProps {
@@ -27,16 +22,20 @@ export const SafetyScoreBar = React.memo(function SafetyScoreBar({
   score,
 }: SafetyScoreBarProps) {
   const clampedScore = Math.max(0, Math.min(1, score))
-  const fillWidth = useSharedValue(0)
+  const fillAnim = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
-    fillWidth.value = withTiming(clampedScore, { duration: 800 })
-  }, [clampedScore, fillWidth])
+    Animated.timing(fillAnim, {
+      toValue: clampedScore,
+      duration: 800,
+      useNativeDriver: false,
+    }).start()
+  }, [clampedScore, fillAnim])
 
-  const animatedFill = useAnimatedStyle(() => ({
-    width: `${fillWidth.value * 100}%`,
-    backgroundColor: scoreColor(fillWidth.value),
-  }))
+  const widthInterp = fillAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0%", "100%"],
+  })
 
   const pct = Math.round(clampedScore * 100)
   const label = scoreLabel(clampedScore)
@@ -50,7 +49,12 @@ export const SafetyScoreBar = React.memo(function SafetyScoreBar({
         </Text>
       </View>
       <View style={styles.track}>
-        <Animated.View style={[styles.fill, animatedFill]} />
+        <Animated.View
+          style={[
+            styles.fill,
+            { width: widthInterp, backgroundColor: scoreColor(clampedScore) },
+          ]}
+        />
       </View>
     </View>
   )

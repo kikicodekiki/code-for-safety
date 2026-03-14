@@ -5,7 +5,8 @@ import { apiClient } from "../api/client"
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
     shouldPlaySound: true,
     shouldSetBadge: false,
   }),
@@ -53,7 +54,7 @@ export async function registerForPushNotifications(): Promise<string | null> {
 export async function fireCrossroadAlert(): Promise<void> {
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "⚠️ Intersection ahead",
+      title: "Intersection ahead",
       body: "Consider dismounting for safety",
       sound: true,
       data: { category: "CROSSROAD_ALERT" },
@@ -65,7 +66,7 @@ export async function fireCrossroadAlert(): Promise<void> {
 export async function fireAwarenessZoneAlert(): Promise<void> {
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "👁 Awareness zone",
+      title: "Awareness zone",
       body: "Children may be present nearby",
       sound: false,
       data: { category: "AWARENESS_ZONE" },
@@ -77,7 +78,7 @@ export async function fireAwarenessZoneAlert(): Promise<void> {
 export async function fireHazardNearbyAlert(hazardType: string, distanceM: number): Promise<void> {
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "🚨 Hazard ahead",
+      title: "Hazard ahead",
       body: `${hazardType} reported ${Math.round(distanceM)} metres ahead`,
       sound: true,
       data: { category: "HAZARD_NEARBY" },
