@@ -313,8 +313,8 @@ export default function MapScreen() {
       {/* Backend error banner */}
       {routeError && (
         <View style={styles.errorBanner}>
-          <Text style={styles.errorBannerText}>{routeError}</Text>
-          <TouchableOpacity onPress={() => setRouteError(null)}>
+          <Text style={styles.errorBannerText}>{routeError.message}</Text>
+          <TouchableOpacity onPress={() => clearRouteError(null)}>
             <MaterialCommunityIcons
               name="close"
               size={18}
