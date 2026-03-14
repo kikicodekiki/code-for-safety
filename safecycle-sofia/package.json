@@ -1,0 +1,37 @@
+{
+  "name": "safecycle-sofia",
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "expo": "^51.0.0",
+    "expo-router": "^3.5.0",
+    "expo-status-bar": "^1.12.1",
+    "expo-location": "^17.0.0",
+    "expo-notifications": "^0.28.0",
+    "expo-task-manager": "^11.8.0",
+    "expo-device": "^6.0.0",
+    "react": "18.2.0",
+    "react-native": "0.74.5",
+    "react-native-maps": "^1.14.0",
+    "react-native-reanimated": "~3.10.0",
+    "zustand": "^4.5.0",
+    "axios": "^1.7.0",
+    "@expo/vector-icons": "^14.0.0",
+    "@react-native-async-storage/async-storage": "^1.23.0",
+    "@react-native-community/slider": "^4.5.0",
+    "simplify-js": "^1.2.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@types/react": "~18.2.0",
+    "@types/react-native": "~0.74.0",
+    "@types/simplify-js": "^1.2.4",
+    "typescript": "^5.3.0"
+  }
+}
