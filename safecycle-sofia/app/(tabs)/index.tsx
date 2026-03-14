@@ -183,21 +183,45 @@ export default function MapScreen() {
         lon: 23.3219,
       }
 
-    // Destination geocoding is handled by the backend for this hackathon build.
-    // We pass a placeholder destination at Sofia centre; replace with a proper
-    // geocoding call (Google Places API) for production.
-    const destCoord: Coordinate = { lat: 42.698, lon: 23.322 }
-    setDestination(destCoord)
+    // Real geocoding using expo-location
+    const searchQuery = `${destinationText.trim()}, Sofia, Bulgaria`
+    try {
+      const geocodeResults = await Location.geocodeAsync(searchQuery)
+      
+      if (!geocodeResults || geocodeResults.length === 0) {
+        useNavigationStore.getState().setRouteError({
+          type: "not_found",
+          message: `Could not find "${destinationText}". Try being more specific or adding a street number.`,
+          retryable: false
+        })
+        return
+      }
 
-    await findRoute({
-      origin_lat: pos.lat,
-      origin_lon: pos.lon,
-      dest_lat: destCoord.lat,
-      dest_lon: destCoord.lon,
-    })
+      const bestResult = geocodeResults[0]
+      const destCoord: Coordinate = { 
+        lat: bestResult.latitude, 
+        lon: bestResult.longitude 
+      }
+      
+      setDestination(destCoord)
 
-    if (!useNavigationStore.getState().routeError) {
-      router.push("/route-detail")
+      await findRoute({
+        origin_lat: pos.lat,
+        origin_lon: pos.lon,
+        dest_lat: destCoord.lat,
+        dest_lon: destCoord.lon,
+      })
+
+      if (!useNavigationStore.getState().routeError) {
+        router.push("/route-detail")
+      }
+    } catch (err) {
+      console.error("Geocoding failed:", err)
+      useNavigationStore.getState().setRouteError({
+        type: "unknown",
+        message: "Search service is temporarily unavailable. Please try again later.",
+        retryable: true
+      })
     }
   }, [destinationText, setDestination, findRoute])
 
