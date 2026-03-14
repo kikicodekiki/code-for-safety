@@ -1,34 +1,14 @@
 import axios, { AxiosInstance } from "axios"
-import { Platform } from "react-native"
-import type { Coordinate, Hazard, HazardType, RouteResponse } from "../types"
+import type {
+  AggregatedHazardResponse,
+  HazardConfirmationCreate,
+  HazardReportCreate,
+  HazardReportResponse,
+  HazardType,
+  RouteResponse,
+} from "../types"
 
-const getDefaultBaseUrl = () => {
-  // On Android emulators, "localhost" refers to the emulator itself, so we need to
-  // use the special 10.0.2.2 host to reach the development machine.
-  if (Platform.OS === "android") {
-    return "http://10.0.2.2:8000"
-  }
-
-  // iOS simulator and web can access the host via localhost.
-  return "http://localhost:8000"
-}
-
-const resolveBaseUrl = () => {
-  const envUrl = process.env.EXPO_PUBLIC_API_BASE_URL
-
-  if (!envUrl) {
-    return getDefaultBaseUrl()
-  }
-
-  // If someone sets localhost in env, fix it automatically for Android emulators.
-  if (Platform.OS === "android" && envUrl.includes("localhost")) {
-    return envUrl.replace("localhost", "10.0.2.2")
-  }
-
-  return envUrl
-}
-
-const BASE_URL = resolveBaseUrl()
+const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ?? "http://localhost:8000"
 
 interface RouteParams {
   origin_lat: number
