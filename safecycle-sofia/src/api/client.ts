@@ -37,16 +37,14 @@ interface RouteParams {
   dest_lon: number
 }
 
-interface HazardReportBody {
-  lat: number
-  lon: number
-  type: HazardType
-  description?: string
-}
-
-interface HazardReportResponse {
-  id: string
-  status: "reported"
+interface HazardQueryParams {
+  lat?: number
+  lon?: number
+  radius_m?: number
+  type?: HazardType
+  min_severity?: number
+  aggregated?: boolean
+  active_only?: boolean
 }
 
 interface DeviceTokenBody {
@@ -70,14 +68,25 @@ class ApiClient {
     return data
   }
 
-  async reportHazard(body: HazardReportBody): Promise<HazardReportResponse> {
+  async reportHazard(body: HazardReportCreate): Promise<HazardReportResponse> {
     const { data } = await this.http.post<HazardReportResponse>("/hazard", body)
     return data
   }
 
-  async getHazards(): Promise<Hazard[]> {
-    const { data } = await this.http.get<Hazard[]>("/hazards")
+  async getHazards(params?: HazardQueryParams): Promise<AggregatedHazardResponse[]> {
+    const { data } = await this.http.get<AggregatedHazardResponse[]>("/hazards", { params })
     return data
+  }
+
+  async confirmHazard(
+    reportId: string,
+    payload: HazardConfirmationCreate
+  ): Promise<void> {
+    await this.http.post(`/hazard/${reportId}/confirm`, payload)
+  }
+
+  async deleteHazard(reportId: string, reason: string): Promise<void> {
+    await this.http.delete(`/hazard/${reportId}`, { params: { reason } })
   }
 
   async registerDeviceToken(body: DeviceTokenBody): Promise<void> {
@@ -92,4 +101,4 @@ class ApiClient {
 
 export const apiClient = new ApiClient(BASE_URL)
 
-export type { RouteParams, HazardReportBody, HazardReportResponse, DeviceTokenBody }
+export type { RouteParams, HazardQueryParams, DeviceTokenBody }
