@@ -10,7 +10,9 @@ Run:
 """
 from __future__ import annotations
 
+import json
 import time
+from pathlib import Path
 from uuid import uuid4
 from typing import Any, TypeVar
 
@@ -87,12 +89,48 @@ async def readiness():
         content={
             "status": "ready",
             "checks": {
-                "graph_loaded": True,
-                "redis": True,
-                "database": True,
             },
         },
     )
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  VELOBG (Bike Paths)
+# ═══════════════════════════════════════════════════════════════════════════════
+@app.get("/velobg/paths", tags=["velobg"], summary="List Sofia bike alleys")
+async def get_velobg_paths():
+    """Returns the bike alleys from the local GeoJSON file."""
+    geojson_path = Path(__file__).parent.parent / "data" / "sofia_bike_alleys.geojson"
+    if not geojson_path.exists():
+        logger.error("velobg_data_missing", path=str(geojson_path))
+        return {"paths": [], "total": 0, "source": "fallback", "fetched_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")}
+    
+    try:
+        data = json.loads(geojson_path.read_text(encoding="utf-8"))
+        paths = []
+        for i, feature in enumerate(data.get("features", [])):
+            paths.append({
+                "id": str(feature.get("properties", {}).get("id") or f"path_{i}"),
+                "name": feature.get("properties", {}).get("text_") or "Bike Alley",
+                "description": None,
+                "path_type": "DEDICATED_LANE",
+                "layer_name": "Bike Alleys",
+                "colour_hex": "#2ecc71", # Nice Emerald Green
+                "length_m": 0,
+                "is_bidirectional": True,
+                "geojson": feature.get("geometry"),
+                "fetched_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+            })
+            
+        return {
+            "paths": paths,
+            "total": len(paths),
+            "source": "cache",
+            "fetched_at": time.strftime("%Y-%m-%dT%H:%M:%SZ")
+        }
+    except Exception as exc:
+        logger.error("velobg_load_error", error=str(exc))
+        raise HTTPException(status_code=500, detail="Failed to load bike path data")
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

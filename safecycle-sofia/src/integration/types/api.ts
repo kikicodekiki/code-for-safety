@@ -162,3 +162,34 @@ export interface RouteError {
   message:   string
   retryable: boolean
 }
+
+// ─── VeloBG (Bike Paths) ──────────────────────────────────────────────────────
+
+export type VeloBGPathType =
+  | "dedicated_lane"
+  | "painted_lane"
+  | "shared_path"
+  | "greenway"
+  | "off_road"
+  | "proposed"
+  | "unknown"
+
+export interface VeloBGPath {
+  id: string
+  name: string | null
+  description: string | null
+  path_type: VeloBGPathType
+  layer_name: string | null
+  colour_hex: string | null
+  length_m: number
+  is_bidirectional: boolean
+  geojson: GeoJSONLineString | { type: "MultiLineString"; coordinates: [number, number][][] }
+  fetched_at: string
+}
+
+export interface VeloBGPathsResponse {
+  paths: VeloBGPath[]
+  total: number
+  source: string
+  fetched_at: string
+}
