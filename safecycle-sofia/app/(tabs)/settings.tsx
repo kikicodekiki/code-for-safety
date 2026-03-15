@@ -4,11 +4,67 @@ import {
   StyleSheet,
   Switch,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native"
 import Slider from "@react-native-community/slider"
 import { useSettingsStore } from "../../src/stores/useSettingsStore"
+import { useNotificationStore, type InAppNotification } from "../../src/stores/useNotificationStore"
+import * as Speech from "expo-speech"
 import { colors, radius, spacing, typography } from "../../src/tokens"
+
+const TEST_ALERTS: InAppNotification[] = [
+  {
+    id:         "test-crossroad",
+    type:       "crossroad_dismount",
+    urgency:    "high",
+    title:      "Intersection ahead",
+    body:       "Consider dismounting — intersection 18m ahead",
+    data:       { distance_m: 18 },
+    receivedAt: Date.now(),
+    read:       false,
+  },
+  {
+    id:         "test-hazard",
+    type:       "hazard_nearby",
+    urgency:    "high",
+    title:      "Hazard ahead",
+    body:       "Pothole — 22m ahead",
+    data:       { hazard_type: "pothole", distance_m: 22 },
+    receivedAt: Date.now(),
+    read:       false,
+  },
+  {
+    id:         "test-road-closed",
+    type:       "road_closed_ahead",
+    urgency:    "high",
+    title:      "Road closed on your route",
+    body:       "Your route has a road closure. Rerouting recommended.",
+    data:       {},
+    receivedAt: Date.now(),
+    read:       false,
+  },
+  {
+    id:         "test-awareness",
+    type:       "awareness_zone_enter",
+    urgency:    "medium",
+    title:      "Awareness zone",
+    body:       "Children may be present — playground",
+    data:       { zone_type: "playground" },
+    receivedAt: Date.now(),
+    read:       false,
+  },
+  {
+    id:         "test-lights",
+    type:       "lights_on",
+    urgency:    "low",
+    title:      "Turn on your lights",
+    body:       "Sunset at 18:42 — turn on your front and rear lights",
+    data:       { sunset_time: "18:42" },
+    receivedAt: Date.now(),
+    read:       false,
+  },
+]
 
 function SectionHeader({ title }: { title: string }) {
   return <Text style={styles.sectionHeader}>{title}</Text>
@@ -44,6 +100,19 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 }
 
 export default function SettingsScreen() {
+  const { addNotification } = useNotificationStore()
+
+  function fireTest(alert: InAppNotification) {
+    addNotification({ ...alert, id: `${alert.id}-${Date.now()}`, receivedAt: Date.now() })
+  }
+
+  function fireVoiceTest() {
+    Speech.speak(
+      "Залезът в София е в 18 часа и 42 минути. Включете предната и задната светлина на колелото.",
+      { language: "bg-BG", rate: 0.9 }
+    )
+  }
+
   const {
     maxSpeedLimit,
     preferBikePaths,
@@ -146,6 +215,25 @@ export default function SettingsScreen() {
             thumbColor={colors.textPrimary}
           />
         </SettingRow>
+      </View>
+
+      {/* Test Notifications */}
+      <SectionHeader title="Test Notifications" />
+      <View style={styles.card}>
+        {TEST_ALERTS.map((alert, index) => (
+          <React.Fragment key={alert.id}>
+            {index > 0 && <View style={styles.cardDivider} />}
+            <TouchableOpacity style={styles.testRow} onPress={() => fireTest(alert)}>
+              <Text style={styles.testLabel}>{alert.title}</Text>
+              <Text style={styles.testArrow}>›</Text>
+            </TouchableOpacity>
+          </React.Fragment>
+        ))}
+        <View style={styles.cardDivider} />
+        <TouchableOpacity style={styles.testRow} onPress={fireVoiceTest}>
+          <Text style={styles.testLabel}>Voice notification (bg-BG TTS)</Text>
+          <Text style={styles.testArrow}>›</Text>
+        </TouchableOpacity>
       </View>
 
       {/* App info */}
@@ -264,5 +352,20 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontSize: typography.size.md,
     fontWeight: typography.weight.medium,
+  },
+  testRow: {
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
+    justifyContent: "space-between" as const,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+  },
+  testLabel: {
+    color: colors.textPrimary,
+    fontSize: typography.size.md,
+  },
+  testArrow: {
+    color: colors.textSecondary,
+    fontSize: typography.size.lg,
   },
 })

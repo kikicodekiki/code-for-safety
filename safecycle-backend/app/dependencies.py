@@ -12,12 +12,14 @@ import structlog
 from fastapi import Depends, Request
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.requests import HTTPConnection
 
 from app.config import Settings, settings
 from app.core.exceptions import GraphNotLoadedError
 from app.data.air_quality.repository import AirQualityRepository
 from app.db.session import get_async_session
 from app.models.schemas.common import AwarenessZoneSchema
+from app.notifications.sunset_service import SunsetService
 from app.services.density_service import DensityService
 from app.services.gps_service import GPSConnectionManager
 from app.services.hazard_service import HazardService
@@ -41,12 +43,12 @@ async def get_db(
     yield session
 
 
-async def get_redis(request: Request) -> Redis:
-    return request.app.state.redis
+async def get_redis(connection: HTTPConnection) -> Redis:
+    return connection.app.state.redis
 
 
-def get_graph(request: Request) -> nx.MultiDiGraph:
-    graph = getattr(request.app.state, "graph", None)
+def get_graph(connection: HTTPConnection) -> nx.MultiDiGraph:
+    graph = getattr(connection.app.state, "graph", None)
     if graph is None:
         raise GraphNotLoadedError(
             "The Sofia street graph is not loaded. "
@@ -55,12 +57,12 @@ def get_graph(request: Request) -> nx.MultiDiGraph:
     return graph
 
 
-def get_danger_nodes(request: Request) -> frozenset[int]:
-    return getattr(request.app.state, "danger_nodes", frozenset())
+def get_danger_nodes(connection: HTTPConnection) -> frozenset[int]:
+    return getattr(connection.app.state, "danger_nodes", frozenset())
 
 
-def get_awareness_zones(request: Request) -> list[AwarenessZoneSchema]:
-    return getattr(request.app.state, "awareness_zones", [])
+def get_awareness_zones(connection: HTTPConnection) -> list[AwarenessZoneSchema]:
+    return getattr(connection.app.state, "awareness_zones", [])
 
 
 def get_hazard_service() -> HazardService:
@@ -74,8 +76,8 @@ def get_notification_service() -> NotificationService:
     return _notification_service
 
 
-def get_connection_manager(request: Request) -> GPSConnectionManager:
-    manager = getattr(request.app.state, "connection_manager", None)
+def get_connection_manager(connection: HTTPConnection) -> GPSConnectionManager:
+    manager = getattr(connection.app.state, "connection_manager", None)
     if manager is None:
         raise RuntimeError("GPSConnectionManager not initialised on app state")
     return manager

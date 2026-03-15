@@ -25,9 +25,12 @@ import * as Speech from "expo-speech";
 // ---------------------------------------------------------------------------
 
 export type NotificationType =
-  | "dismount"
-  | "awareness_zone"
+  | "crossroad_dismount"
+  | "awareness_zone_enter"
   | "hazard_nearby"
+  | "road_closed_ahead"
+  | "route_safety_degraded"
+  | "hazard_confirmed_ahead"
   | "lights_on";
 
 export interface NotificationEvent {
@@ -54,10 +57,13 @@ const SPEECH_LANGUAGE = "bg-BG";
  * Dismount and hazard warnings are slightly faster (more urgent).
  */
 const SPEECH_RATE: Record<NotificationType, number> = {
-  dismount:       1.1,
-  awareness_zone: 0.95,
-  hazard_nearby:  1.1,
-  lights_on:      0.9,
+  crossroad_dismount:     1.1,
+  awareness_zone_enter:   0.95,
+  hazard_nearby:          1.1,
+  road_closed_ahead:      1.1,
+  route_safety_degraded:  0.95,
+  hazard_confirmed_ahead: 1.1,
+  lights_on:              0.9,
 };
 
 // ---------------------------------------------------------------------------
@@ -126,7 +132,7 @@ export function useVoiceNotifications({
   useEffect(() => {
     if (!userId) return;
 
-    const url = `${WS_BASE_URL}/notifications/ws/gps/${encodeURIComponent(userId)}`;
+    const url = `${WS_BASE_URL}/ws/gps`;
     const ws  = new WebSocket(url);
     wsRef.current = ws;
 

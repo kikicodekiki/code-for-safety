@@ -172,10 +172,10 @@ export default function MapScreen() {
     }
   }, [route, isNavigating])
 
-  // Slide card up when destination field is focused
+  // Keep card stationary — it's near the top so the keyboard never covers it
   useEffect(() => {
     RNAnimated.timing(cardSlide, {
-      toValue: isSearchFocused ? -120 : 0,
+      toValue: 0,
       duration: 280,
       useNativeDriver: true,
     }).start()
@@ -305,21 +305,24 @@ export default function MapScreen() {
             <Polyline
               key={`${path.id}-${idx}`}
               coordinates={coords}
-              strokeColor={route ? "rgba(39, 174, 96, 0.4)" : "#27ae60"}
-              strokeWidth={route ? 4 : 5}
+              strokeColor={isNavigating ? "rgba(39, 174, 96, 0.15)" : "#27ae60"}
+              strokeWidth={isNavigating ? 2 : 5}
               lineJoin="round"
               lineCap="round"
-              zIndex={10}           // Higher z-index to stay above roads
+              zIndex={10}
             />
           ))
         })}
 
-        {/* Safe route polyline */}
+        {/* Safe route polyline — sits above bike paths */}
         {routeCoords && routeCoords.length > 0 && (
           <Polyline
             coordinates={routeCoords}
             strokeColor={colors.routeStroke}
-            strokeWidth={5}
+            strokeWidth={6}
+            lineJoin="round"
+            lineCap="round"
+            zIndex={20}
           />
         )}
 

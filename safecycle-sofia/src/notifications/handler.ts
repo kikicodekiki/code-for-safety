@@ -23,6 +23,7 @@ export type NotificationType =
   | "road_closed_ahead"
   | "route_safety_degraded"
   | "hazard_confirmed_ahead"
+  | "lights_on"
 
 export type NotificationUrgency = "critical" | "high" | "medium" | "low"
 

@@ -20,7 +20,9 @@ from app.dependencies import (
     get_graph,
     get_redis,
     get_settings,
+    get_sunset_service,
 )
+from app.notifications.sunset_service import SunsetService
 from app.models.schemas.common import AwarenessZoneSchema
 from app.models.schemas.gps import GPSUpdate
 from app.services.gps_service import GPSConnectionManager, process_gps_update
@@ -39,6 +41,7 @@ async def gps_websocket(
     awareness_zones: list[AwarenessZoneSchema] = Depends(get_awareness_zones),
     redis: Redis = Depends(get_redis),
     settings: Settings = Depends(get_settings),
+    sunset_service: SunsetService = Depends(get_sunset_service),
 ) -> None:
     """
     Real-time GPS WebSocket for active cycling navigation.
@@ -69,13 +72,11 @@ async def gps_websocket(
     session = await manager.connect(websocket, session_id)
     hazard_service = HazardService()
 
-    # Send initial connection acknowledgement
+    # Send initial connection acknowledgement (matches useVoiceNotifications check)
     await websocket.send_json({
-        "event": "connected",
-        "payload": {
-            "session_id": session_id,
-            "message": "SafeCycle GPS session established. Stay safe! 🚴",
-        },
+        "status":     "connected",
+        "session_id": session_id,
+        "message":    "SafeCycle GPS session established. Stay safe!",
     })
 
     try:
@@ -87,8 +88,8 @@ async def gps_websocket(
                 update = GPSUpdate.model_validate(raw)
             except Exception as exc:
                 await websocket.send_json({
-                    "event": "error",
-                    "payload": {"message": f"Invalid GPS update: {exc}"},
+                    "status": "error",
+                    "detail": f"Invalid GPS update: {exc}",
                 })
                 continue
 
@@ -101,6 +102,7 @@ async def gps_websocket(
                 awareness_zones=awareness_zones,
                 settings=settings,
                 redis=redis,
+                sunset_service=sunset_service,
             )
 
             # Send all triggered events back to the client

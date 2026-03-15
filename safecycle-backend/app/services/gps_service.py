@@ -2,11 +2,11 @@
 SafeCycle Sofia — GPS WebSocket session manager and proximity dispatcher.
 
 Manages all active cyclist WebSocket connections and processes GPS updates
-in real time. Emits crossroad, awareness_zone, and hazard_nearby events.
+in real time. Emits crossroad, awareness_zone, hazard_nearby, and lights_on events.
 """
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from uuid import uuid4
 
 import networkx as nx
@@ -22,6 +22,8 @@ from app.core.proximity.crossroad import crossroad_debounce_ok, is_near_crossroa
 from app.models.schemas.common import AwarenessZoneSchema, Coordinate
 from app.models.schemas.gps import GPSUpdate
 from app.models.schemas.route import RouteResponse
+from app.notifications.sunset_service import SunsetService
+from app.notifications.types import VOICE_TEXT, NotificationType
 from app.services.hazard_service import HazardService
 from app.utils.geo import haversine_metres
 from app.utils.time import utc_now
@@ -46,6 +48,7 @@ class GPSSession:
         self.last_crossroad_alert: datetime | None = None
         self.last_zone_alert: datetime | None = None
         self.last_hazard_alert: datetime | None = None
+        self.last_lights_alert: datetime | None = None
         self.connected_at: datetime = utc_now()
 
 
@@ -125,6 +128,33 @@ class GPSConnectionManager:
                     )
 
 
+def _make_event(
+    ntype: NotificationType,
+    title: str,
+    body: str,
+    payload: dict,
+    voice_text: str | None = None,
+) -> dict:
+    """
+    Build a NotificationEvent dict — the wire format sent over WebSocket.
+    Matches the NotificationEvent TypeScript interface in useVoiceNotifications.
+    """
+    return {
+        "event_id":          str(uuid4()),
+        "notification_type": ntype.value,
+        "title":             title,
+        "body":              body,
+        "voice_text":        voice_text or VOICE_TEXT.get(ntype, body),
+        "payload":           payload,
+        "ts":                utc_now().isoformat(),
+    }
+
+
+def _lights_debounce_ok(last: datetime | None, now: datetime) -> bool:
+    """10-minute debounce for lights reminders."""
+    return last is None or (now - last) >= timedelta(minutes=10)
+
+
 async def process_gps_update(
     update: GPSUpdate,
     session: GPSSession,
@@ -133,16 +163,18 @@ async def process_gps_update(
     awareness_zones: list[AwarenessZoneSchema],
     settings: Settings,
     redis,
+    sunset_service: SunsetService | None = None,
 ) -> list[dict]:
     """
     Core GPS processing logic — called on every GPS update from a client.
 
     Checks (in order):
-      1. Crossroad proximity → "crossroad" event (debounced 30 s)
-      2. Awareness zone proximity → "awareness_zone" event (debounced 30 s)
+      1. Crossroad proximity → "crossroad_dismount" event (debounced 30 s)
+      2. Awareness zone proximity → "awareness_zone_enter" event (debounced 30 s)
       3. Active hazard proximity → "hazard_nearby" event (debounced 30 s)
+      4. Sunset / darkness check → "lights_on" event (debounced 10 min)
 
-    Returns a (possibly empty) list of server-push event dicts.
+    Returns a (possibly empty) list of NotificationEvent dicts.
     """
     events: list[dict] = []
     now = utc_now()
@@ -162,17 +194,18 @@ async def process_gps_update(
             dist = haversine_metres(
                 lat, lon, nearest_crossroad.lat, nearest_crossroad.lon
             )
-            events.append({
-                "event": "crossroad",
-                "payload": {
+            events.append(_make_event(
+                ntype=NotificationType.CROSSROAD_DISMOUNT,
+                title="Intersection ahead",
+                body=f"Consider dismounting — intersection {int(dist)}m ahead",
+                payload={
                     "distance_m": round(dist, 1),
                     "node": {
                         "lat": nearest_crossroad.lat,
                         "lon": nearest_crossroad.lon,
                     },
-                    "message": "Intersection ahead — stay alert",
                 },
-            })
+            ))
             session.last_crossroad_alert = now
             logger.info(
                 "crossroad_alert_fired",
@@ -190,16 +223,17 @@ async def process_gps_update(
         )
         if zone_result:
             zone, zone_dist = zone_result
-            events.append({
-                "event": "awareness_zone",
-                "payload": {
-                    "zone_id": zone.id,
+            events.append(_make_event(
+                ntype=NotificationType.AWARENESS_ZONE_ENTER,
+                title="Awareness zone",
+                body=f"Children may be present — {(zone.name or zone.type).replace('_', ' ')}",
+                payload={
+                    "zone_id":   zone.id,
                     "zone_type": zone.type,
                     "zone_name": zone.name,
                     "distance_m": round(zone_dist, 1),
-                    "message": f"Awareness zone ahead — {zone.name or zone.type}",
                 },
-            })
+            ))
             session.last_zone_alert = now
             logger.info(
                 "awareness_zone_alert_fired",
@@ -220,13 +254,41 @@ async def process_gps_update(
         if active_hazards:
             nearest_hazard = active_hazards[0]  # already sorted by proximity
             h_dist = haversine_metres(lat, lon, nearest_hazard.lat, nearest_hazard.lon)
-            events.append({
-                "event": "hazard_nearby",
-                "payload": {
-                    "hazard": nearest_hazard.model_dump(mode="json"),
+            htype  = getattr(nearest_hazard, "hazard_type", "hazard")
+            events.append(_make_event(
+                ntype=NotificationType.HAZARD_NEARBY,
+                title="Hazard ahead",
+                body=f"{str(htype).replace('_', ' ').title()} — {int(h_dist)}m ahead",
+                payload={
+                    "hazard":     nearest_hazard.model_dump(mode="json"),
                     "distance_m": round(h_dist, 1),
                 },
-            })
+            ))
             session.last_hazard_alert = now
+
+    # ── 4. Sunset / lights check ──────────────────────────────────────────────
+    if sunset_service and _lights_debounce_ok(session.last_lights_alert, now):
+        try:
+            if await sunset_service.is_dark(lat=lat, lon=lon):
+                voice_text = await sunset_service.sunset_voice_text(lat=lat, lon=lon)
+                sunset_dt  = await sunset_service.get_sunset(lat=lat, lon=lon)
+                sunset_time = (
+                    sunset_dt.strftime("%H:%M") if sunset_dt else ""
+                )
+                events.append(_make_event(
+                    ntype=NotificationType.LIGHTS_ON,
+                    title="Turn on your lights",
+                    body=(
+                        f"Sunset at {sunset_time} — turn on your front and rear lights"
+                        if sunset_time else
+                        "Visibility is reduced — turn on your lights"
+                    ),
+                    payload={"sunset_time": sunset_time},
+                    voice_text=voice_text,
+                ))
+                session.last_lights_alert = now
+                logger.info("lights_on_alert_fired", session_id=session.session_id)
+        except Exception as exc:
+            logger.warning("lights_check_failed", error=str(exc))
 
     return events

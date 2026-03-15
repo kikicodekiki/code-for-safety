@@ -5,6 +5,7 @@ import { useSettingsStore } from "../src/stores/useSettingsStore"
 import { useWebSocket } from "../src/integration/hooks/useWebSocket"
 import { syncHazards } from "../src/integration/sync/hazardSync"
 import { deviceService } from "../src/integration/services/deviceService"
+import { AlertQueue } from "../src/components/notifications/AlertQueue"
 import { colors } from "../src/tokens"
 
 export default function RootLayout() {
@@ -35,13 +36,14 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="route-detail"
-          options={{ 
-            presentation: "transparentModal", 
+          options={{
+            presentation: "transparentModal",
             animation: "fade",
             contentStyle: { backgroundColor: "transparent" }
           }}
         />
       </Stack>
+      <AlertQueue />
     </>
   )
 }
