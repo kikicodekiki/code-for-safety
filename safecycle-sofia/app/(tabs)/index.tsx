@@ -23,7 +23,8 @@ import { AwarenessZoneCircle } from "../../src/components/AwarenessZoneCircle"
 import { AlertBanner } from "../../src/components/AlertBanner"
 import { NavigationHUD } from "../../src/components/NavigationHUD"
 import { colors, radius, spacing, typography } from "../../src/tokens"
-import type { Coordinate } from "../../src/types"
+import { bikePathService } from "../../src/integration/services/bikePathService"
+import type { Coordinate, VeloBGPath } from "../../src/integration/types/api"
 
 // Custom grey-toned map style — desaturates base tiles so the green route pops
 const MAP_STYLE = [
@@ -98,6 +99,7 @@ export default function MapScreen() {
   const [banners, setBanners] = useState<Banner[]>([])
   const [distanceRemainingM, setDistanceRemainingM] = useState(0)
   const [timeRemainingMin, setTimeRemainingMin] = useState(0)
+  const [bikePaths, setBikePaths] = useState<VeloBGPath[]>([])
 
   const route = useNavigationStore((s) => s.route)
   const isNavigating = useNavigationStore((s) => s.isNavigating)
@@ -128,6 +130,33 @@ export default function MapScreen() {
     })()
   }, [setOrigin])
 
+  const pushBanner = useCallback((type: Banner["type"], message: string) => {
+    const id = `${type}_${Date.now()}`
+    setBanners((prev) => {
+      // De-duplicate consecutive same-type banners
+      if (prev.length > 0 && prev[prev.length - 1].type === type) return prev
+      return [...prev, { id, type, message }]
+    })
+  }, [])
+
+  // Fetch bike paths on mount
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const resp = await bikePathService.getBikePaths()
+        setBikePaths(resp.paths)
+        if (resp.paths.length > 0) {
+          pushBanner("awareness", `Loaded ${resp.paths.length} bike infrastructure paths`)
+        } else {
+          pushBanner("hazard", "No bike paths found in database")
+        }
+      } catch (err) {
+        console.error("Failed to fetch bike paths:", err)
+        pushBanner("hazard", "Connection error: Could not load bike infrastructure")
+      }
+    })()
+  }, [pushBanner])
+
   // Fetch hazards on mount and refresh every 60 s
   useEffect(() => {
     fetchHazards()
@@ -151,15 +180,6 @@ export default function MapScreen() {
       useNativeDriver: true,
     }).start()
   }, [isSearchFocused, cardSlide])
-
-  const pushBanner = useCallback((type: Banner["type"], message: string) => {
-    const id = `${type}_${Date.now()}`
-    setBanners((prev) => {
-      // De-duplicate consecutive same-type banners
-      if (prev.length > 0 && prev[prev.length - 1].type === type) return prev
-      return [...prev, { id, type, message }]
-    })
-  }, [])
 
   const dismissBanner = useCallback((id: string) => {
     setBanners((prev) => prev.filter((b) => b.id !== id))
@@ -279,6 +299,21 @@ export default function MapScreen() {
         showsUserLocation={false}
         showsMyLocationButton={false}
       >
+        {bikePaths.map((path) => {
+          const segments = bikePathService.pathToMapCoordinates(path)
+          return segments.map((coords, idx) => (
+            <Polyline
+              key={`${path.id}_${idx}`}
+              coordinates={coords}
+              strokeColor="#2ecc71" // Forced Emerald Green for visibility
+              strokeWidth={5}       // Thicker lines
+              lineJoin="round"
+              lineCap="round"
+              zIndex={10}           // Higher z-index to stay above roads
+            />
+          ))
+        })}
+
         {/* Safe route polyline */}
         {routeCoords && routeCoords.length > 0 && (
           <Polyline
