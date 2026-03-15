@@ -118,7 +118,7 @@ export default function MapScreen() {
 
   // Request foreground location permission and capture initial position
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync()
       setGpsGranted(status === "granted")
       if (status === "granted") {
@@ -141,7 +141,7 @@ export default function MapScreen() {
 
   // Fetch bike paths on mount
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       try {
         const resp = await bikePathService.getBikePaths()
         setBikePaths(resp.paths)
@@ -207,7 +207,7 @@ export default function MapScreen() {
     const searchQuery = `${destinationText.trim()}, Sofia, Bulgaria`
     try {
       const geocodeResults = await Location.geocodeAsync(searchQuery)
-      
+
       if (!geocodeResults || geocodeResults.length === 0) {
         useNavigationStore.getState().setRouteError({
           type: "not_found",
@@ -218,11 +218,11 @@ export default function MapScreen() {
       }
 
       const bestResult = geocodeResults[0]
-      const destCoord: Coordinate = { 
-        lat: bestResult.latitude, 
-        lon: bestResult.longitude 
+      const destCoord: Coordinate = {
+        lat: bestResult.latitude,
+        lon: bestResult.longitude
       }
-      
+
       setDestination(destCoord)
 
       await findRoute({
@@ -424,7 +424,7 @@ export default function MapScreen() {
             style={[
               styles.findRouteButton,
               (!destinationText.trim() || isLoadingRoute) &&
-                styles.findRouteButtonDisabled,
+              styles.findRouteButtonDisabled,
             ]}
             onPress={handleFindRoute}
             disabled={!destinationText.trim() || isLoadingRoute}
