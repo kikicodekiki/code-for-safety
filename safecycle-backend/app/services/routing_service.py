@@ -15,6 +15,7 @@ from app.core.routing.algorithm import find_safe_route
 from app.data.air_quality.repository import AirQualityRepository
 from app.models.schemas.common import AwarenessZoneSchema
 from app.models.schemas.route import RouteResponse
+from app.services.density_service import DensityService
 from app.services.hazard_service import HazardService
 from redis.asyncio import Redis
 
@@ -31,6 +32,7 @@ class RoutingService:
         self,
         graph: nx.MultiDiGraph,
         hazard_service: HazardService,
+        density_service: DensityService,
         danger_nodes: frozenset[int],
         awareness_zones: list[AwarenessZoneSchema],
         settings: Settings,
@@ -38,6 +40,7 @@ class RoutingService:
     ) -> None:
         self.graph = graph
         self.hazard_service = hazard_service
+        self.density_service = density_service
         self.danger_nodes = danger_nodes
         self.awareness_zones = awareness_zones
         self.settings = settings
@@ -90,6 +93,13 @@ class RoutingService:
             self.graph, redis
         )
 
+        # Fetch real-time crowd density at route midpoint
+        mid_lat = (origin_lat + dest_lat) / 2.0
+        mid_lon = (origin_lon + dest_lon) / 2.0
+        density_result = await self.density_service.estimate_density(
+            lat=mid_lat, lon=mid_lon
+        )
+
         # Run the routing algorithm (air quality repo may be None if data unavailable)
         result = find_safe_route(
             G=self.graph,
@@ -99,6 +109,7 @@ class RoutingService:
             danger_nodes=self.danger_nodes,
             awareness_zones=self.awareness_zones,
             settings=self.settings,
+            people_density=density_result.people_density,
             air_quality_repo=self.air_quality_repo,
         )
 
@@ -120,6 +131,8 @@ class RoutingService:
             excluded_edges_count=result.excluded_edges_count,
             active_hazards=len(hazard_penalties),
             awareness_zones_on_path=len(result.awareness_zones),
+            density_score=density_result.density_score,
+            density_real_time=density_result.is_real_time,
             computation_ms=round(elapsed_ms, 1),
         )
 

@@ -42,6 +42,7 @@ def find_safe_route(
     danger_nodes: frozenset[int],
     awareness_zones: list[AwarenessZoneSchema],
     settings: Settings,
+    people_density: float = 0.0,
     air_quality_repo: AirQualityRepository | None = None,
 ) -> RouteResponse:
     """
@@ -89,7 +90,7 @@ def find_safe_route(
                 (lat_u + lat_v) / 2.0, (lon_u + lon_v) / 2.0
             )
 
-        result = compute_edge_weight(data, hazard_penalties, settings, pm25_value=pm25)
+        result = compute_edge_weight(data, hazard_penalties, settings, pm25_value=pm25, people_density=people_density,)
         data["safe_weight"] = result.weight
         weight_results[(u, v, k)] = result
 
