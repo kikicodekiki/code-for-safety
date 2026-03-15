@@ -299,14 +299,14 @@ export default function MapScreen() {
         showsUserLocation={false}
         showsMyLocationButton={false}
       >
-        {!route && bikePaths.map((path) => {
+        {bikePaths.map((path) => {
           const segments = bikePathService.pathToMapCoordinates(path)
           return segments.map((coords, idx) => (
             <Polyline
-              key={`${path.id}_${idx}`}
+              key={`${path.id}-${idx}`}
               coordinates={coords}
-              strokeColor="#27ae60" // Darker Green (Nephriti)
-              strokeWidth={5}       // Thicker lines
+              strokeColor={route ? "rgba(39, 174, 96, 0.4)" : "#27ae60"}
+              strokeWidth={route ? 4 : 5}
               lineJoin="round"
               lineCap="round"
               zIndex={10}           // Higher z-index to stay above roads
