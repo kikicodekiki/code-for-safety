@@ -360,7 +360,7 @@ export default function MapScreen() {
         )}
       </MapView>
 
-      {/* WebSocket connection indicator */}
+      {/* WebSocket connection indicator 
       {connectionStatus !== "connected" && (
         <View style={styles.connectionBadge}>
           <View style={styles.connectionDot} />
@@ -370,7 +370,7 @@ export default function MapScreen() {
               : "Live updates paused"}
           </Text>
         </View>
-      )}
+      )}*/}
 
       {/* Backend error banner */}
       {routeError && (
