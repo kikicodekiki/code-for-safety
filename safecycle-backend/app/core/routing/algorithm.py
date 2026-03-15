@@ -41,6 +41,7 @@ def find_safe_route(
     danger_nodes: frozenset[int],
     awareness_zones: list[AwarenessZoneSchema],
     settings: Settings,
+    people_density: float = 0.0,
 ) -> RouteResponse:
     """
     Find the safety-optimal cycling route using A* with safety-weighted edges.
@@ -71,7 +72,10 @@ def find_safe_route(
     excluded_count = 0
 
     for u, v, k, data in H.edges(data=True, keys=True):
-        result = compute_edge_weight(data, hazard_penalties, settings)
+        result = compute_edge_weight(
+            data, hazard_penalties, settings,
+            people_density=people_density,
+        )
         data["safe_weight"] = result.weight
         weight_results[(u, v, k)] = result
 
