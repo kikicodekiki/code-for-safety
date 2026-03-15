@@ -23,6 +23,7 @@ class NotificationType(str, Enum):
     ROAD_CLOSED_AHEAD      = "road_closed_ahead"
     ROUTE_SAFETY_DEGRADED  = "route_safety_degraded"
     HAZARD_CONFIRMED_AHEAD = "hazard_confirmed_ahead"
+    LIGHTS_ON              = "lights_on"
 
 
 class NotificationUrgency(str, Enum):
@@ -46,6 +47,7 @@ DEBOUNCE_SECONDS: dict[NotificationType, int] = {
     NotificationType.ROAD_CLOSED_AHEAD:     120,
     NotificationType.ROUTE_SAFETY_DEGRADED: 300,
     NotificationType.HAZARD_CONFIRMED_AHEAD: 180,
+    NotificationType.LIGHTS_ON:             600,   # once per 10 min max
 }
 
 # ── Sound profile per type ────────────────────────────────────────────────────
@@ -56,6 +58,7 @@ SOUND_ENABLED: dict[NotificationType, bool] = {
     NotificationType.ROAD_CLOSED_AHEAD:      True,
     NotificationType.ROUTE_SAFETY_DEGRADED:  False,
     NotificationType.HAZARD_CONFIRMED_AHEAD: False,
+    NotificationType.LIGHTS_ON:             False,
 }
 
 # ── Urgency per type ──────────────────────────────────────────────────────────
@@ -66,6 +69,7 @@ URGENCY: dict[NotificationType, NotificationUrgency] = {
     NotificationType.ROAD_CLOSED_AHEAD:      NotificationUrgency.CRITICAL,
     NotificationType.ROUTE_SAFETY_DEGRADED:  NotificationUrgency.MEDIUM,
     NotificationType.HAZARD_CONFIRMED_AHEAD: NotificationUrgency.MEDIUM,
+    NotificationType.LIGHTS_ON:             NotificationUrgency.LOW,
 }
 
 # ── Required delivery channels per type (priority order) ─────────────────────
@@ -94,6 +98,10 @@ REQUIRED_CHANNELS: dict[NotificationType, list[NotificationChannel]] = {
     NotificationType.HAZARD_CONFIRMED_AHEAD: [
         NotificationChannel.FCM,
     ],
+    NotificationType.LIGHTS_ON: [
+        NotificationChannel.WEBSOCKET,
+        NotificationChannel.LOCAL_PUSH,
+    ],
 }
 
 # ── Copy strings per type ─────────────────────────────────────────────────────
@@ -104,6 +112,25 @@ _TITLES: dict[NotificationType, str] = {
     NotificationType.ROAD_CLOSED_AHEAD:      "Road closed on your route",
     NotificationType.ROUTE_SAFETY_DEGRADED:  "Route safety changed",
     NotificationType.HAZARD_CONFIRMED_AHEAD: "Hazard confirmed ahead",
+    NotificationType.LIGHTS_ON:             "Turn on your lights",
+}
+
+# Bulgarian TTS strings for expo-speech (bg-BG)
+VOICE_TEXT: dict[NotificationType, str] = {
+    NotificationType.CROSSROAD_DISMOUNT:
+        "Предстои кръстовище. Помислете за слизане от колелото.",
+    NotificationType.AWARENESS_ZONE_ENTER:
+        "Внимание: зона с деца. Намалете скоростта.",
+    NotificationType.HAZARD_NEARBY:
+        "Внимание: препятствие на пътя. Карайте внимателно.",
+    NotificationType.ROAD_CLOSED_AHEAD:
+        "Маршрутът ви е затворен. Препоръчваме ново маршрутизиране.",
+    NotificationType.ROUTE_SAFETY_DEGRADED:
+        "Безопасността на маршрута е намалена. Помислете за нов маршрут.",
+    NotificationType.HAZARD_CONFIRMED_AHEAD:
+        "Потвърдено препятствие по маршрута. Бъдете внимателни.",
+    NotificationType.LIGHTS_ON:
+        "Включете предната и задната светлина на колелото.",
 }
 
 
@@ -144,6 +171,12 @@ def _build_body(ntype: NotificationType, data: dict[str, Any]) -> str:
     if ntype == NotificationType.HAZARD_CONFIRMED_AHEAD:
         htype = data.get("hazard_type", "hazard").replace("_", " ")
         return f"Multiple cyclists confirm: {htype} ahead on your route"
+
+    if ntype == NotificationType.LIGHTS_ON:
+        sunset_time = data.get("sunset_time", "")
+        if sunset_time:
+            return f"Sunset at {sunset_time} — turn on your front and rear lights"
+        return "Visibility is reduced — turn on your front and rear lights"
 
     return "Stay alert on your route"
 
