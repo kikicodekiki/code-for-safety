@@ -38,6 +38,9 @@ from app.core.exceptions import (
 from app.core.graph.enrichment import GeoJSONEnricher
 from app.core.graph.loader import GraphLoader
 from app.core.graph.zones import build_awareness_zone_list, build_danger_node_set
+from app.data.air_quality.fetcher import AirQualityFetcher
+from app.data.air_quality.repository import AirQualityRepository
+from app.data.air_quality.scheduler import AirQualityScheduler
 from app.data.velobg.cache import VeloBGCache
 from app.data.velobg.enricher import VeloBGEnricher
 from app.data.velobg.fetcher import VeloBGFetcher
@@ -245,6 +248,32 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # Start the background refresh scheduler
     velobg_scheduler.start(app.state.graph)
 
+    # ── Air Quality (sensor.community) ────────────────────────────────────────
+    # Fetch initial PM2.5/PM10 data for Sofia, save to data/sofia_air_quality.json,
+    # and build the in-memory spatial index used by the routing algorithm.
+    aq_fetcher    = AirQualityFetcher(settings)
+    aq_repository = AirQualityRepository()
+    aq_scheduler  = AirQualityScheduler(settings, aq_fetcher, aq_repository)
+
+    try:
+        aq_payload = await aq_fetcher.fetch()
+        aq_repository.update(aq_payload)
+        logger.info(
+            "air_quality_loaded",
+            sensor_count=aq_repository.sensor_count,
+            fetched_at=aq_repository.fetched_at,
+        )
+    except Exception as exc:
+        logger.warning(
+            "air_quality_startup_failed",
+            error=str(exc),
+            note="Routing continues without air quality data. Scheduler will retry.",
+        )
+
+    app.state.air_quality_repository = aq_repository
+    app.state.air_quality_scheduler  = aq_scheduler
+    aq_scheduler.start()
+
     # ── GPS Connection Manager ────────────────────────────────────────────────
     app.state.connection_manager = GPSConnectionManager()
 
@@ -258,6 +287,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # ── Shutdown ──────────────────────────────────────────────────────────────
     logger.info("app_shutdown_started")
     await velobg_scheduler.stop()
+    await aq_scheduler.stop()
     await app.state.connection_manager.disconnect_all()
     await redis.aclose()
     logger.info("app_shutdown_complete")
