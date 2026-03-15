@@ -75,6 +75,10 @@ def get_notification_service() -> NotificationService:
     return _notification_service
 
 
+def get_sunset_service() -> SunsetService:
+    return SunsetService()
+
+
 def get_connection_manager(connection: HTTPConnection) -> GPSConnectionManager:
     manager = getattr(connection.app.state, "connection_manager", None)
     if manager is None:
