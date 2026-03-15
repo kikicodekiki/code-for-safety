@@ -15,7 +15,7 @@ export const colors = {
   awarenessZoneAlpha: "rgba(245, 166, 35, 0.18)",
 
   // Crossroad marker
-  crossroadBorder: "#E8453C",
+  crossroadBorder: "#F5A623",
   crossroadFill: "#FFFFFF",
 
   // Map route

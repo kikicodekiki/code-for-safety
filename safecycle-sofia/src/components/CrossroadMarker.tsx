@@ -19,7 +19,7 @@ export const CrossroadMarker = React.memo(function CrossroadMarker({
       tracksViewChanges={false}
     >
       <View style={styles.container}>
-        <MaterialCommunityIcons name="close" size={10} color={colors.crossroadBorder} />
+        <MaterialCommunityIcons name="alert" size={11} color={colors.crossroadBorder} />
       </View>
     </Marker>
   )
