@@ -1,5 +1,6 @@
 import * as Location from "expo-location"
 import * as TaskManager from "expo-task-manager"
+import Constants from "expo-constants"
 import { useNavigationStore } from "../stores/useNavigationStore"
 import { useHazardStore } from "../stores/useHazardStore"
 import { useSettingsStore } from "../stores/useSettingsStore"
@@ -143,6 +144,9 @@ TaskManager.defineTask(BACKGROUND_LOCATION_TASK, async ({ data, error }) => {
 })
 
 export async function startBackgroundLocationTask(): Promise<void> {
+  // Background location is not supported in Expo Go
+  if (Constants.executionEnvironment === "storeClient") return
+
   const { status } = await Location.requestBackgroundPermissionsAsync()
   if (status !== "granted") return
 
