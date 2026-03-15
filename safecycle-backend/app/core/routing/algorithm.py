@@ -25,6 +25,7 @@ from app.config import Settings
 from app.core.exceptions import RouteNotFoundError
 from app.core.graph.weighting import EdgeWeightResult, compute_edge_weight
 from app.core.routing.heuristic import haversine_heuristic
+from app.data.air_quality.repository import AirQualityRepository
 from app.models.schemas.common import AwarenessZoneSchema, Coordinate, GeoJSONLineString
 from app.models.schemas.route import RouteResponse
 from app.utils.geo import haversine_metres, metres_to_degrees
@@ -42,6 +43,7 @@ def find_safe_route(
     awareness_zones: list[AwarenessZoneSchema],
     settings: Settings,
     people_density: float = 0.0,
+    air_quality_repo: AirQualityRepository | None = None,
 ) -> RouteResponse:
     """
     Find the safety-optimal cycling route using A* with safety-weighted edges.
@@ -55,6 +57,11 @@ def find_safe_route(
     danger_nodes : frozenset — node IDs to remove (accident hotspots only)
     awareness_zones : list  — zones flagged in response but NOT removed from graph
     settings : Settings
+    air_quality_repo : AirQualityRepository | None
+        When provided, each edge gets the PM2.5 reading of the nearest sensor
+        (up to 3 km away) factored into its safety cost.  Edges in areas with
+        high PM2.5 receive a multiplicative penalty so the router prefers
+        cleaner air corridors (e.g. parks, bike alleys away from traffic).
 
     Returns
     -------
@@ -72,10 +79,18 @@ def find_safe_route(
     excluded_count = 0
 
     for u, v, k, data in H.edges(data=True, keys=True):
-        result = compute_edge_weight(
-            data, hazard_penalties, settings,
-            people_density=people_density,
-        )
+        # Look up PM2.5 at the edge midpoint from the nearest sensor
+        pm25 = 0.0
+        if air_quality_repo is not None:
+            lat_u = H.nodes[u].get("y", 0.0)
+            lon_u = H.nodes[u].get("x", 0.0)
+            lat_v = H.nodes[v].get("y", 0.0)
+            lon_v = H.nodes[v].get("x", 0.0)
+            pm25 = air_quality_repo.get_pm25(
+                (lat_u + lat_v) / 2.0, (lon_u + lon_v) / 2.0
+            )
+
+        result = compute_edge_weight(data, hazard_penalties, settings, pm25_value=pm25, people_density=people_density,)
         data["safe_weight"] = result.weight
         weight_results[(u, v, k)] = result
 
