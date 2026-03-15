@@ -43,6 +43,7 @@ from app.data.velobg.enricher import VeloBGEnricher
 from app.data.velobg.fetcher import VeloBGFetcher
 from app.data.velobg.parser import VeloBGParser
 from app.data.velobg.scheduler import VeloBGScheduler
+from app.notifications.sunset_service import SunsetService
 from app.services.gps_service import GPSConnectionManager
 from app.services.notification_service import NotificationService
 
@@ -167,6 +168,10 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         logger.info("redis_connected", url=settings.REDIS_URL)
     except Exception as exc:
         logger.error("redis_connection_failed", error=str(exc))
+
+    # ── Sunset Service ────────────────────────────────────────────────────────
+    app.state.sunset_service = SunsetService(redis)
+    logger.info("sunset_service_initialized")
 
     # ── OSMnx Graph ───────────────────────────────────────────────────────────
     t0 = time.perf_counter()

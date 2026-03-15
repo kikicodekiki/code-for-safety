@@ -20,7 +20,9 @@ from app.dependencies import (
     get_graph,
     get_redis,
     get_settings,
+    get_sunset_service,
 )
+from app.notifications.sunset_service import SunsetService
 from app.models.schemas.common import AwarenessZoneSchema
 from app.models.schemas.gps import GPSUpdate
 from app.services.gps_service import GPSConnectionManager, process_gps_update
@@ -39,6 +41,7 @@ async def gps_websocket(
     awareness_zones: list[AwarenessZoneSchema] = Depends(get_awareness_zones),
     redis: Redis = Depends(get_redis),
     settings: Settings = Depends(get_settings),
+    sunset_service: SunsetService = Depends(get_sunset_service),
 ) -> None:
     """
     Real-time GPS WebSocket for active cycling navigation.
