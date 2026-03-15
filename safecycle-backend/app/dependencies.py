@@ -17,6 +17,7 @@ from app.config import Settings, settings
 from app.core.exceptions import GraphNotLoadedError
 from app.db.session import get_async_session
 from app.models.schemas.common import AwarenessZoneSchema
+from app.services.density_service import DensityService
 from app.services.gps_service import GPSConnectionManager
 from app.services.hazard_service import HazardService
 from app.services.notification_service import NotificationService
@@ -88,6 +89,7 @@ async def get_routing_service(
     return RoutingService(
         graph=graph,
         hazard_service=HazardService(),
+        density_service=DensityService(settings),
         danger_nodes=danger_nodes,
         awareness_zones=awareness_zones,
         settings=settings,
