@@ -205,9 +205,6 @@ export default function RouteDetailScreen() {
             <Text style={styles.startButtonText}>Start Navigation</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.alternativeLink}>
-            <Text style={styles.alternativeLinkText}>Show Alternatives</Text>
-          </TouchableOpacity>
         </ScrollView>
       </RNAnimated.View>
     </View>
