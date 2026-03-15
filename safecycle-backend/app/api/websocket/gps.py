@@ -72,13 +72,11 @@ async def gps_websocket(
     session = await manager.connect(websocket, session_id)
     hazard_service = HazardService()
 
-    # Send initial connection acknowledgement
+    # Send initial connection acknowledgement (matches useVoiceNotifications check)
     await websocket.send_json({
-        "event": "connected",
-        "payload": {
-            "session_id": session_id,
-            "message": "SafeCycle GPS session established. Stay safe! 🚴",
-        },
+        "status":     "connected",
+        "session_id": session_id,
+        "message":    "SafeCycle GPS session established. Stay safe!",
     })
 
     try:
@@ -90,8 +88,8 @@ async def gps_websocket(
                 update = GPSUpdate.model_validate(raw)
             except Exception as exc:
                 await websocket.send_json({
-                    "event": "error",
-                    "payload": {"message": f"Invalid GPS update: {exc}"},
+                    "status": "error",
+                    "detail": f"Invalid GPS update: {exc}",
                 })
                 continue
 
@@ -104,6 +102,7 @@ async def gps_websocket(
                 awareness_zones=awareness_zones,
                 settings=settings,
                 redis=redis,
+                sunset_service=sunset_service,
             )
 
             # Send all triggered events back to the client
