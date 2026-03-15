@@ -13,11 +13,17 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+# Expose GDAL headers so Fiona can compile against the system GDAL
+ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
+ENV C_INCLUDE_PATH=/usr/include/gdal
+
 WORKDIR /app
 
 # Install Python dependencies first (layer cache optimisation)
+# Install GDAL Python bindings matching the system version before the rest
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir "GDAL==$(gdal-config --version)" \
     && pip install --no-cache-dir -r requirements.txt
 
 # Copy application source
