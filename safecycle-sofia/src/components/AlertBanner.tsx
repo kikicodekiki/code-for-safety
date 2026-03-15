@@ -2,24 +2,46 @@ import React, { useEffect, useRef } from "react"
 import { Animated, StyleSheet, Text, TouchableOpacity } from "react-native"
 import { colors, radius, spacing, typography } from "../tokens"
 
-type BannerType = "crossroad" | "awareness" | "hazard"
+// Covers both the legacy short names used by the map screen and the full
+// NotificationType values used by useNotificationStore.
+export type BannerType =
+  | "crossroad"
+  | "awareness"
+  | "hazard"
+  | "crossroad_dismount"
+  | "awareness_zone_enter"
+  | "hazard_nearby"
+  | "road_closed_ahead"
+  | "route_safety_degraded"
+  | "hazard_confirmed_ahead"
+  | "lights_on"
 
 interface AlertBannerProps {
   type: BannerType
+  title?: string
   message: string
+  urgency?: string
   onDismiss: () => void
 }
 
 const BANNER_CONFIG: Record<BannerType, { background: string; icon: string }> = {
-  crossroad: { background: colors.caution, icon: "⚠️" },
-  awareness: { background: "#3498DB", icon: "👁" },
-  hazard: { background: colors.danger, icon: "🚨" },
+  crossroad:              { background: colors.caution,  icon: "⚠️" },
+  awareness:              { background: "#3498DB",        icon: "👁" },
+  hazard:                 { background: colors.danger,   icon: "🚨" },
+  crossroad_dismount:     { background: colors.caution,  icon: "⚠️" },
+  awareness_zone_enter:   { background: "#3498DB",        icon: "👁" },
+  hazard_nearby:          { background: colors.danger,   icon: "🚨" },
+  road_closed_ahead:      { background: "#E67E22",        icon: "🚧" },
+  route_safety_degraded:  { background: colors.caution,  icon: "📉" },
+  hazard_confirmed_ahead: { background: colors.danger,   icon: "☠️" },
+  lights_on:              { background: "#8E44AD",        icon: "💡" },
 }
 
 const AUTO_DISMISS_MS = 6000
 
 export const AlertBanner = React.memo(function AlertBanner({
   type,
+  title,
   message,
   onDismiss,
 }: AlertBannerProps) {
@@ -61,8 +83,8 @@ export const AlertBanner = React.memo(function AlertBanner({
       ]}
     >
       <Text style={styles.icon}>{icon}</Text>
-      <Text style={styles.message} numberOfLines={2}>
-        {message}
+      <Text style={styles.message} numberOfLines={3}>
+        {title ? `${title}\n` : ""}{message}
       </Text>
       <TouchableOpacity
         onPress={() => {
