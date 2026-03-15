@@ -332,8 +332,8 @@ export default function MapScreen() {
           />
         ))}
 
-        {/* Crossroad markers */}
-        {route?.crossroad_nodes.map((node, i) => (
+        {/* Crossroad markers — cap at 8 to avoid flooding the route */}
+        {route?.crossroad_nodes.slice(0, 8).map((node, i) => (
           <CrossroadMarker key={`cross_${i}`} coordinate={node} />
         ))}
 
