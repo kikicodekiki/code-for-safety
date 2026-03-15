@@ -299,13 +299,13 @@ export default function MapScreen() {
         showsUserLocation={false}
         showsMyLocationButton={false}
       >
-        {bikePaths.map((path) => {
+        {!route && bikePaths.map((path) => {
           const segments = bikePathService.pathToMapCoordinates(path)
           return segments.map((coords, idx) => (
             <Polyline
               key={`${path.id}_${idx}`}
               coordinates={coords}
-              strokeColor="#2ecc71" // Forced Emerald Green for visibility
+              strokeColor="#27ae60" // Darker Green (Nephriti)
               strokeWidth={5}       // Thicker lines
               lineJoin="round"
               lineCap="round"
