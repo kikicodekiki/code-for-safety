@@ -73,6 +73,12 @@ class Settings(BaseSettings):
     VELOBG_REDIS_KEY: str = "velobg:map_data"
     VELOBG_REDIS_TTL_S: int = 90000          # 25 hours — slightly longer than refresh interval
 
+    # ── Air Quality (sensor.community) ───────────────────────────────────────
+    # Path to the local JSON cache written after each successful fetch
+    AIR_QUALITY_JSON_PATH: str = "data/sofia_air_quality.json"
+    # How often the background scheduler re-fetches sensor data (seconds)
+    AIR_QUALITY_REFRESH_INTERVAL_S: int = 1800   # 30 minutes
+
     # ── GPS WebSocket ─────────────────────────────────────────────────────────
     GPS_POLL_INTERVAL_S: int = 10
     WS_PING_INTERVAL_S: int = 30
