@@ -16,7 +16,6 @@ from starlette.requests import HTTPConnection
 
 from app.config import Settings, settings
 from app.core.exceptions import GraphNotLoadedError
-from app.data.air_quality.repository import AirQualityRepository
 from app.db.session import get_async_session
 from app.models.schemas.common import AwarenessZoneSchema
 from app.notifications.sunset_service import SunsetService
@@ -83,16 +82,11 @@ def get_connection_manager(connection: HTTPConnection) -> GPSConnectionManager:
     return manager
 
 
-def get_air_quality_repository(request: Request) -> AirQualityRepository | None:
-    return getattr(request.app.state, "air_quality_repository", None)
-
-
 async def get_routing_service(
     request: Request,
     graph: nx.MultiDiGraph = Depends(get_graph),
     danger_nodes: frozenset[int] = Depends(get_danger_nodes),
     awareness_zones: list[AwarenessZoneSchema] = Depends(get_awareness_zones),
-    air_quality_repo: AirQualityRepository | None = Depends(get_air_quality_repository),
 ) -> RoutingService:
     return RoutingService(
         graph=graph,
@@ -101,7 +95,6 @@ async def get_routing_service(
         danger_nodes=danger_nodes,
         awareness_zones=awareness_zones,
         settings=settings,
-        air_quality_repo=air_quality_repo,
     )
 
 

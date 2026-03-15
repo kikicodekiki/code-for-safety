@@ -12,7 +12,6 @@ import structlog
 from app.config import Settings
 from app.core.graph.loader import GraphLoader
 from app.core.routing.algorithm import find_safe_route
-from app.data.air_quality.repository import AirQualityRepository
 from app.models.schemas.common import AwarenessZoneSchema
 from app.models.schemas.route import RouteResponse
 from app.services.density_service import DensityService
@@ -36,7 +35,6 @@ class RoutingService:
         danger_nodes: frozenset[int],
         awareness_zones: list[AwarenessZoneSchema],
         settings: Settings,
-        air_quality_repo: AirQualityRepository | None = None,
     ) -> None:
         self.graph = graph
         self.hazard_service = hazard_service
@@ -44,7 +42,6 @@ class RoutingService:
         self.danger_nodes = danger_nodes
         self.awareness_zones = awareness_zones
         self.settings = settings
-        self.air_quality_repo = air_quality_repo
 
     async def find_route(
         self,
@@ -100,7 +97,7 @@ class RoutingService:
             lat=mid_lat, lon=mid_lon
         )
 
-        # Run the routing algorithm (air quality repo may be None if data unavailable)
+        # Run the routing algorithm
         result = find_safe_route(
             G=self.graph,
             origin_node=origin_node,
@@ -110,7 +107,6 @@ class RoutingService:
             awareness_zones=self.awareness_zones,
             settings=self.settings,
             people_density=density_result.people_density,
-            air_quality_repo=self.air_quality_repo,
         )
 
         elapsed_ms = (time.perf_counter() - t_start) * 1000
