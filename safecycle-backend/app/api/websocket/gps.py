@@ -10,10 +10,11 @@ from __future__ import annotations
 from uuid import uuid4
 
 import structlog
-from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, Depends, Query, WebSocket, WebSocketDisconnect
 from redis.asyncio import Redis
 
 from app.config import Settings
+from app.core.security import API_KEY_HEADER_NAME, websocket_key_valid
 from app.dependencies import (
     get_awareness_zones,
     get_connection_manager,
@@ -36,6 +37,7 @@ router = APIRouter()
 @router.websocket("/ws/gps")
 async def gps_websocket(
     websocket: WebSocket,
+    token: str | None = Query(default=None),
     manager: GPSConnectionManager = Depends(get_connection_manager),
     graph=Depends(get_graph),
     awareness_zones: list[AwarenessZoneSchema] = Depends(get_awareness_zones),
@@ -67,7 +69,20 @@ async def gps_websocket(
     ```
 
     All alerts include a 30-second debounce to prevent notification fatigue.
+
+    Authentication: when an API key is configured, the client must supply it as
+    the `token` query parameter (`/ws/gps?token=<key>`) or the `X-API-Key`
+    header. Unauthenticated connections are refused before the socket is
+    accepted.
     """
+    # Authenticate the handshake before accepting the socket.
+    provided_key = token or websocket.headers.get(API_KEY_HEADER_NAME)
+    if not websocket_key_valid(provided_key):
+        # 1008 = policy violation. Closing before accept yields an HTTP 403.
+        await websocket.close(code=1008)
+        logger.warning("ws_auth_rejected", reason="invalid_or_missing_api_key")
+        return
+
     session_id = str(uuid4())
     session = await manager.connect(websocket, session_id)
     hazard_service = HazardService()

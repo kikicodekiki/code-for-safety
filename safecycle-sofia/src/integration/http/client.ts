@@ -23,6 +23,11 @@ apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     config.headers["X-Request-ID"] = generateRequestId()
 
+    // Attach the backend API key when configured (private/hosted deploys).
+    if (integrationConfig.apiKey) {
+      config.headers["X-API-Key"] = integrationConfig.apiKey
+    }
+
     if (integrationConfig.isDevelopment) {
       console.log(
         `[API →] ${config.method?.toUpperCase()} ${config.url}`,

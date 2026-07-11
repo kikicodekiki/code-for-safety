@@ -14,6 +14,7 @@ Lifespan manages:
 from __future__ import annotations
 
 import time
+from collections import defaultdict, deque
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 from uuid import uuid4
@@ -150,6 +151,52 @@ async def _load_awareness_zones_from_db(app: FastAPI) -> list[dict]:
         return []
 
 
+async def _run_sql_migrations() -> None:
+    """
+    Apply the .sql files in app/db/migrations, in filename order, at startup.
+
+    Each file is run as a single script over a raw asyncpg connection — the
+    simple query protocol handles multiple statements and dollar-quoted
+    functions in one call. Every migration is idempotent (IF NOT EXISTS /
+    ON CONFLICT DO NOTHING), so re-running on each boot is safe.
+
+    Non-fatal by design: if the database is unlinked/unreachable, or a
+    statement fails (e.g. the PostGIS extension is unavailable on a plain
+    Postgres image), it logs and returns so the app still serves in degraded
+    mode (routing + Redis-backed hazards keep working).
+    """
+    import asyncpg
+    from pathlib import Path
+
+    logger = structlog.get_logger("safecycle.migrations")
+    migrations_dir = Path(__file__).resolve().parent / "db" / "migrations"
+    files = sorted(migrations_dir.glob("*.sql"))
+    if not files:
+        return
+
+    # asyncpg wants a bare postgresql:// DSN (no SQLAlchemy +asyncpg suffix).
+    dsn = settings.DATABASE_URL.replace("postgresql+asyncpg://", "postgresql://")
+    try:
+        conn = await asyncpg.connect(dsn, timeout=10)
+    except Exception as exc:
+        logger.warning(
+            "migrations_skipped",
+            error=str(exc),
+            note="Postgres unreachable — schema not applied, running degraded",
+        )
+        return
+
+    try:
+        for f in files:
+            try:
+                await conn.execute(f.read_text(encoding="utf-8"))
+                logger.info("migration_applied", file=f.name)
+            except Exception as exc:
+                logger.warning("migration_failed", file=f.name, error=str(exc))
+    finally:
+        await conn.close()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """
@@ -159,6 +206,20 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     logger = structlog.get_logger("safecycle.startup")
     _configure_logging()
     logger.info("app_startup", version=settings.APP_VERSION, env=settings.ENVIRONMENT)
+
+    # ── Security posture ──────────────────────────────────────────────────────
+    from app.core.security import auth_enabled
+
+    if auth_enabled():
+        logger.info("api_auth_enabled", note="X-API-Key required on data routes")
+    elif settings.ENVIRONMENT == "production":
+        logger.critical(
+            "api_auth_disabled",
+            note="API_KEY is not set — every data route is PUBLIC. "
+            "Set the API_KEY secret to make this deploy private.",
+        )
+    else:
+        logger.warning("api_auth_disabled", note="API_KEY not set (dev/CI) — auth open")
 
     # ── Redis ─────────────────────────────────────────────────────────────────
     redis: Redis = from_url(settings.REDIS_URL, decode_responses=True)
@@ -172,6 +233,12 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # ── Sunset Service ────────────────────────────────────────────────────────
     app.state.sunset_service = SunsetService(redis)
     logger.info("sunset_service_initialized")
+
+    # ── Database schema ───────────────────────────────────────────────────────
+    # Apply idempotent SQL migrations (tables, PostGIS extension, seed data).
+    # Non-fatal: if Postgres is unlinked or unreachable the app runs degraded
+    # (routing + Redis hazards still work; awareness zones/push need the DB).
+    await _run_sql_migrations()
 
     # ── OSMnx Graph ───────────────────────────────────────────────────────────
     t0 = time.perf_counter()
@@ -265,9 +332,17 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 def create_app() -> FastAPI:
     """Application factory — creates and configures the FastAPI instance."""
+    # Expose interactive docs only when explicitly enabled, or outside
+    # production. This keeps the API schema off a public production URL while
+    # the endpoints themselves stay protected by the API key.
+    docs_enabled = settings.ENABLE_DOCS or settings.ENVIRONMENT != "production"
+
     app = FastAPI(
         title=settings.APP_NAME,
         version=settings.APP_VERSION,
+        docs_url="/docs" if docs_enabled else None,
+        redoc_url="/redoc" if docs_enabled else None,
+        openapi_url="/openapi.json" if docs_enabled else None,
         description="""
 **SafeCycle Sofia** — cycling safety navigation API for Sofia, Bulgaria.
 
@@ -284,20 +359,73 @@ Built for the *Code for Security* hackathon theme.
 - **Graph**: OpenStreetMap via OSMnx (Sofia bbox)
 - **Bike alleys**: [Sofia Open Data](https://urbandata.sofia.bg/tl/api/3) (GeoJSON, 486 features)
 """,
-        docs_url="/docs",
-        redoc_url="/redoc",
         lifespan=lifespan,
     )
 
     # ── Middleware (order matters — outermost first) ───────────────────────────
+    # Credentials cannot be combined with a wildcard origin (browsers reject
+    # it), so only enable credentials for an explicit allow-list.
+    cors_origins = settings.ALLOWED_ORIGINS
+    allow_credentials = bool(cors_origins) and cors_origins != ["*"]
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.ALLOWED_ORIGINS,
-        allow_credentials=True,
+        allow_origins=cors_origins,
+        allow_credentials=allow_credentials,
         allow_methods=["*"],
         allow_headers=["*"],
     )
     app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+    # In-process per-client rate limit. Best-effort (per worker, in memory) —
+    # enough to blunt abuse and accidental hammering on a shared deploy.
+    _rate_buckets: dict[str, deque[float]] = defaultdict(deque)
+
+    @app.middleware("http")
+    async def rate_limit_middleware(request: Request, call_next) -> Response:
+        # Exempt health probes and CORS preflight from limiting.
+        if (
+            not settings.RATE_LIMIT_ENABLED
+            or request.method == "OPTIONS"
+            or request.url.path == "/health"
+        ):
+            return await call_next(request)
+
+        # Prefer the real client IP behind Railway's proxy; fall back to peer.
+        forwarded = request.headers.get("x-forwarded-for", "")
+        client_ip = (
+            forwarded.split(",")[0].strip()
+            if forwarded
+            else (request.client.host if request.client else "unknown")
+        )
+
+        now = time.monotonic()
+        window = 60.0
+        bucket = _rate_buckets[client_ip]
+        while bucket and bucket[0] <= now - window:
+            bucket.popleft()
+        if len(bucket) >= settings.RATE_LIMIT_PER_MINUTE:
+            return JSONResponse(
+                status_code=429,
+                content={"error": "rate_limited", "detail": "Too many requests."},
+                headers={"Retry-After": "60"},
+            )
+        bucket.append(now)
+        return await call_next(request)
+
+    @app.middleware("http")
+    async def security_headers_middleware(request: Request, call_next) -> Response:
+        """Add defensive response headers to every response."""
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = "no-referrer"
+        response.headers["Cross-Origin-Opener-Policy"] = "same-origin"
+        if settings.ENVIRONMENT == "production":
+            # HSTS is safe here: Railway terminates TLS and serves HTTPS only.
+            response.headers["Strict-Transport-Security"] = (
+                "max-age=63072000; includeSubDomains"
+            )
+        return response
 
     @app.middleware("http")
     async def request_timing_middleware(request: Request, call_next) -> Response:

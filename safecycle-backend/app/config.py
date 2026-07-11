@@ -5,6 +5,7 @@ Never read os.environ directly outside this module.
 """
 from __future__ import annotations
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -18,7 +19,26 @@ class Settings(BaseSettings):
     # ── Server ───────────────────────────────────────────────────────────────
     HOST: str = "0.0.0.0"
     PORT: int = 8000
-    ALLOWED_ORIGINS: list[str] = ["*"]
+    # CORS allow-list. Empty = no cross-origin browser access (safe default for
+    # a private/dev deploy; native mobile clients are unaffected by CORS).
+    # Set to your web app's origin(s) as JSON, e.g. ["https://app.example.com"].
+    # "*" is honoured but forces credentials off (browsers forbid the combo).
+    ALLOWED_ORIGINS: list[str] = []
+
+    # ── Security ──────────────────────────────────────────────────────────────
+    # Shared secret required in the `X-API-Key` header on every protected route
+    # (and as the `token` query param on the GPS WebSocket). Empty disables the
+    # gate — set it as a platform secret to keep the deploy private. Never
+    # commit a real value; .env is git-ignored.
+    API_KEY: str = ""
+    # Serve interactive docs (/docs, /redoc, /openapi.json). Off in production
+    # by default so the API schema is not exposed publicly; auto-on outside
+    # production. Flip to true to expose docs on a shared deploy if desired.
+    ENABLE_DOCS: bool = False
+    # Simple in-process per-client rate limit (requests/minute). Blunts abuse
+    # and accidental hammering; /health is always exempt.
+    RATE_LIMIT_ENABLED: bool = True
+    RATE_LIMIT_PER_MINUTE: int = 120
 
     # ── Database ─────────────────────────────────────────────────────────────
     DATABASE_URL: str = "postgresql+asyncpg://safecycle:safecycle@localhost/safecycle"
@@ -83,6 +103,30 @@ class Settings(BaseSettings):
     GPS_POLL_INTERVAL_S: int = 10
     WS_PING_INTERVAL_S: int = 30
     WS_MAX_CONNECTIONS: int = 500
+
+    @field_validator("DATABASE_URL")
+    @classmethod
+    def _normalise_database_url(cls, v: str) -> str:
+        """
+        Make managed-Postgres URLs work with the async (asyncpg) engine.
+
+        Platforms like Railway/Heroku hand out `postgres://` or `postgresql://`
+        URLs (the sync psycopg form). SQLAlchemy's async engine needs the
+        `postgresql+asyncpg://` driver prefix, and asyncpg does not accept the
+        libpq `sslmode` query param — so we rewrite the scheme and drop it.
+        This lets you paste Railway's DATABASE_URL reference variable verbatim.
+        """
+        if v.startswith("postgres://"):
+            v = "postgresql+asyncpg://" + v[len("postgres://"):]
+        elif v.startswith("postgresql://"):
+            v = "postgresql+asyncpg://" + v[len("postgresql://"):]
+
+        # Strip a trailing ?sslmode=... (asyncpg configures TLS differently).
+        if "sslmode=" in v:
+            base, _, query = v.partition("?")
+            kept = [p for p in query.split("&") if not p.startswith("sslmode=")]
+            v = base + (("?" + "&".join(kept)) if kept else "")
+        return v
 
     model_config = SettingsConfigDict(
         env_file=".env",

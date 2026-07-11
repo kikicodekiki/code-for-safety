@@ -9,6 +9,10 @@ export const integrationConfig = {
   apiBaseUrl: env.EXPO_PUBLIC_API_BASE_URL ?? "http://localhost:8000",
   wsBaseUrl: env.EXPO_PUBLIC_WS_BASE_URL ?? "ws://localhost:8000",
   googleMapsKey: env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
+  // Shared secret for the SafeCycle backend. Sent as the `X-API-Key` header on
+  // every REST call and as `?token=` on the GPS WebSocket. Empty = no header
+  // (works against a local backend that has auth disabled).
+  apiKey: env.EXPO_PUBLIC_API_KEY ?? "",
   environment: (env.EXPO_PUBLIC_ENVIRONMENT ?? "development") as
     "development" | "staging" | "production",
 

@@ -9,6 +9,7 @@ import type {
 } from "../types"
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ?? "http://localhost:8000"
+const API_KEY = process.env.EXPO_PUBLIC_API_KEY ?? ""
 
 interface RouteParams {
   origin_lat: number
@@ -39,7 +40,11 @@ class ApiClient {
     this.http = axios.create({
       baseURL,
       timeout: 15_000,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        // Backend API key when configured (private/hosted deploys).
+        ...(API_KEY ? { "X-API-Key": API_KEY } : {}),
+      },
     })
   }
 
@@ -75,7 +80,10 @@ class ApiClient {
 
   getWebSocketUrl(): string {
     const wsBase = BASE_URL.replace(/^http/, "ws")
-    return `${wsBase}/ws/gps`
+    // Key travels as a query param — WS handshakes can't carry custom headers.
+    return API_KEY
+      ? `${wsBase}/ws/gps?token=${encodeURIComponent(API_KEY)}`
+      : `${wsBase}/ws/gps`
   }
 }
 

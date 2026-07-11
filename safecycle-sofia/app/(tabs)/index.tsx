@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native"
-import MapView, { Circle, Polyline, PROVIDER_GOOGLE } from "react-native-maps"
 import * as Location from "expo-location"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { router } from "expo-router"
@@ -17,70 +16,26 @@ import { useNavigationStore } from "../../src/stores/useNavigationStore"
 import { useHazardStore } from "../../src/stores/useHazardStore"
 import { useConnectionStore } from "../../src/stores/useConnectionStore"
 import { useRoute } from "../../src/integration/hooks/useRoute"
-import { HazardPin } from "../../src/components/hazard"
-import { CrossroadMarker } from "../../src/components/CrossroadMarker"
-import { AwarenessZoneCircle } from "../../src/components/AwarenessZoneCircle"
+import { MapWebView, type MapHazard } from "../../src/components/MapWebView"
 import { AlertBanner } from "../../src/components/AlertBanner"
 import { NavigationHUD } from "../../src/components/NavigationHUD"
 import { colors, radius, spacing, typography } from "../../src/tokens"
 import { bikePathService } from "../../src/integration/services/bikePathService"
+import { HAZARD_COLOURS, HAZARD_ICONS, HAZARD_TYPE_DESCRIPTORS } from "../../src/constants/hazardTypes"
+import { SEVERITY_DESCRIPTORS } from "../../src/constants/hazardSeverity"
 import type { Coordinate, VeloBGPath } from "../../src/integration/types/api"
 
-// Custom grey-toned map style — desaturates base tiles so the green route pops
-const MAP_STYLE = [
-  { elementType: "geometry", stylers: [{ saturation: -60 }, { lightness: -10 }] },
-  { elementType: "labels.text.fill", stylers: [{ color: "#9ca5b3" }] },
-  { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
-  {
-    featureType: "administrative.locality",
-    elementType: "labels.text.fill",
-    stylers: [{ color: "#d59563" }],
-  },
-  { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
-  { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#263c3f" }] },
-  {
-    featureType: "poi.park",
-    elementType: "labels.text.fill",
-    stylers: [{ color: "#6b9a76" }],
-  },
-  { featureType: "road", elementType: "geometry", stylers: [{ color: "#38414e" }] },
-  { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#212a37" }] },
-  { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#9ca5b3" }] },
-  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#746855" }] },
-  {
-    featureType: "road.highway",
-    elementType: "geometry.stroke",
-    stylers: [{ color: "#1f2835" }],
-  },
-  {
-    featureType: "road.highway",
-    elementType: "labels.text.fill",
-    stylers: [{ color: "#f3d19c" }],
-  },
-  { featureType: "transit", elementType: "geometry", stylers: [{ color: "#2f3948" }] },
-  {
-    featureType: "transit.station",
-    elementType: "labels.text.fill",
-    stylers: [{ color: "#d59563" }],
-  },
-  { featureType: "water", elementType: "geometry", stylers: [{ color: "#17263c" }] },
-  {
-    featureType: "water",
-    elementType: "labels.text.fill",
-    stylers: [{ color: "#515c6d" }],
-  },
-  {
-    featureType: "water",
-    elementType: "labels.text.stroke",
-    stylers: [{ color: "#17263c" }],
-  },
-]
+const SOFIA_CENTER = { lat: 42.6977, lon: 23.3219 }
 
-const SOFIA_REGION = {
-  latitude: 42.6977,
-  longitude: 23.3219,
-  latitudeDelta: 0.05,
-  longitudeDelta: 0.05,
+// Human-readable "reported N ago" label for a hazard's age in hours.
+function formatHazardAge(ageHours: number): string {
+  if (ageHours < 1 / 60) return "just now"
+  if (ageHours < 1) {
+    const mins = Math.round(ageHours * 60)
+    return `${mins} minute${mins !== 1 ? "s" : ""} ago`
+  }
+  const hours = Math.floor(ageHours)
+  return `${hours} hour${hours !== 1 ? "s" : ""} ago`
 }
 
 interface Banner {
@@ -90,7 +45,6 @@ interface Banner {
 }
 
 export default function MapScreen() {
-  const mapRef = useRef<MapView>(null)
   const cardSlide = useRef(new RNAnimated.Value(0)).current
 
   const [gpsGranted, setGpsGranted] = useState<boolean | null>(null)
@@ -247,9 +201,40 @@ export default function MapScreen() {
 
   const activeHazards = getActiveHazards()
 
-  const routeCoords = route?.path.coordinates.map(([lon, lat]) => ({
-    latitude: lat,
-    longitude: lon,
+  // ── Map data (Leaflet uses [lat, lon]) ─────────────────────────────────────
+  const routeCoords = route?.path.coordinates.map(
+    ([lon, lat]) => [lat, lon] as [number, number],
+  )
+
+  const bikePathSegments = bikePaths.flatMap((path) =>
+    bikePathService
+      .pathToMapCoordinates(path)
+      .map((seg) => seg.map((c) => [c.latitude, c.longitude] as [number, number])),
+  )
+
+  const mapZones = route?.awareness_zones.map((zone) => ({
+    lat: zone.center.lat,
+    lon: zone.center.lon,
+    radius: zone.radius_m,
+  }))
+
+  const mapCrossroads = route?.crossroad_nodes
+    .slice(0, 8)
+    .map((node) => ({ lat: node.lat, lon: node.lon }))
+
+  const mapHazards: MapHazard[] = activeHazards.map((h) => ({
+    id: h.id,
+    lat: h.lat,
+    lon: h.lon,
+    color: HAZARD_COLOURS[h.hazard_type],
+    icon: HAZARD_ICONS[h.hazard_type],
+    severity: h.effective_severity,
+    reportCount: h.report_count,
+    title: HAZARD_TYPE_DESCRIPTORS[h.hazard_type].displayName,
+    severityLabel: SEVERITY_DESCRIPTORS[h.effective_severity].label,
+    description: h.description ?? undefined,
+    ageLabel: formatHazardAge(h.age_hours),
+    fresh: h.is_fresh,
   }))
 
   // ── Permission denied ──────────────────────────────────────────────────────
@@ -289,76 +274,17 @@ export default function MapScreen() {
   // ── Main map ───────────────────────────────────────────────────────────────
   return (
     <View style={styles.root}>
-      <MapView
-        ref={mapRef}
-        style={StyleSheet.absoluteFill}
-        provider={PROVIDER_GOOGLE}
-        mapType="standard"
-        customMapStyle={MAP_STYLE}
-        initialRegion={SOFIA_REGION}
-        showsUserLocation={false}
-        showsMyLocationButton={false}
-      >
-        {bikePaths.map((path) => {
-          const segments = bikePathService.pathToMapCoordinates(path)
-          return segments.map((coords, idx) => (
-            <Polyline
-              key={`${path.id}-${idx}`}
-              coordinates={coords}
-              strokeColor={isNavigating ? "rgba(39, 174, 96, 0.15)" : "#27ae60"}
-              strokeWidth={isNavigating ? 2 : 5}
-              lineJoin="round"
-              lineCap="round"
-              zIndex={10}
-            />
-          ))
-        })}
-
-        {/* Safe route polyline — sits above bike paths */}
-        {routeCoords && routeCoords.length > 0 && (
-          <Polyline
-            coordinates={routeCoords}
-            strokeColor={colors.routeStroke}
-            strokeWidth={6}
-            lineJoin="round"
-            lineCap="round"
-            zIndex={20}
-          />
-        )}
-
-        {/* Awareness zones — always visible during navigation */}
-        {route?.awareness_zones.map((zone, i) => (
-          <AwarenessZoneCircle
-            key={`zone_${i}`}
-            center={zone.center}
-            radius={zone.radius_m}
-          />
-        ))}
-
-        {/* Crossroad markers — cap at 8 to avoid flooding the route */}
-        {route?.crossroad_nodes.slice(0, 8).map((node, i) => (
-          <CrossroadMarker key={`cross_${i}`} coordinate={node} />
-        ))}
-
-        {/* Hazard pins — active reports only (< 10 h) */}
-        {activeHazards.map((hazard) => (
-          <HazardPin key={hazard.id} hazard={hazard} onConfirm={confirmHazard} />
-        ))}
-
-        {/* Current position — teal dot with white ring */}
-        {currentPosition && (
-          <Circle
-            center={{
-              latitude: currentPosition.lat,
-              longitude: currentPosition.lon,
-            }}
-            radius={8}
-            fillColor={colors.primary}
-            strokeColor="#FFFFFF"
-            strokeWidth={2}
-          />
-        )}
-      </MapView>
+      <MapWebView
+        initialCenter={SOFIA_CENTER}
+        routeCoords={routeCoords}
+        bikePaths={bikePathSegments}
+        zones={mapZones}
+        crossroads={mapCrossroads}
+        hazards={mapHazards}
+        position={currentPosition ? { lat: currentPosition.lat, lon: currentPosition.lon } : null}
+        isNavigating={isNavigating}
+        onConfirmHazard={confirmHazard}
+      />
 
       {/* Backend error banner */}
       {routeError && (
