@@ -39,11 +39,15 @@ RUN python scripts/preload_graph.py || true
 
 EXPOSE 8000
 
-# Readiness probe — checks graph, Redis, and DB are all healthy
+# Readiness probe — checks graph, Redis, and DB are all healthy.
+# start-period is generous: cold start does a live GeoJSON bike-alley
+# enrichment + VeloBG KML fetch/enrichment pass over the whole graph, which
+# measured ~210s end-to-end on a fresh container (no graph cache, no VeloBG
+# cache). 90s previously undershot this and caused false "unhealthy" states.
 HEALTHCHECK \
     --interval=30s \
     --timeout=10s \
-    --start-period=90s \
+    --start-period=240s \
     --retries=3 \
     CMD curl -f http://localhost:8000/health/ready || exit 1
 

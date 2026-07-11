@@ -12,6 +12,7 @@ import networkx as nx
 import osmnx as ox
 from redis.asyncio import Redis
 
+from app.config import settings
 from app.core.hazard.aggregation import (
     AggregatedHazard,
     HazardReport,
@@ -21,6 +22,7 @@ from app.core.hazard.decay import DECAY_HORIZON, decay_factor
 from app.core.hazard.severity import SEVERITY_PENALTY_MAP, apply_severity_penalty
 from app.core.hazard.validators import HazardValidationError, validate_hazard_report
 from app.models.enums import HazardType
+from app.models.schemas.hazard import HazardResponse
 from app.models.schemas.hazard_create import HazardReportCreate
 from app.models.schemas.hazard_response import (
     AggregatedHazardResponse,
@@ -29,6 +31,7 @@ from app.models.schemas.hazard_response import (
     RoutingImpact,
 )
 from app.models.schemas.hazard_update import HazardConfirmationCreate
+from app.utils.geo import haversine_metres
 
 logger = logging.getLogger(__name__)
 
@@ -266,6 +269,67 @@ class HazardService:
             )
 
         results.sort(key=lambda h: h.effective_severity, reverse=True)
+        return results
+
+    async def get_all_active(
+        self,
+        redis: Redis,
+        lat: float | None = None,
+        lon: float | None = None,
+        radius_m: float | None = None,
+        active_only: bool = True,
+    ) -> list[HazardResponse]:
+        """
+        Return individual (non-aggregated) hazard reports, each annotated with
+        real-time is_recent / is_active flags. Used for the GPS proximity
+        alert path — distinct from get_aggregated_hazards(), which clusters
+        reports for the map/stats API.
+
+        When lat/lon are given, results are filtered to radius_m (if set) and
+        sorted nearest-first; otherwise sorted freshest-first.
+        """
+        keys = await redis.keys(f"{REDIS_HAZARD_PREFIX}*")
+        now = _utc_now()
+        results: list[HazardResponse] = []
+
+        for key in keys:
+            raw = await redis.get(key)
+            if not raw:
+                continue
+            try:
+                d = json.loads(raw)
+                timestamp = datetime.fromisoformat(d["timestamp"])
+                age_hours = (now - timestamp).total_seconds() / 3600.0
+                is_active = age_hours < settings.HAZARD_ACTIVE_THRESHOLD_HOURS
+                if active_only and not is_active:
+                    continue
+
+                hazard = HazardResponse(
+                    id=d["id"],
+                    lat=d["lat"],
+                    lon=d["lon"],
+                    type=d["type"],
+                    description=d.get("description"),
+                    timestamp=timestamp,
+                    age_hours=age_hours,
+                    is_recent=age_hours < settings.HAZARD_RECENT_THRESHOLD_HOURS,
+                    is_active=is_active,
+                )
+            except (KeyError, ValueError) as exc:
+                logger.warning("Skipping malformed Redis entry: %s", exc)
+                continue
+
+            if lat is not None and lon is not None and radius_m is not None:
+                if haversine_metres(lat, lon, hazard.lat, hazard.lon) > radius_m:
+                    continue
+
+            results.append(hazard)
+
+        if lat is not None and lon is not None:
+            results.sort(key=lambda h: haversine_metres(lat, lon, h.lat, h.lon))
+        else:
+            results.sort(key=lambda h: h.age_hours)
+
         return results
 
     async def confirm_hazard(

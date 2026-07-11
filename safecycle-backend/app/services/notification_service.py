@@ -8,6 +8,8 @@ Handles three alert types:
 """
 from __future__ import annotations
 
+import json
+
 import structlog
 
 from app.config import settings
@@ -29,7 +31,12 @@ class NotificationService:
             try:
                 import firebase_admin
                 from firebase_admin import credentials
-                cred = credentials.Certificate(settings.FIREBASE_CREDENTIALS_PATH)
+                if settings.FIREBASE_CREDENTIALS_JSON:
+                    cred = credentials.Certificate(
+                        json.loads(settings.FIREBASE_CREDENTIALS_JSON)
+                    )
+                else:
+                    cred = credentials.Certificate(settings.FIREBASE_CREDENTIALS_PATH)
                 self._firebase_app = firebase_admin.initialize_app(cred)
                 logger.info("firebase_initialised")
             except Exception as exc:

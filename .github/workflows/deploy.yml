@@ -1,0 +1,86 @@
+name: Deploy safecycle-backend to Railway
+
+# Every push to main:
+#   1. Builds the standard Dockerfile (proves the image compiles).
+#   2. Runs the backend test suite INSIDE that image (identical env to prod).
+#   3. Only if both pass, deploys to Railway via the Railway CLI.
+#
+# The image is built once and reused for testing so the artifact we validate
+# is the same one Railway rebuilds from the committed Dockerfile — no nixpacks,
+# no Railway-specific build magic.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}       # allow manual runs from the Actions tab
+
+# Portability knobs — change these, not the steps, to retarget.
+env:
+  SERVICE_DIR: safecycle-backend          # subfolder that holds the Dockerfile
+  IMAGE_TAG: safecycle-backend:ci         # local tag for the CI-built image
+  RAILWAY_SERVICE: safecycle-backend      # name of the api service in Railway
+
+# Don't pile up deploys if several pushes land quickly; keep only the latest.
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
+jobs:
+  build-and-test:
+    name: Build image & run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./${{ env.SERVICE_DIR }}
+          file: ./${{ env.SERVICE_DIR }}/Dockerfile
+          push: false
+          load: true                       # load into the local daemon so we can run it
+          tags: ${{ env.IMAGE_TAG }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run backend test suite inside the image
+        # pytest, pytest-asyncio and pytest-cov are already in requirements.txt.
+        # pytest.ini points testpaths at tests/, which is fully mocked
+        # (no live Postgres/Redis needed). FIREBASE_ENABLED=false keeps the
+        # Firebase Admin SDK from trying to initialise during import.
+        run: |
+          docker run --rm \
+            -e FIREBASE_ENABLED=false \
+            ${{ env.IMAGE_TAG }} \
+            pytest -q
+
+  deploy:
+    name: Deploy to Railway
+    needs: build-and-test          # deploy only if build + tests succeeded
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy to Railway
+        working-directory: ${{ env.SERVICE_DIR }}
+        env:
+          # Project token created by the repo owner and stored as a repo secret.
+          # The Railway CLI reads RAILWAY_TOKEN automatically — no `railway login`.
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ]; then
+            echo "::error::RAILWAY_TOKEN secret is not set. Add it under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          # `railway up` uploads this directory as the build root and builds the
+          # committed Dockerfile remotely. --detach returns once the build is
+          # queued instead of streaming logs (keeps the job from hanging).
+          railway up --service "$RAILWAY_SERVICE" --detach

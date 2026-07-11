@@ -36,6 +36,12 @@ class Settings(BaseSettings):
     GOOGLE_ROADS_API_ENABLED: bool = True
 
     # ── Firebase ──────────────────────────────────────────────────────────────
+    # FIREBASE_CREDENTIALS_JSON takes priority when set — the full service
+    # account JSON as a string, for platforms with no durable filesystem to
+    # drop a credentials file on (Railway, Cloud Run, ECS/Fargate). Falls
+    # back to FIREBASE_CREDENTIALS_PATH (a file on disk) when unset, which
+    # is what local dev / docker-compose still uses.
+    FIREBASE_CREDENTIALS_JSON: str = ""
     FIREBASE_CREDENTIALS_PATH: str = "firebase-credentials.json"
     FIREBASE_ENABLED: bool = True
 

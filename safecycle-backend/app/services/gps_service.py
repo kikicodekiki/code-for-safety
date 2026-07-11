@@ -254,7 +254,7 @@ async def process_gps_update(
         if active_hazards:
             nearest_hazard = active_hazards[0]  # already sorted by proximity
             h_dist = haversine_metres(lat, lon, nearest_hazard.lat, nearest_hazard.lon)
-            htype  = getattr(nearest_hazard, "hazard_type", "hazard")
+            htype  = nearest_hazard.type.value
             events.append(_make_event(
                 ntype=NotificationType.HAZARD_NEARBY,
                 title="Hazard ahead",
