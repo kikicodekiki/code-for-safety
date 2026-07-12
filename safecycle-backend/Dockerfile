@@ -47,6 +47,9 @@ HEALTHCHECK \
     CMD curl -f "http://localhost:${PORT:-8000}/health" || exit 1
 
 # uvloop + httptools for maximum async performance.
+# --ws websockets is explicit (not "auto") — the GPS route needs a working
+# WS implementation, and auto-detection has silently resolved to "none" in
+# some container builds even with the websockets package installed.
 # Shell form so ${PORT} (injected by Railway) expands; falls back to 8000.
 CMD uvicorn app.main:app \
      --host 0.0.0.0 \
@@ -54,4 +57,5 @@ CMD uvicorn app.main:app \
      --workers 1 \
      --loop uvloop \
      --http httptools \
+     --ws websockets \
      --log-level warning

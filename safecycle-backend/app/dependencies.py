@@ -75,8 +75,11 @@ def get_notification_service() -> NotificationService:
     return _notification_service
 
 
-def get_sunset_service() -> SunsetService:
-    return SunsetService()
+def get_sunset_service(connection: HTTPConnection) -> SunsetService:
+    service = getattr(connection.app.state, "sunset_service", None)
+    if service is None:
+        raise RuntimeError("SunsetService not initialised on app state")
+    return service
 
 
 def get_connection_manager(connection: HTTPConnection) -> GPSConnectionManager:

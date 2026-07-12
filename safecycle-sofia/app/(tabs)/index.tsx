@@ -70,16 +70,24 @@ export default function MapScreen() {
   const { findRoute, isLoading: isLoadingRoute, error: routeError } = useRoute()
   const clearRouteError = useNavigationStore((s) => s.setRouteError)
 
-  // Request foreground location permission and capture initial position
+  // Request foreground location permission and capture initial position.
+  // Best-effort only — a slow/failed GPS fix (common on first launch,
+  // indoors, or under Expo Go) must not crash the screen. The background
+  // GPS task (src/tasks/gpsTask.ts) is the real position source once
+  // navigation starts; this just seeds the origin for route search.
   useEffect(() => {
     ; (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync()
       setGpsGranted(status === "granted")
       if (status === "granted") {
-        const loc = await Location.getCurrentPositionAsync({
-          accuracy: Location.Accuracy.Balanced,
-        })
-        setOrigin({ lat: loc.coords.latitude, lon: loc.coords.longitude })
+        try {
+          const loc = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.Balanced,
+          })
+          setOrigin({ lat: loc.coords.latitude, lon: loc.coords.longitude })
+        } catch (err) {
+          console.warn("[SafeCycle] Initial GPS fix failed, will retry via background task:", err)
+        }
       }
     })()
   }, [setOrigin])
