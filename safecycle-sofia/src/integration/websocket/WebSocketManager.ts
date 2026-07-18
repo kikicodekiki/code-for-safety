@@ -95,7 +95,11 @@ class WebSocketManager {
     if (this.socket?.readyState === WebSocket.OPEN) return
 
     this._setState(this.reconnectAttempts > 0 ? "reconnecting" : "connecting")
-    const url = `${integrationConfig.wsBaseUrl}/ws/gps`
+    // Browsers can't set custom headers on a WS handshake, so the backend
+    // takes the API key as the `token` query parameter.
+    const url = integrationConfig.apiKey
+      ? `${integrationConfig.wsBaseUrl}/ws/gps?token=${encodeURIComponent(integrationConfig.apiKey)}`
+      : `${integrationConfig.wsBaseUrl}/ws/gps`
 
     try {
       this.socket = new WebSocket(url)
@@ -108,7 +112,7 @@ class WebSocketManager {
       this.reconnectAttempts = 0
       this._setState("connected")
       this._startHeartbeat()
-      if (integrationConfig.isDevelopment) console.log("[WS] Connected:", url)
+      if (integrationConfig.isDevelopment) console.log("[WS] Connected:", `${integrationConfig.wsBaseUrl}/ws/gps`)
     }
 
     this.socket.onmessage = (event: MessageEvent) => {

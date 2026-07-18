@@ -1,0 +1,63 @@
+name: CI — build & test safecycle-backend
+
+# Every push to main:
+#   1. Builds the standard Dockerfile (proves the image compiles).
+#   2. Runs the backend test suite INSIDE that image (identical env to prod).
+#
+# Deployment is handled by Railway's native GitHub integration (Auto Deploy
+# on push to main), NOT by this workflow. Enable "Wait for CI" in the Railway
+# service settings if you want Railway to hold the deploy until this job passes.
+#
+# The image is built once and tested so the artifact we validate is the same
+# one Railway rebuilds from the committed Dockerfile — no nixpacks, no
+# Railway-specific build magic.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}       # allow manual runs from the Actions tab
+
+# Portability knobs — change these, not the steps, to retarget.
+env:
+  SERVICE_DIR: safecycle-backend          # subfolder that holds the Dockerfile
+  IMAGE_TAG: safecycle-backend:ci         # local tag for the CI-built image
+
+# Don't pile up CI runs if several pushes land quickly; keep only the latest.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build image & run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./${{ env.SERVICE_DIR }}
+          file: ./${{ env.SERVICE_DIR }}/Dockerfile
+          push: false
+          load: true                       # load into the local daemon so we can run it
+          tags: ${{ env.IMAGE_TAG }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run backend test suite inside the image
+        # pytest, pytest-asyncio and pytest-cov are already in requirements.txt.
+        # pytest.ini points testpaths at tests/, which is fully mocked
+        # (no live Postgres/Redis needed). FIREBASE_ENABLED=false keeps the
+        # Firebase Admin SDK from trying to initialise during import.
+        run: |
+          docker run --rm \
+            -e FIREBASE_ENABLED=false \
+            ${{ env.IMAGE_TAG }} \
+            pytest -q

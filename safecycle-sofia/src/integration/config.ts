@@ -1,15 +1,25 @@
 /**
  * Integration configuration.
  * All environment variables are accessed through this module only.
+ *
+ * EXPO_PUBLIC_* references must use the literal `process.env.EXPO_PUBLIC_X`
+ * form directly below -- Expo's Babel plugin statically replaces that exact
+ * syntax at build time. Reading through an aliased variable (e.g.
+ * `const env = process.env; env.EXPO_PUBLIC_X`) is NOT recognised, so it
+ * silently falls through to the fallback in every production/EAS build
+ * (process.env isn't populated at runtime on-device) while still appearing
+ * to work under `expo start`, where a real env-loaded process is involved.
  */
 
-const env = process.env
-
 export const integrationConfig = {
-  apiBaseUrl: env.EXPO_PUBLIC_API_BASE_URL ?? "http://localhost:8000",
-  wsBaseUrl: env.EXPO_PUBLIC_WS_BASE_URL ?? "ws://localhost:8000",
-  googleMapsKey: env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
-  environment: (env.EXPO_PUBLIC_ENVIRONMENT ?? "development") as
+  apiBaseUrl: process.env.EXPO_PUBLIC_API_BASE_URL ?? "http://localhost:8000",
+  wsBaseUrl: process.env.EXPO_PUBLIC_WS_BASE_URL ?? "ws://localhost:8000",
+  googleMapsKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
+  // Shared secret for the SafeCycle backend. Sent as the `X-API-Key` header on
+  // every REST call and as `?token=` on the GPS WebSocket. Empty = no header
+  // (works against a local backend that has auth disabled).
+  apiKey: process.env.EXPO_PUBLIC_API_KEY ?? "",
+  environment: (process.env.EXPO_PUBLIC_ENVIRONMENT ?? "development") as
     "development" | "staging" | "production",
 
   get isDevelopment() { return this.environment === "development" },
